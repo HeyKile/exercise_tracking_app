@@ -11,7 +11,10 @@ enum TemplateTab { myTemplates, premade }
 class TemplateList extends StatefulWidget {
   final bool isWorkout;
 
-  const TemplateList({super.key, required this.isWorkout});
+  const TemplateList({
+    super.key,
+    required this.isWorkout
+  });
 
 
   @override
@@ -130,6 +133,12 @@ class _TemplateListState extends State<TemplateList> {
                     ? ListView.builder(
                         itemCount: templateViewModel.filteredTemplates.length,
                         itemBuilder: (context, idx) {
+                          if (idx == 0) {
+                            print("=============RERENDERING=============");
+                            for (var elem in templateViewModel.filteredTemplates) {
+                              print(elem.name);
+                            }
+                          }
                           final template = templateViewModel.filteredTemplates[idx];
                           return TemplateListItem(
                             template: template,
@@ -152,10 +161,10 @@ class _TemplateListState extends State<TemplateList> {
                   MaterialPageRoute(
                     builder: (context) => MultiProvider(
                       providers: [
-                        ChangeNotifierProvider(create: (context) => TemplateViewModel()),
+                        ChangeNotifierProvider.value(value: templateViewModel),
                         ChangeNotifierProvider(create: (context) => ExerciseViewModel())
                       ],
-                      child: const TemplateBuilderView(),
+                      child: TemplateBuilderView(),
                     )
                   ),
                 );
@@ -170,7 +179,7 @@ class _TemplateListState extends State<TemplateList> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         );
-      },
+      }
     );
   }
 }

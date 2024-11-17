@@ -9,12 +9,7 @@ class TemplatesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Card(
-        child: ChangeNotifierProvider(
-          create: (_) => TemplateViewModel(),
-          child: const TemplateList(isWorkout: false),
-        ),
-      ),
+      body: TemplateList(isWorkout: false),
     );
   }
 }

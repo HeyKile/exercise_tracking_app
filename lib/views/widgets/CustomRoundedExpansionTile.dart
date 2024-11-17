@@ -39,9 +39,9 @@ class CustomRoundedExpansionTile extends StatefulWidget {
   final EdgeInsets? childrenPadding;
   final bool? rotateTrailing;
   final bool? noTrailing;
-  bool? isExpanded = false;
+  final bool? isExpanded;
 
-  CustomRoundedExpansionTile(
+  const CustomRoundedExpansionTile(
       {super.key, this.title,
       this.subtitle,
       this.leading,
@@ -85,7 +85,6 @@ class _CustomRoundedExpansionTileState extends State<CustomRoundedExpansionTile>
   bool? _noTrailing;
   late AnimationController _controller;
   late AnimationController _iconController;
-  late AnimationController _leadingIconController;
 
   // When the duration of the ListTile animation is NOT provided. This value will be used instead.
   Duration defaultDuration = const Duration(milliseconds: 500);

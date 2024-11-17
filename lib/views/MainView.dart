@@ -2,6 +2,9 @@ import 'package:exercise_tracking_app/views/HomeView.dart';
 import 'package:exercise_tracking_app/views/StatsView.dart';
 import 'package:exercise_tracking_app/views/TemplatesView.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../viewmodels/TemplateViewModel.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -25,7 +28,11 @@ class _MainViewState extends State<MainView> {
           const Card(
             child: Text('lets fucking go')
           ),
-          const TemplatesView(),
+          // const TemplatesView(),
+          ChangeNotifierProvider(
+            create: (context) => TemplateViewModel(),
+            child: const TemplatesView()
+          ),
           const StatsView(),
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(

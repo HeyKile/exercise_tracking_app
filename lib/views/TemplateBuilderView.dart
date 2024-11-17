@@ -12,7 +12,7 @@ class TemplateBuilderView extends StatefulWidget {
 
   const TemplateBuilderView({
     super.key,
-    this.starterTemplate
+    this.starterTemplate,
   });
 
   @override
@@ -23,7 +23,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
   String title = "";
   TextEditingController titleController = TextEditingController();
   List<TemplateExerciseListItem> currentExercises = [];
-  TemplateViewModel templateViewModel = TemplateViewModel();
   bool _isLoading = false;
 
   @override
@@ -47,7 +46,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
 
   void _onTitleChanged() {
     title = titleController.text;
-    print('Title is $title');
   }
 
   void _showSnackBar(BuildContext context) {
@@ -109,7 +107,7 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
       },
     );
     // save template
-    bool result = await templateViewModel.saveTemplate(title, currentExercises);
+    bool result = await Provider.of<TemplateViewModel>(context, listen: false).saveTemplate(title, currentExercises);
     // hide loading spinner
     await Future.delayed(const Duration(seconds: 1));
     Navigator.of(context).pop();
@@ -137,15 +135,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
         ),
       );
     }
-  }
-
-  void _closeTemplateBuilder(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Saved!'),
-        duration: Duration(seconds: 2),
-      ),
-    );
   }
 
   @override

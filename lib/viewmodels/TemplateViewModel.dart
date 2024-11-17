@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../models/TemplateModel.dart';
@@ -19,19 +18,15 @@ class TemplateViewModel extends ChangeNotifier {
 
   TemplateTab get currentTab => _currentTab;
   String get searchQuery => _searchQuery;
+  List<Template> get allTemplates => _allTemplates;
 
   Future<void> fetchTemplates() async {
-    print("fetching this shish");
     _allTemplates = await _templateService.fetchTemplates();
     if (_allTemplates.isNotEmpty) {
       _highestTemplateId = _getHighestTemplateId();
       _myTemplates = getMyTemplates();
       _premadeTemplates = getPremadeTemplates();
       _updateFilteredTemplates();
-    }
-    print('got:');
-    for (var t in _allTemplates) {
-      print(t.name);
     }
     notifyListeners();
   }
@@ -49,8 +44,19 @@ class TemplateViewModel extends ChangeNotifier {
     return res;
   }
 
-  void refreshTemplates() {
-    fetchTemplates();
+  List<Template> getSearchedTemplates(String searchQuery) {
+    if (searchQuery == "") {
+      return _allTemplates;
+    }
+    else {
+      return _allTemplates
+          .where((template) => template.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
+    }
+  }
+
+  void refreshTemplates() async {
+    await fetchTemplates();
   }
 
   void setTab(TemplateTab tab) {

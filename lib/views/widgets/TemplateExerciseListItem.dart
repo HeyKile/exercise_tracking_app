@@ -16,7 +16,7 @@ class TemplateExerciseListItem {
   addSet() {
     List<TextEditingController> rowControllers = exercise.trackedStats.map((stat) => TextEditingController()).toList();
     controllers.add(rowControllers);
-
+    
     setRows.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +80,6 @@ class TemplateExerciseListItem {
         }).toList(),
       ),
     );
-    print(setRows);
   }
 
   void removeSet(Widget setToRemove) {
