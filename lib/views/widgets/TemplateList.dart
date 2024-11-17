@@ -133,12 +133,6 @@ class _TemplateListState extends State<TemplateList> {
                     ? ListView.builder(
                         itemCount: templateViewModel.filteredTemplates.length,
                         itemBuilder: (context, idx) {
-                          if (idx == 0) {
-                            print("=============RERENDERING=============");
-                            for (var elem in templateViewModel.filteredTemplates) {
-                              print(elem.name);
-                            }
-                          }
                           final template = templateViewModel.filteredTemplates[idx];
                           return TemplateListItem(
                             template: template,
@@ -162,9 +156,9 @@ class _TemplateListState extends State<TemplateList> {
                     builder: (context) => MultiProvider(
                       providers: [
                         ChangeNotifierProvider.value(value: templateViewModel),
-                        ChangeNotifierProvider(create: (context) => ExerciseViewModel())
+                        ChangeNotifierProvider.value(value: Provider.of<ExerciseViewModel>(context, listen: false))
                       ],
-                      child: TemplateBuilderView(),
+                      child: const TemplateBuilderView(),
                     )
                   ),
                 );

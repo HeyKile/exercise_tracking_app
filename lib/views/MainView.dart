@@ -28,11 +28,7 @@ class _MainViewState extends State<MainView> {
           const Card(
             child: Text('lets fucking go')
           ),
-          // const TemplatesView(),
-          ChangeNotifierProvider(
-            create: (context) => TemplateViewModel(),
-            child: const TemplatesView()
-          ),
+          const TemplatesView(),
           const StatsView(),
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(
