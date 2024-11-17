@@ -140,6 +140,8 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     Color enabledBackgroundColor = Colors.green[400]!;
     Color disabledBackgroundColor = Colors.green[100]!;
     Color enabledForegroundColor = Colors.black;
@@ -148,37 +150,31 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: SizedBox(
-          width: width * 0.8,
-          child: TextField(
-            controller: titleController,
-            style: const TextStyle(
-              fontSize: 24,
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              hintText: 'New Custom Workout',
-              contentPadding: const EdgeInsets.only(left: 10.0, bottom: -4.5),
-              enabledBorder: const OutlineInputBorder(),
-              focusedBorder: const OutlineInputBorder(),
-              fillColor: Colors.grey[200],
-              filled: true,
-            ),
-          ),        
+        elevation: 9.0,
+        title: TextField(
+          controller: titleController,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+            color: Colors.white,
+          ),
+          decoration: const InputDecoration(
+            hintText: 'New Custom Workout',
+            enabledBorder: UnderlineInputBorder(),
+            focusedBorder: UnderlineInputBorder(),
+            fillColor: Colors.transparent,
+            filled: true,
+            prefixIcon: Icon(Icons.edit_outlined),
+          ),
+          cursorColor: Colors.white,
         ),
         actions: [
-          TextButton.icon(
+          IconButton(
             onPressed: () => _showSnackBar(context),
             icon: const Icon(Icons.tag),
-            label: const Text(
-              'Tags',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             style: TextButton.styleFrom(
-              backgroundColor: Colors.grey[200],
+              backgroundColor: Colors.transparent,
               foregroundColor: Colors.black,
             ),
           ),
@@ -221,6 +217,24 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
+                    boxDecoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 2.0,
+                          color: Colors.blue[800]!.withOpacity(0.4)
+                        ),
+                        right: BorderSide(
+                          width: 2.0,
+                          color: Colors.blue[800]!.withOpacity(0.4)
+                        ),
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
+                        topLeft: Radius.zero,
+                        topRight: Radius.circular(10.0)
+                      ),
+                    ),
                     duration: const Duration(milliseconds: 50),
                     leading: const Icon(Icons.chevron_left_rounded),
                     trailing: IconButton(
@@ -228,20 +242,28 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
                       icon: const Icon(Icons.highlight_remove_rounded)
                     ),
                     isExpanded: exerciseItem.isExpanded,
-                    title: Text(exerciseItem.exercise.name),
+                    title: Text(
+                      exerciseItem.exercise.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20
+                      ),
+                    ),
                     children: [
                       Container(
                         margin: const EdgeInsets.only(left: 6.0, right: 6.0),
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          border: const Border(
-                            left: BorderSide(color: Colors.black),
-                            right: BorderSide(color: Colors.black),
-                            bottom: BorderSide(color: Colors.black),
+                          border: Border(
+                            right: BorderSide(color: Colors.grey[700]!.withOpacity(0.3)),
+                            bottom: BorderSide(color: Colors.grey[700]!.withOpacity(0.3)),
                           ),
                           borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(10.0),
                             bottomRight: Radius.circular(10.0),
+                            topLeft: Radius.zero,
+                            topRight: Radius.zero
                           ),
                         ),
                         child: Padding(
