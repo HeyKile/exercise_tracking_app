@@ -19,7 +19,6 @@ class CustomRoundedExpansionTile extends StatefulWidget {
   final double? horizontalTitleGap;
   final Color? hoverColor;
   final bool? isThreeLine;
-  final Key? key;
   final Widget? leading;
   final double? minLeadingWidth;
   final double? minVerticalPadding;
@@ -43,7 +42,7 @@ class CustomRoundedExpansionTile extends StatefulWidget {
   bool? isExpanded = false;
 
   CustomRoundedExpansionTile(
-      {this.title,
+      {super.key, this.title,
       this.subtitle,
       this.leading,
       this.trailing,
@@ -59,7 +58,6 @@ class CustomRoundedExpansionTile extends StatefulWidget {
       this.horizontalTitleGap,
       this.hoverColor,
       this.isThreeLine,
-      this.key,
       this.minLeadingWidth,
       this.minVerticalPadding,
       this.mouseCursor,
@@ -90,7 +88,7 @@ class _CustomRoundedExpansionTileState extends State<CustomRoundedExpansionTile>
   late AnimationController _leadingIconController;
 
   // When the duration of the ListTile animation is NOT provided. This value will be used instead.
-  Duration defaultDuration = Duration(milliseconds: 500);
+  Duration defaultDuration = const Duration(milliseconds: 500);
 
   @override
   void initState() {
@@ -99,15 +97,15 @@ class _CustomRoundedExpansionTileState extends State<CustomRoundedExpansionTile>
     _expanded = widget.isExpanded ?? false;
     // If not provided, this will be true
     _rotateTrailing =
-        widget.rotateTrailing == null ? true : widget.rotateTrailing;
+        widget.rotateTrailing ?? true;
     // If not provided this will be false
-    _noTrailing = widget.noTrailing == null ? false : widget.noTrailing;
+    _noTrailing = widget.noTrailing ?? false;
     _controller = AnimationController(
         vsync: this,
-        duration: widget.duration == null ? defaultDuration : widget.duration);
+        duration: widget.duration ?? defaultDuration);
 
     _iconController = AnimationController(
-      duration: widget.duration == null ? defaultDuration : widget.duration,
+      duration: widget.duration ?? defaultDuration,
       vsync: this,
     );
 
@@ -134,12 +132,12 @@ class _CustomRoundedExpansionTileState extends State<CustomRoundedExpansionTile>
             autofocus: widget.autofocus == null ? false : widget.autofocus!,
             contentPadding: widget.contentPadding,
             // If bool is not provided the default will be false.
-            dense: widget.dense == null ? false : widget.dense,
+            dense: widget.dense ?? false,
             // If bool is not provided the default will be true.
             enabled: widget.enabled == null ? true : widget.enabled!,
             enableFeedback:
                 // If bool is not provided the default will be false.
-                widget.enableFeedback == null ? false : widget.enableFeedback,
+                widget.enableFeedback ?? false,
             focusColor: widget.focusColor,
             focusNode: widget.focusNode,
             horizontalTitleGap: widget.horizontalTitleGap,
@@ -202,7 +200,7 @@ class _CustomRoundedExpansionTileState extends State<CustomRoundedExpansionTile>
                   /// ClampingScrollPhyiscs so the ListTile will scroll in the main screen and not its children.
                   /// Shrinkwrap is always true so the ExpansionTile will wrap its children and hide when not expanded.
                   ListView(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 padding: widget.childrenPadding,
                 shrinkWrap: true,
                 children: widget.children!,

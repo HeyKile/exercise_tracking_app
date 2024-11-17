@@ -1,8 +1,8 @@
 import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
+import 'package:exercise_tracking_app/viewmodels/TemplateViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/TemplateModel.dart';
-import '../models/ExerciseModel.dart';
 import './widgets/AddExerciseModal.dart';
 import './widgets/CustomRoundedExpansionTile.dart';
 import './widgets/TemplateExerciseListItem.dart';
@@ -23,6 +23,8 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
   String title = "";
   TextEditingController titleController = TextEditingController();
   List<TemplateExerciseListItem> currentExercises = [];
+  TemplateViewModel templateViewModel = TemplateViewModel();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -92,22 +94,67 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
     });
   }
 
-  void _onSaveTemplateButtonClicked(BuildContext context) {
-    // const snackBar = SnackBar(
-    //   content: Text('save that mf template'),
-    //   duration: Duration(seconds: 2)
-    // );
-    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    for (var exerciseItem in currentExercises) {
-      for (var setVals in exerciseItem.getSetValues()) {
-        print(setVals);
-      }
+  Future<void> _onSaveTemplateButtonClicked(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    // show loading spinner
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    // save template
+    bool result = await templateViewModel.saveTemplate(title, currentExercises);
+    // hide loading spinner
+    await Future.delayed(const Duration(seconds: 1));
+    Navigator.of(context).pop();
+    // if success, show & naviagte back to template list
+    if (result) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Template Saved!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      await Future.delayed(const Duration(seconds: 2));
+      print("done lil bro");
+      Navigator.pop(context);
     }
+    // else, display error
+    else {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to save. Please try again.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  void _closeTemplateBuilder(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Saved!'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    Color enabledBackgroundColor = Colors.green[400]!;
+    Color disabledBackgroundColor = Colors.green[100]!;
+    Color enabledForegroundColor = Colors.black;
+    Color disabledForegroundColor = Colors.black38;
 
     return Scaffold(
       appBar: AppBar(
@@ -248,11 +295,17 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _onSaveTemplateButtonClicked(context),
+        onPressed: currentExercises.isEmpty || _isLoading
+          ? null
+          : () => _onSaveTemplateButtonClicked(context),
         label: const Text('Save Template'),
         icon: const Icon(Icons.save_alt_outlined),
-        backgroundColor: Colors.green[400],
-        foregroundColor: Colors.black,
+        backgroundColor: currentExercises.isEmpty || _isLoading
+          ? disabledBackgroundColor
+          : enabledBackgroundColor,
+        foregroundColor: currentExercises.isEmpty || _isLoading
+          ? disabledForegroundColor
+          : enabledForegroundColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -60,7 +60,7 @@ class TemplateListItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(template.description),
+                    Text('${template.exercises.length} Sets'),
                     const SizedBox(height: 8),
                   ],
                 ),

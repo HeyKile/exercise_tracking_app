@@ -60,7 +60,7 @@ class ExerciseStat {
         );
       case "Distance":
         return ExerciseStat(
-          type: TrackableStat.time,
+          type: TrackableStat.distance,
           display: json['type'],
           unit: json['unit']
         );

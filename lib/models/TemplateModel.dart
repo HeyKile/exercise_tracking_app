@@ -1,14 +1,12 @@
 class Template {
   final int id;
   final String name;
-  final String description;
   final bool isPremade;
   final List<TemplateExercise> exercises;
 
   Template({
     required this.id,
     required this.name,
-    required this.description,
     required this.isPremade,
     required this.exercises
   });
@@ -19,7 +17,6 @@ class Template {
     return Template(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
       isPremade: json['isPremade'],
       exercises: exercisesList,
     );
@@ -30,7 +27,7 @@ class Template {
 class TemplateExercise {
   final int id;
   final String name;
-  final int sets;
+  final List<dynamic> sets;
 
   TemplateExercise({required this.id, required this.name, required this.sets});
 
