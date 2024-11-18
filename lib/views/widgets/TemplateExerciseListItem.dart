@@ -35,6 +35,7 @@ class TemplateExerciseListItem {
             const SizedBox(width: 10.0),
             SizedBox(
               width: 60.0,
+              height: 35.0,
               child: TextField(
                 controller: rowControllers[index],
                 style: const TextStyle(
@@ -42,9 +43,6 @@ class TemplateExerciseListItem {
                   color: Colors.black,
                 ),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 10.0, bottom: -4.5),
-                  enabledBorder: const OutlineInputBorder(),
-                  focusedBorder: const OutlineInputBorder(),
                   fillColor: Colors.grey[200],
                   filled: true,
                 ),

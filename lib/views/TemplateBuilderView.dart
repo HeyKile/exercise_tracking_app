@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
 import 'package:exercise_tracking_app/viewmodels/TemplateViewModel.dart';
 import 'package:flutter/material.dart';
@@ -186,7 +188,7 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
             padding: const EdgeInsets.only(top: 10.0),
             child: SizedBox(
               width: width * 0.80,
-              child: TextButton.icon(
+              child: ElevatedButton.icon(
                 onPressed: () => _showAddExerciseModal(context),
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.grey[300],
@@ -194,6 +196,7 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
+                  shadowColor: Colors.grey
                 ),
                 icon: const Icon(Icons.add),
                 label: const Text(
@@ -256,8 +259,8 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                           border: Border(
-                            right: BorderSide(color: Colors.grey[700]!.withOpacity(0.3)),
-                            bottom: BorderSide(color: Colors.grey[700]!.withOpacity(0.3)),
+                            right: BorderSide(color: Colors.grey[700]!.withOpacity(0.35)),
+                            bottom: BorderSide(color: Colors.grey[700]!.withOpacity(0.35)),
                           ),
                           borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(10.0),
@@ -271,27 +274,48 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
                           child: Column(
                             children: [
                               ...exerciseItem.setRows.map((setRow) {
-                                return Row(
-                                  children: [
-                                    Expanded(child: setRow),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () {
-                                        setState(() {
-                                          exerciseItem.removeSet(setRow);
-                                        });
-                                      },
+                                return Container(
+                                  decoration:  BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border(
+                                      right: BorderSide(color: Colors.grey[700]!.withOpacity(0.4)),
+                                      bottom: BorderSide(color: Colors.grey[700]!.withOpacity(0.4)),
                                     ),
-                                  ],
+                                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                  margin: const EdgeInsets.symmetric(vertical: 3.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: setRow
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () {
+                                          setState(() {
+                                            exerciseItem.removeSet(setRow);
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  )
                                 );
                               }),
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    exerciseItem.addSet();
-                                  });
-                                },
-                                child: const Text("Add Set")
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 3.0),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      exerciseItem.addSet();
+                                    });
+                                  },
+                                  style: const ButtonStyle(
+                                    foregroundColor: WidgetStatePropertyAll<Color>(Colors.black),
+                                    backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                                    shadowColor: WidgetStatePropertyAll<Color>(Colors.grey),
+                                  ),
+                                  child: const Text("Add Set"),
+                                )
                               )
                             ],
                           )
