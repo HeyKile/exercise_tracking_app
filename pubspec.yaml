@@ -22,3 +22,4 @@ flutter:
   assets:
     - lib/data/templates.json
     - lib/data/user.json
+    - lib/data/exercises.json

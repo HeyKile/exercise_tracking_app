@@ -4,13 +4,17 @@ import '../../viewmodels/TemplateViewModel.dart';
 import '../../models/TemplateModel.dart';
 import 'package:provider/provider.dart';
 import '../TemplateBuilderView.dart';
+import '../../viewmodels/ExerciseViewModel.dart';
 
 enum TemplateTab { myTemplates, premade }
 
 class TemplateList extends StatefulWidget {
   final bool isWorkout;
 
-  const TemplateList({super.key, required this.isWorkout});
+  const TemplateList({
+    super.key,
+    required this.isWorkout
+  });
 
 
   @override
@@ -148,7 +152,15 @@ class _TemplateListState extends State<TemplateList> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const TemplateBuilderView())
+                  MaterialPageRoute(
+                    builder: (context) => MultiProvider(
+                      providers: [
+                        ChangeNotifierProvider.value(value: templateViewModel),
+                        ChangeNotifierProvider.value(value: Provider.of<ExerciseViewModel>(context, listen: false))
+                      ],
+                      child: const TemplateBuilderView(),
+                    )
+                  ),
                 );
               },
               backgroundColor: Colors.blue,
@@ -161,7 +173,7 @@ class _TemplateListState extends State<TemplateList> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         );
-      },
+      }
     );
   }
 }

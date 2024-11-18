@@ -7,11 +7,11 @@ class TemplateListItem extends StatelessWidget {
   final bool isWorkout;
   
   const TemplateListItem({
-    Key? key,
+    super.key,
     required this.template,
     required this.onTap,
     required this.isWorkout,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class TemplateListItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(template.description),
+                    Text('${template.exercises.length} Sets'),
                     const SizedBox(height: 8),
                   ],
                 ),

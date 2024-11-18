@@ -1,10 +1,13 @@
+
 import 'package:flutter/material.dart';
 import '../models/TemplateModel.dart';
 import '../services/TemplateService.dart';
+import '../views/widgets/TemplateExerciseListItem.dart';
 import '../views/widgets/TemplateList.dart';
 
 class TemplateViewModel extends ChangeNotifier {
   List<Template> _allTemplates = <Template>[];
+  int _highestTemplateId = -1;
   List<Template> _myTemplates = <Template>[];
   List<Template> _premadeTemplates = <Template>[];
   List<Template> filteredTemplates = <Template>[];
@@ -15,13 +18,45 @@ class TemplateViewModel extends ChangeNotifier {
 
   TemplateTab get currentTab => _currentTab;
   String get searchQuery => _searchQuery;
+  List<Template> get allTemplates => _allTemplates;
 
   Future<void> fetchTemplates() async {
     _allTemplates = await _templateService.fetchTemplates();
-    _myTemplates = getMyTemplates();
-    _premadeTemplates = getPremadeTemplates();
-    _updateFilteredTemplates();
+    if (_allTemplates.isNotEmpty) {
+      _highestTemplateId = _getHighestTemplateId();
+      _myTemplates = getMyTemplates();
+      _premadeTemplates = getPremadeTemplates();
+      _updateFilteredTemplates();
+    }
     notifyListeners();
+  }
+
+  Future<bool> saveTemplate(String title, List<TemplateExerciseListItem> exercises) async {
+    if (_highestTemplateId == -1) {
+      await fetchTemplates();
+    }
+    Map jsonRes = _templateToJsonObj(title, exercises);
+    bool res = await _templateService.saveTemplate(jsonRes);
+    if (res == true) {
+      refreshTemplates();
+    }
+    notifyListeners();
+    return res;
+  }
+
+  List<Template> getSearchedTemplates(String searchQuery) {
+    if (searchQuery == "") {
+      return _allTemplates;
+    }
+    else {
+      return _allTemplates
+          .where((template) => template.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
+    }
+  }
+
+  void refreshTemplates() async {
+    await fetchTemplates();
   }
 
   void setTab(TemplateTab tab) {
@@ -51,6 +86,10 @@ class TemplateViewModel extends ChangeNotifier {
     }
   }
 
+  int _getHighestTemplateId() {
+    return _allTemplates.reduce((cur, next) => cur.id > next.id ? cur : next).id;
+  }
+
   List<Template> getMyTemplates() {
     return _allTemplates
       .where((template) => template.isPremade == false)
@@ -61,5 +100,34 @@ class TemplateViewModel extends ChangeNotifier {
     return _allTemplates
       .where((template) => template.isPremade == true)
       .toList();
+  }
+
+  Map<String, dynamic> _templateToJsonObj(String title, List<TemplateExerciseListItem> exercises) {
+    print('highedt id: $_highestTemplateId');
+    Map<String, dynamic> templateJson = {
+      "id": _highestTemplateId + 1,
+      "name": title,
+      "isPremade": false,
+      "exercises": exercises.map((exerciseItem) {
+        return {
+          "id": exerciseItem.exercise.id,
+          "name": exerciseItem.exercise.name,
+          "sets": exerciseItem.getSetValues().map((set) {
+            Map<String, dynamic> setJson = {};
+            for (int i = 0; i < set.length; i++) {
+              var stat = exerciseItem.exercise.trackedStats[i];
+              print(stat.display);
+              print(stat.type.toString().split('.').last.toLowerCase());
+              print(set[i]);
+              if (set[i] != "") {
+                setJson[stat.type.toString().split('.').last.toLowerCase()] = int.parse(set[i]);
+              }
+            }
+            return setJson;
+          }).toList()
+        };
+      }).toList()
+    };
+    return templateJson;
   }
 }
