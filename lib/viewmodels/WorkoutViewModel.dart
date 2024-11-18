@@ -15,19 +15,6 @@ class WorkoutViewModel extends ChangeNotifier{
   Workout? get currentWorkout => _currentWorkout;
   List<Workout> get allWorkouts => _allWorkouts;
 
-  void startWorkout(String workoutName){
-    _currentWorkout = Workout(
-      completed: [], 
-      time: 0, 
-      workoutName: workoutName, 
-      date: DateTime.now(), 
-      intensity: 0,
-      tags: []
-    );
-    debugPrint("Started new workout: ${_currentWorkout!.toJson()}");
-    notifyListeners();
-  }
-
   void addExercise(String name, List<Set> sets, int time){
     if(_currentWorkout != null){
       _currentWorkout!.completed.add(Exercise(name: name, sets: sets, time: time));
@@ -35,7 +22,22 @@ class WorkoutViewModel extends ChangeNotifier{
       notifyListeners();
     }
     else {
-      debugPrint("Error: No workout started!"); // Debug print
+      debugPrint("Error: No workout started!");
+    }
+  }
+
+  Future<void> updateIntensity(int newIntensity, Workout? curr) async {
+    if (curr != null) {
+      curr.updateIntensity(newIntensity); 
+      debugPrint("Updated intensity: $newIntensity");
+
+      final success = await _workoutService.saveUpdatedWorkout(curr);
+
+      if (success) {
+        notifyListeners();
+      } else {
+        debugPrint("Failed to update workout intensity!");
+      }
     }
   }
 
@@ -50,7 +52,7 @@ class WorkoutViewModel extends ChangeNotifier{
       notifyListeners();
     }
     else {
-      debugPrint("Failed to save workout!"); // Debug print on failure
+      debugPrint("Failed to save workout!");
     }
   }
 

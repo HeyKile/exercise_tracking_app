@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import '../../models/WorkoutModel.dart';
 
 class WorkoutSummary extends StatefulWidget{
-  const WorkoutSummary({super.key});
+  final Workout? currentWorkout;
+  final WorkoutViewModel workoutViewModel;
+  const WorkoutSummary({super.key, required this.currentWorkout, required this.workoutViewModel});
 
   @override
   _WorkoutSummaryState createState() => _WorkoutSummaryState();
@@ -15,8 +17,7 @@ class WorkoutSummary extends StatefulWidget{
 }
 
 class _WorkoutSummaryState extends State<WorkoutSummary>{
-  final WorkoutViewModel workoutViewModel = WorkoutViewModel();
-  List<Exercise> exercises = [];
+  int selectedIntensity = 0;
 
   @override
   void initState() { 
@@ -25,13 +26,14 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
       Provider.of<WorkoutViewModel>(context, listen: false).loadWorkouts(); 
     }); 
   }
+  
 
   @override 
   Widget build(BuildContext context) { 
     return Scaffold( 
       body: Consumer<WorkoutViewModel>( 
         builder: (context, workoutViewModel, child) { 
-          final exercises = workoutViewModel.currentWorkout?.completed ?? [];
+          final exercises = widget.currentWorkout?.completed ?? [];
           print('Current exercises: $exercises'); 
           return SingleChildScrollView( 
             child: Column( 
@@ -51,9 +53,13 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 for (int i = 0; i < exercises.length; i++) 
                 ExerciseTile( exercise: exercises[i], isEditable: false, onDeleteExercise: () {}, onSetDetailsChanged: (int setIndex, int reps, int weight) {}, ), 
                 const SizedBox(height: 15), 
-                const Intensity(), 
+                Intensity(onIntensityChanged: (int intensity){
+                  setState(() {
+                    selectedIntensity = intensity;
+                  });
+                }), 
                 const SizedBox(height: 16.0), 
-                const CloseDisplay(), 
+                CloseDisplay(selectedIntensity: selectedIntensity, workoutViewModel: workoutViewModel, currentWorkout: widget.currentWorkout), 
                 const SizedBox(height: 16.0), 
               ], 
             ), 
@@ -65,7 +71,8 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
 }
 
 class Intensity extends StatefulWidget {
-  const Intensity({super.key});
+  final ValueChanged<int> onIntensityChanged;
+  const Intensity({super.key, required this.onIntensityChanged});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -73,17 +80,19 @@ class Intensity extends StatefulWidget {
 }
 
 class _IntensityState extends State<Intensity> {
-  int selectedIntensity = 0; // Initial selected value
+  int selectedIntensity = 0;
 
   void _incrementIntensity() {
     setState(() {
       selectedIntensity = (selectedIntensity + 1).clamp(1, 10);
+      widget.onIntensityChanged(selectedIntensity);
     });
   }
 
   void _decrementIntensity() {
     setState(() {
       selectedIntensity = (selectedIntensity - 1).clamp(1, 10);
+      widget.onIntensityChanged(selectedIntensity);
     });
   }
 
@@ -134,7 +143,10 @@ class _IntensityState extends State<Intensity> {
 }
 
 class CloseDisplay extends StatelessWidget{
-  const CloseDisplay({super.key});
+  final int selectedIntensity;
+  final WorkoutViewModel workoutViewModel;
+  final Workout? currentWorkout;
+  const CloseDisplay({super.key, required this.selectedIntensity, required this.workoutViewModel, required this.currentWorkout});
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +156,7 @@ class CloseDisplay extends StatelessWidget{
       child: ElevatedButton(
         onPressed: () {
           // send info to workout view model to save workout in model
+          workoutViewModel.updateIntensity(selectedIntensity, currentWorkout);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -216,14 +229,14 @@ class WorkoutHeader extends StatelessWidget{
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: const BoxDecoration(
-        color: Colors.blue, // Customize the background color
+        color: Colors.blue, 
       ),
       child: const Align(
-        alignment: Alignment.topLeft, // Center the text horizontally
+        alignment: Alignment.topLeft, 
         child: Text(
           'WORKOUT NAME',
           style: TextStyle(
-            color: Colors.white, // Customize the text color
+            color: Colors.white, 
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/WorkoutModel.dart';
@@ -56,6 +57,35 @@ class WorkoutService {
       return true;
     } catch (e) {
       print('Error saving the workout: $e');
+      return false;
+    }
+  }
+
+  Future<bool> saveUpdatedWorkout(Workout updatedWorkout) async {
+    try {
+      String filePath = 'lib/data/workout.json';
+      File file = File(filePath);
+      List<Map<String, dynamic>> workouts = [];
+
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        workouts = List<Map<String, dynamic>>.from(json.decode(content));
+
+        int index = workouts.indexWhere((w) => w['id'] == updatedWorkout.id);
+
+        if (index != -1) {
+          workouts[index] = updatedWorkout.toJson();  
+        } else {
+          debugPrint("Workout not found in the list!");
+          return false;
+        }
+      }
+
+      await file.writeAsString(json.encode(workouts));
+      debugPrint("Workout updated successfully!");
+      return true;
+    } catch (e) {
+      debugPrint("Error saving updated workout: $e");
       return false;
     }
   }

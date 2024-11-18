@@ -1,16 +1,21 @@
+import 'package:uuid/uuid.dart';
+
 class Workout{
+  String? id;
   final List<Exercise> completed;
   final int time;
   final String workoutName;
   final DateTime date;
-  final int intensity;
+  int intensity;
   final List<Tag> tags;
 
-  Workout({required this.completed, required this.time, required this.workoutName, required this.date, required this.intensity, required this.tags});
+  Workout({String? id, required this.completed, required this.time, required this.workoutName, required this.date, required this.intensity, required this.tags})
+  : id = id ?? const Uuid().v4();
 
   // workout to json
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'completed': completed.map((exercise) => exercise.toJson()).toList(),
       'time': time,
       'workoutName': workoutName,
@@ -20,9 +25,14 @@ class Workout{
     };
   }
 
+  void updateIntensity(int newIntensity) {
+    intensity = newIntensity;
+  }
+  
   // json to workout
   factory Workout.fromJson(Map<String, dynamic> json) {
     return Workout(
+      id: json['id'] as String,
       completed: (json['completed'] as List<dynamic>)
           .map((exercise) => Exercise.fromJson(exercise))
           .toList(),

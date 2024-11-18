@@ -34,12 +34,6 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     });
   }
 
-  void _addSetToExercise(int index) {
-    setState(() {
-      exercises[index].sets.add(Set(reps: 10, weight: 0)); // Default set
-    });
-  }
-
   void _deleteExercise(int index){
     setState(() {
       if (index >= 0 && index < exercises.length) {
@@ -156,24 +150,14 @@ class SaveWorkout extends StatelessWidget{
         onPressed: () {
           // send info to workout view model to save workout in model
           final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: 0, date: DateTime.now());
-          debugPrint('Current Workout: $currentWorkout');
-          for (var exercise in exercises) {
-                  debugPrint('  Exercise Name: ${exercise.name}');
-                  debugPrint('  Sets:');
-                  for (var set in exercise.sets) {
-                    debugPrint('    - Reps: ${set.reps}, Weight: ${set.weight}');
-                  }
-          }
-          if(currentWorkout != null){
-            workoutViewModel.saveWorkout(currentWorkout);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const WorkoutSummary(),
-              ),
-            );
-
-          }
+          debugPrint('Current Workout HUH??: $currentWorkout');
+          workoutViewModel.saveWorkout(currentWorkout);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
+            ),
+          );
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -206,14 +190,14 @@ class WorkoutHeader extends StatelessWidget{
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: const BoxDecoration(
-        color: Colors.blue, // Customize the background color
+        color: Colors.blue, 
       ),
       child: const Align(
-        alignment: Alignment.center, // Center the text horizontally
+        alignment: Alignment.center, 
         child: Text(
           'CURRENT WORKOUT',
           style: TextStyle(
-            color: Colors.white, // Customize the text color
+            color: Colors.white, 
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
