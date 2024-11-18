@@ -1,5 +1,6 @@
 import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/models/UserModel.dart';
+import 'package:exercise_tracking_app/views/WorkoutView.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/UserViewModel.dart';
 import 'package:provider/provider.dart';
@@ -339,8 +340,11 @@ class SecondRoute extends StatelessWidget {
       ),
       body: Center(
         child: TemplateList(isWorkout: true, chooseTemplate: (Template? template) {
-            //SEND SHIT TO WORKOUT VIEW
-          })
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WorkoutView(isLive: isLive, template: template)));
+          }
+          )
         
       ),
     );

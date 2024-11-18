@@ -20,13 +20,11 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stealing is good'),
+        title: const Text('AllMoves'),
       ),
       body: <Widget> [
           HomeView(showWorkout: _startWorkout),
-          const WorkoutView(isLive: true),
-          
-          
+          const WorkoutView(isLive: true, template: null),
           const TemplatesView(),
           const StatsView(),
       ][_selectedIndex],
