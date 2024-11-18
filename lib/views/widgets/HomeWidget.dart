@@ -1,7 +1,9 @@
+import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/models/UserModel.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/UserViewModel.dart';
 import 'package:provider/provider.dart';
+import 'TemplateList.dart';
 
 class HomeWidget extends StatefulWidget {
   HomeWidget({super.key, required this.showWorkout});
@@ -293,12 +295,11 @@ class GoalTable extends StatelessWidget {
   }
 }
 
-
-
 class WorkoutOptions extends StatelessWidget {
   WorkoutOptions({super.key, required this.workoutVisible, required this.update});
   final ValueChanged<bool> update;
   bool workoutVisible;
+  
     @override
     Widget build(BuildContext context) {
       return Visibility(visible: workoutVisible, child:Stack( children: [
@@ -306,12 +307,43 @@ class WorkoutOptions extends StatelessWidget {
         Container(width: double.infinity, color: Colors.black.withOpacity(0.5),)), 
         Align(alignment: Alignment.bottomCenter, child: Container(height: 120, width: double.infinity, color: Colors.grey, 
         child:Column(
-          children:[Expanded(child:TextButton.icon(onPressed: (){}, label: Text("Track Live", style: TextStyle(color: Colors.black, fontSize: 24)), icon: Icon(Icons.radio_button_checked, color: Colors.black, size:40,))),
-        Expanded(child:TextButton.icon(onPressed: (){}, label: Text("Log Past Workout", style: TextStyle(color: Colors.black, fontSize: 24)), icon: Icon(Icons.history, color: Colors.black, size: 40))),
+          children:[Expanded(child:TextButton.icon(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute(isLive:true)));
+          }, label: Text("Track Live", style: TextStyle(color: Colors.black, fontSize: 24)), icon: Icon(Icons.radio_button_checked, color: Colors.black, size:40,))),
+        Expanded(child:TextButton.icon(onPressed: (){
+           Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute(isLive:false)));
+          }
+        , label: Text("Log Past Workout", style: TextStyle(color: Colors.black, fontSize: 24)), icon: Icon(Icons.history, color: Colors.black, size: 40))),
       ]
       )
       ))],
       ));
     }
 
+}
+
+class SecondRoute extends StatelessWidget {
+  SecondRoute({super.key, required this.isLive});
+  bool isLive;
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Select Workout Template'),
+      ),
+      body: Center(
+        child: TemplateList(isWorkout: true, chooseTemplate: (Template? template) {
+            //SEND SHIT TO WORKOUT VIEW
+          })
+        
+      ),
+    );
+  }
+  
 }

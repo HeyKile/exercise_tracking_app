@@ -10,10 +10,12 @@ enum TemplateTab { myTemplates, premade }
 
 class TemplateList extends StatefulWidget {
   final bool isWorkout;
+  final Function(Template?) chooseTemplate;
 
   const TemplateList({
     super.key,
-    required this.isWorkout
+    required this.isWorkout,
+    required this.chooseTemplate
   });
 
 
@@ -46,14 +48,13 @@ class _TemplateListState extends State<TemplateList> {
   }
 
   VoidCallback chooseTemplate(Template? template) {
-    return () {
-      if (template == null) {
+      return (){if (template == null) {
         print("Selected null!");
       }
       else {
-        print('Selected ${template.name}');
+        print('Selected ${template}');
       }
-    };
+      widget.chooseTemplate(template);};
   }
 
   @override
