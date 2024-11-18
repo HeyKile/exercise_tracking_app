@@ -1,6 +1,7 @@
 import 'package:exercise_tracking_app/views/HomeView.dart';
 import 'package:exercise_tracking_app/views/StatsView.dart';
 import 'package:exercise_tracking_app/views/TemplatesView.dart';
+import 'package:exercise_tracking_app/views/WorkoutView.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
@@ -22,9 +23,7 @@ class _MainViewState extends State<MainView> {
       ),
       body: <Widget> [
           const HomeView(),
-          const Card(
-            child: Text('lets fucking go')
-          ),
+          const WorkoutView(isLive: true),
           const TemplatesView(),
           const StatsView(),
       ][_selectedIndex],
