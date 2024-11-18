@@ -1,4 +1,6 @@
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
+import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
+import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
 import 'ExerciseTile.dart';
 
@@ -10,6 +12,10 @@ class PastWorkout extends StatefulWidget {
 }
 
 class _PastWorkoutState extends State<PastWorkout>{
+  Workout? currentWorkout;
+
+  WorkoutViewModel workoutViewModel = WorkoutViewModel();
+  //extract from template
   List<Exercise> exercises = [
     Exercise(name: 'Leg Press', sets: [
       Set(reps: 12, weight: 100),
@@ -30,6 +36,13 @@ class _PastWorkoutState extends State<PastWorkout>{
         exercises.removeAt(index);
       }
     });
+  }
+
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight) {
+    setState(() { 
+      final updatedSet = Set(reps: reps, weight: weight);
+      exercises[exerciseIndex].sets[setIndex] = updatedSet;
+    }); 
   }
 
 
@@ -61,10 +74,21 @@ class _PastWorkoutState extends State<PastWorkout>{
               ],
             ),
             const SizedBox(height:15),
-            for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
-            ExerciseTile(exercise: exercises[i], onDeleteExercise: () => _deleteExercise(i), isEditable: true, onSetDetailsChanged: (int setIndex, int reps, int weight) {  },),
+            Column(
+              children: [
+                for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
+                ExerciseTile(
+                  exercise: exercises[i],
+                  onDeleteExercise: () => _deleteExercise(i),
+                  onSetDetailsChanged: (setIndex, reps, weight) { 
+                    _updateSetDetails(i, setIndex, reps, weight);
+                  },
+                  isEditable: true,
+                ),
+              ],
+            ),
             const SizedBox(height:15),
-            const SaveWorkout(),
+            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises),
           ],
         )
       )
@@ -106,7 +130,11 @@ class SetAdd extends StatelessWidget{
 }
 
 class SaveWorkout extends StatelessWidget{
-  const SaveWorkout({super.key});
+  final WorkoutViewModel workoutViewModel;
+  final List<Exercise> exercises;
+
+
+  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises});
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +142,17 @@ class SaveWorkout extends StatelessWidget{
       width: MediaQuery.of(context).size.width * 0.95, 
       height: 30, 
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: 0, date: DateTime.now());
+          debugPrint('Current Workout HUH??: $currentWorkout');
+          workoutViewModel.saveWorkout(currentWorkout);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
+            ),
+          );
+        },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
