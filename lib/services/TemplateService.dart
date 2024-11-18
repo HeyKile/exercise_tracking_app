@@ -9,12 +9,17 @@ class TemplateService {
       String filePath = 'lib/data/templates.json';
       File file = File(filePath);
       String fileContent = await file.readAsString();
-      List<dynamic> jsonList = jsonDecode(fileContent);
-      List<Template> templates = jsonList.map((json) => Template.fromJson(json)).toList();
-      return templates;
+      try {
+        List<dynamic> jsonList = jsonDecode(fileContent);
+        List<Template> templates = jsonList.map((json) => Template.fromJson(json)).toList();
+        return templates;
+      }
+      catch (_) {
+        return [];
+      }
     }
     catch (e) {
-      print('Error reading or parsing the file: $e');
+      print('Error reading file: $e');
       return [];
     }
   }
