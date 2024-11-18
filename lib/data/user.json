@@ -4,7 +4,7 @@
     "achievements": [
         {
             "date": "2024-10-31",
-            "exerciseName": "Squats",
+            "exerciseName": "Squat",
             "exerciseId":1,
             "achievementThreshold": 1
         },
@@ -12,13 +12,13 @@
             "date": "2024-10-06",
             "exerciseName": "1 mile",
             "exerciseId":2,
-            "achievementThreshold": 2
+            "achievementThreshold": 3
         },
         {
             "date": "2024-09-25",
             "exerciseName": "Bench Press",
             "exerciseId":3,
-            "achievementThreshold": 1
+            "achievementThreshold": 2
         }
     ],
     "goals": [
@@ -41,7 +41,7 @@
             "currPR": 20
         },
         {
-            "exerciseName": "Squats",
+            "exerciseName": "Squat",
             "exerciseId":1,
             "goalThreshold": 205,
             "currPR": 200

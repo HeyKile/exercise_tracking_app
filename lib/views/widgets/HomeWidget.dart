@@ -4,7 +4,8 @@ import '../../viewmodels/UserViewModel.dart';
 import 'package:provider/provider.dart';
 
 class HomeWidget extends StatefulWidget {
-  const HomeWidget({super.key});
+  HomeWidget({super.key, required this.showWorkout});
+  bool showWorkout;
   
   @override
   State<HomeWidget> createState() => _HomeViewState();
@@ -14,7 +15,6 @@ class HomeWidget extends StatefulWidget {
 
 
 class _HomeViewState extends State<HomeWidget> {
- bool _showWorkout = false;
   @override
   void initState() {
     super.initState();
@@ -25,7 +25,7 @@ class _HomeViewState extends State<HomeWidget> {
   }
 
   void _toggleWorkout(bool change) {
-    setState(() => _showWorkout = change);
+    setState(() => widget.showWorkout = change);
   }
 
   @override
@@ -42,7 +42,7 @@ class _HomeViewState extends State<HomeWidget> {
 
 
       ]),
-        WorkoutOptions(workoutVisible: _showWorkout, update: _toggleWorkout)
+        WorkoutOptions(workoutVisible: widget.showWorkout, update: _toggleWorkout)
     ]));});
     }
   }
@@ -65,12 +65,12 @@ class HomeHeader extends StatelessWidget {
             Row(
           children: [
             Expanded(child:Column(children: [
-            Text(
+            Align(alignment: Alignment.centerLeft, child:Text(
               "Welcome Back",
-              style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),),
-            Text(
+              style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),)),
+            Align(alignment: Alignment.centerLeft, child:Text(
               userName + "!",
-              style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.bold),)])),
+              style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),))])),
            Expanded(child:Column(children:[
             Material(
       color: Color.fromARGB(255, 0, 149, 255),
@@ -141,7 +141,7 @@ class ScheduleListItem extends StatelessWidget {
           decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
           child: Center(child:Text(weekday, style:TextStyle(color: Colors.white))),
           ),
-          Expanded(child:Text(workoutName)),
+          Expanded(child:Center(child:Text(workoutName))),
           Container(padding: EdgeInsets.all(8.0), child:TextButton(onPressed: (){}, child: Text("View", style: TextStyle(color: Colors.black)), style: TextButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 228, 230, 231),
           ))),
@@ -159,11 +159,13 @@ class AchievementsList extends StatelessWidget {
 
    @override
   Widget build(BuildContext context) {
-    return Container(child: Column(children:
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Column(children:
     [
       Align( alignment: Alignment.centerLeft, child: Text("Achievements", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))),
       Container(
-                  child: SizedBox(height: 100, child:achievementsList.isNotEmpty
+                  child: SizedBox(height: 120, child:achievementsList.isNotEmpty
                     ? ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
@@ -211,7 +213,13 @@ class AchievementsListItem extends StatelessWidget {
           _ => const Color.fromARGB(255, 115, 172, 233)
         })), 
         Center(child:Text(date.month.toString() + "-" + date.day.toString())),
-        Center(child:Text(exerciseName))])
+        Center(child:Text(switch (achievementThreshold) {
+          1 => "Best",
+          2 => "2nd Best",
+          3 => "3rd Best",
+          _ => ""
+        })),
+        Center(child: Text(exerciseName))])
         );
   }
 }
@@ -276,10 +284,12 @@ class GoalTable extends StatelessWidget {
 
    @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child:Column(children: [
       Align( alignment: Alignment.centerLeft, child: Text("Goals", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))),
       Container(width: double.infinity, child: DataTableExample(goalsList: goalsList)),
-    ]);
+    ]));
   }
 }
 

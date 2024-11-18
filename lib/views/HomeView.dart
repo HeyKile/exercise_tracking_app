@@ -4,7 +4,8 @@ import '../viewmodels/UserViewModel.dart';
 import 'widgets/HomeWidget.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  HomeView({super.key, required this.showWorkout});
+  bool showWorkout;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class HomeView extends StatelessWidget {
       body: Card(
         child: ChangeNotifierProvider(
           create: (_) => UserViewModel(),
-          child: const HomeWidget(),
+          child: HomeWidget(showWorkout: showWorkout,),
         ),
       ),
     );

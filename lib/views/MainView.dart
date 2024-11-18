@@ -13,6 +13,7 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
 
   int _selectedIndex = 0;
+  bool _startWorkout = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class _MainViewState extends State<MainView> {
         title: const Text('Stealing is good'),
       ),
       body: <Widget> [
-          const HomeView(),
+          HomeView(showWorkout: _startWorkout),
           const Card(
             child: Text('lets fucking go')
           ),
@@ -30,9 +31,18 @@ class _MainViewState extends State<MainView> {
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
-          setState(() {
+          if(index == 1){
+            setState(() {
+              _startWorkout = true;
+            });
+            
+          }
+          else{
+            setState(() {
             _selectedIndex = index;
           });
+          }
+          
         },
         indicatorColor: const Color.fromARGB(255, 0, 149, 255),
         selectedIndex: _selectedIndex,
