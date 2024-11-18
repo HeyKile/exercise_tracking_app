@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
 import 'package:exercise_tracking_app/viewmodels/TemplateViewModel.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +140,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     Color enabledBackgroundColor = Colors.green[400]!;
     Color disabledBackgroundColor = Colors.green[100]!;
