@@ -39,7 +39,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     return Exercise(
       name: templateExercise.name,
       sets: convertedSets,
-      time: 0, // Set default time (you can adjust based on template data)
+      time: 0, 
     );
   }
 
@@ -107,7 +107,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
               ],
             ),
             const SizedBox(height:15),
-            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises),
+            SaveWorkout(template: widget.template, workoutViewModel: workoutViewModel, exercises: exercises),
             const SizedBox(height:15),
           ],
         )
@@ -151,10 +151,11 @@ class SetAdd extends StatelessWidget{
 }
 
 class SaveWorkout extends StatelessWidget{
+  final Template? template;
   final WorkoutViewModel workoutViewModel;
   final List<Exercise> exercises;
 
-  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises});
+  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises, required this.template});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +165,7 @@ class SaveWorkout extends StatelessWidget{
       child: ElevatedButton(
         onPressed: () {
           // send info to workout view model to save workout in model
-          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: 0, date: DateTime.now());
+          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: template!.name, intensity: 0, time: 0, date: DateTime.now());
           workoutViewModel.saveWorkout(currentWorkout);
           Navigator.pushReplacement(
             context,

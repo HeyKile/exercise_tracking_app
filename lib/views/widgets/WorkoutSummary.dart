@@ -42,11 +42,13 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 Container( 
                   padding: const EdgeInsets.symmetric(vertical: 16.0), 
                   decoration: const BoxDecoration( color: Colors.blue, ), 
-                  child: const Row( 
+                  child: Row( 
                     mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                     children: [ 
-                      WorkoutHeader(), 
-                      TagButton(), 
+                      const SizedBox(width: 16.0),
+                      WorkoutHeader(workout: widget.currentWorkout), 
+                      const TagButton(),
+                      const SizedBox(height: 16.0), 
                     ], 
                   ), 
                 ), 
@@ -195,7 +197,7 @@ class TagButton extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.1,
+      width: MediaQuery.of(context).size.width * 0.05,
       child: ElevatedButton(
       onPressed: (){},
       style: ElevatedButton.styleFrom(
@@ -222,7 +224,8 @@ class TagButton extends StatelessWidget{
 }
 
 class WorkoutHeader extends StatelessWidget{
-  const WorkoutHeader({super.key});
+  final Workout? workout;
+  const WorkoutHeader({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
@@ -232,11 +235,11 @@ class WorkoutHeader extends StatelessWidget{
       decoration: const BoxDecoration(
         color: Colors.blue, 
       ),
-      child: const Align(
+      child: Align(
         alignment: Alignment.topLeft, 
         child: Text(
-          'WORKOUT NAME',
-          style: TextStyle(
+          workout!.workoutName,
+          style: const TextStyle(
             color: Colors.white, 
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
