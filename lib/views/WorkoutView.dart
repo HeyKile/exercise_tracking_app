@@ -14,7 +14,7 @@ class WorkoutView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: isLive ? const LiveWorkout() : const PastWorkout(),
+      body: isLive ? LiveWorkout(template: template) : PastWorkout(template: template),
     );
   }
 }

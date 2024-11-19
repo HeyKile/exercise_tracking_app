@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'ExerciseTile.dart';
 
 class PastWorkout extends StatefulWidget {
-  const PastWorkout({super.key});
+  final Template? template;
+  const PastWorkout({super.key, required this.template});
 
   @override
   _PastWorkoutState createState() => _PastWorkoutState();
@@ -13,16 +15,33 @@ class PastWorkout extends StatefulWidget {
 
 class _PastWorkoutState extends State<PastWorkout>{
   Workout? currentWorkout;
-
+  List<Exercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
-  //extract from template
-  List<Exercise> exercises = [
-    Exercise(name: 'Leg Press', sets: [
-      Set(reps: 12, weight: 100),
-      Set(reps: 10, weight: 110),
-    ], time: 60),
-  ];
 
+  //extract from template
+  @override
+  void initState() {
+    super.initState();
+    if (widget.template != null) {
+      exercises = widget.template!.exercises.map((templateExercise) => _convertTemplateExercise(templateExercise)).toList();
+    }
+  }
+
+  Exercise _convertTemplateExercise(TemplateExercise templateExercise) {
+    final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
+      final map = templateSet as Map<String, dynamic>; // Cast to Map
+      return Set(
+        reps: map['reps'] != null ? map['reps'] as int : 0,
+        weight: map['weight'] != null ? map['weight'] as int : 0,
+      );
+    }).toList();
+
+    return Exercise(
+      name: templateExercise.name,
+      sets: convertedSets,
+      time: 0, 
+    );
+  }
 
   void _addExercise(){
     setState(() {

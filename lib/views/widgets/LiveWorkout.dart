@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
 import 'ExerciseTile.dart';
@@ -5,7 +6,8 @@ import 'package:exercise_tracking_app/models/WorkoutModel.dart';
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
 
 class LiveWorkout extends StatefulWidget {
-  const LiveWorkout({super.key});
+  final Template? template;
+  const LiveWorkout({super.key, this.template});
 
   @override
   _LiveWorkoutState createState() => _LiveWorkoutState();
@@ -13,20 +15,33 @@ class LiveWorkout extends StatefulWidget {
 
 class _LiveWorkoutState extends State<LiveWorkout> {
   Workout? currentWorkout;
-
+  List<Exercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
 
   // extract from selected template
-  List<Exercise> exercises = [
-    Exercise(name: 'Leg Press', sets: [
-      Set(reps: 12, weight: 1020),
-      Set(reps: 10, weight: 110),
-    ], time: 60),
-    Exercise(name: 'Leg Press', sets: [
-      Set(reps: 12, weight: 1020),
-      Set(reps: 10, weight: 110),
-    ], time: 60)
-  ];
+  @override
+  void initState() {
+    super.initState();
+    if (widget.template != null) {
+      exercises = widget.template!.exercises.map((templateExercise) => _convertTemplateExercise(templateExercise)).toList();
+    }
+  }
+
+  Exercise _convertTemplateExercise(TemplateExercise templateExercise) {
+    final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
+      final map = templateSet as Map<String, dynamic>; 
+      return Set(
+        reps: map['reps'] != null ? map['reps'] as int : 0,
+        weight: map['weight'] != null ? map['weight'] as int : 0,
+      );
+    }).toList();
+
+    return Exercise(
+      name: templateExercise.name,
+      sets: convertedSets,
+      time: 0, // Set default time (you can adjust based on template data)
+    );
+  }
 
   void _addExercise(){
     setState(() {
@@ -93,6 +108,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
             ),
             const SizedBox(height:15),
             SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises),
+            const SizedBox(height:15),
           ],
         )
       )
@@ -138,7 +154,6 @@ class SaveWorkout extends StatelessWidget{
   final WorkoutViewModel workoutViewModel;
   final List<Exercise> exercises;
 
-
   const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises});
 
   @override
@@ -150,7 +165,6 @@ class SaveWorkout extends StatelessWidget{
         onPressed: () {
           // send info to workout view model to save workout in model
           final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: 0, date: DateTime.now());
-          debugPrint('Current Workout HUH??: $currentWorkout');
           workoutViewModel.saveWorkout(currentWorkout);
           Navigator.pushReplacement(
             context,
