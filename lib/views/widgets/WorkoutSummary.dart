@@ -1,4 +1,5 @@
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
+import 'package:exercise_tracking_app/views/MainView.dart';
 import 'package:exercise_tracking_app/views/StatsView.dart';
 import 'package:exercise_tracking_app/views/widgets/ExerciseTile.dart';
 import 'package:flutter/material.dart';
@@ -157,10 +158,10 @@ class CloseDisplay extends StatelessWidget{
         onPressed: () {
           // send info to workout view model to save workout in model
           workoutViewModel.updateIntensity(selectedIntensity, currentWorkout);
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const StatsView(),
+              builder: (context) => const MainView(),
             ),
           );
         },

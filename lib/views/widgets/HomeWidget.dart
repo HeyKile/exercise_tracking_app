@@ -340,9 +340,9 @@ class SecondRoute extends StatelessWidget {
       ),
       body: Center(
         child: TemplateList(isWorkout: true, chooseTemplate: (Template? template) {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => WorkoutView(isLive: isLive, template: template)));
+              MaterialPageRoute(builder: (context) => WorkoutView(isLive: isLive, template: template)), (Route<dynamic> route) => false);
           }
           )
         
