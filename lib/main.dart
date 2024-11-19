@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ExerciseViewModel()),
         ChangeNotifierProvider(create: (context) => WorkoutViewModel()),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         home: MainView(),
       ),
     );

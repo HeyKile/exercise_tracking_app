@@ -161,7 +161,7 @@ class CloseDisplay extends StatelessWidget{
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const MainView(),
+              builder: (context) => MainView(selectedIndex: 3),
             ),
           );
         },
