@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'ExerciseTileListItem.dart';
 
 class ExerciseTile extends StatefulWidget{
-  final Exercise exercise;
+  final WorkoutExercise exercise;
   final bool isEditable;
   final VoidCallback onDeleteExercise;
   final Function(int setIndex, int reps, int weight) onSetDetailsChanged;
@@ -16,7 +16,7 @@ class ExerciseTile extends StatefulWidget{
 }
 
 class _ExerciseTileState extends State<ExerciseTile> {
-  String _selectedUnit = 'lbs';
+  String _selectedUnit = 'Unit';
 
   late List<TextEditingController> _repsControllers; 
   late List<TextEditingController> _weightControllers;

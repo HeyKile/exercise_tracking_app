@@ -1,4 +1,5 @@
 import 'package:exercise_tracking_app/models/TemplateModel.dart';
+import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
 import 'ExerciseTile.dart';
@@ -15,7 +16,7 @@ class LiveWorkout extends StatefulWidget {
 
 class _LiveWorkoutState extends State<LiveWorkout> {
   Workout? currentWorkout;
-  List<Exercise> exercises = [];
+  List<WorkoutExercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
 
   // extract from selected template
@@ -27,7 +28,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     }
   }
 
-  Exercise _convertTemplateExercise(TemplateExercise templateExercise) {
+  WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
     final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
       final map = templateSet as Map<String, dynamic>; 
       return Set(
@@ -36,18 +37,25 @@ class _LiveWorkoutState extends State<LiveWorkout> {
       );
     }).toList();
 
-    return Exercise(
+    return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
       time: 0, 
     );
   }
 
-  void _addExercise(){
-    setState(() {
-      exercises.add(Exercise(name: 'New Exercise', sets: [], time: 0));
-    });
-  }
+  void _addExercise() async {
+    final selectedExercises = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddExerciseModal()),
+    );
+    if (selectedExercises != null) {
+      setState(() {
+        exercises.addAll(selectedExercises.cast<WorkoutExercise>());
+        print(exercises);
+      });
+    }
+}
 
   void _deleteExercise(int index){
     setState(() {
@@ -117,7 +125,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
 
 }
 
-class SetAdd extends StatelessWidget{
+class SetAdd extends StatelessWidget{ // add exercise here
   final VoidCallback onAddSet;
   const SetAdd({super.key, required this.onAddSet});
 
@@ -153,7 +161,7 @@ class SetAdd extends StatelessWidget{
 class SaveWorkout extends StatelessWidget{
   final Template? template;
   final WorkoutViewModel workoutViewModel;
-  final List<Exercise> exercises;
+  final List<WorkoutExercise> exercises;
 
   const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises, required this.template});
 

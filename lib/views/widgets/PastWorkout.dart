@@ -15,7 +15,7 @@ class PastWorkout extends StatefulWidget {
 
 class _PastWorkoutState extends State<PastWorkout>{
   Workout? currentWorkout;
-  List<Exercise> exercises = [];
+  List<WorkoutExercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
 
   //extract from template
@@ -27,7 +27,7 @@ class _PastWorkoutState extends State<PastWorkout>{
     }
   }
 
-  Exercise _convertTemplateExercise(TemplateExercise templateExercise) {
+  WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
     final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
       final map = templateSet as Map<String, dynamic>; // Cast to Map
       return Set(
@@ -36,7 +36,7 @@ class _PastWorkoutState extends State<PastWorkout>{
       );
     }).toList();
 
-    return Exercise(
+    return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
       time: 0, 
@@ -45,7 +45,7 @@ class _PastWorkoutState extends State<PastWorkout>{
 
   void _addExercise(){
     setState(() {
-      exercises.add(Exercise(name: 'New Exercise', sets: [], time: 0));
+      exercises.add(WorkoutExercise(name: 'New Exercise', sets: [], time: 0));
     });
   }
 
@@ -150,8 +150,7 @@ class SetAdd extends StatelessWidget{
 
 class SaveWorkout extends StatelessWidget{
   final WorkoutViewModel workoutViewModel;
-  final List<Exercise> exercises;
-
+  final List<WorkoutExercise> exercises;
 
   const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises});
 

@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 
 class Workout{
   String? id;
-  final List<Exercise> completed;
+  final List<WorkoutExercise> completed;
   final int time;
   final String workoutName;
   final DateTime date;
@@ -34,7 +34,7 @@ class Workout{
     return Workout(
       id: json['id'] as String,
       completed: (json['completed'] as List<dynamic>)
-          .map((exercise) => Exercise.fromJson(exercise))
+          .map((exercise) => WorkoutExercise.fromJson(exercise))
           .toList(),
       time: json['time'],
       workoutName: json['workoutName'],
@@ -67,12 +67,12 @@ class Tag {
   Tag({required this.name});
 }
 
-class Exercise{
+class WorkoutExercise{
   String name;
   List<Set> sets;
   int time;
 
-  Exercise({required this.name, required this.sets, required this.time});
+  WorkoutExercise({required this.name, required this.sets, required this.time});
 
   Map<String, dynamic> toJson() {
     return {
@@ -82,8 +82,8 @@ class Exercise{
     };
   }
 
-  factory Exercise.fromJson(Map<String, dynamic> json) {
-    return Exercise(
+  factory WorkoutExercise.fromJson(Map<String, dynamic> json) {
+    return WorkoutExercise(
       name: json['name'],
       sets: (json['sets'] as List<dynamic>)
       .map((sets) => Set.fromJson(sets))

@@ -83,21 +83,8 @@ class Intensity extends StatefulWidget {
 }
 
 class _IntensityState extends State<Intensity> {
-  int selectedIntensity = 0;
+  int selectedIntensity = 1;
 
-  void _incrementIntensity() {
-    setState(() {
-      selectedIntensity = (selectedIntensity + 1).clamp(1, 10);
-      widget.onIntensityChanged(selectedIntensity);
-    });
-  }
-
-  void _decrementIntensity() {
-    setState(() {
-      selectedIntensity = (selectedIntensity - 1).clamp(1, 10);
-      widget.onIntensityChanged(selectedIntensity);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,31 +99,27 @@ class _IntensityState extends State<Intensity> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children: [
-            IconButton(
-            icon: const Icon(Icons.arrow_upward, size: 30, color: Colors.black),
-            onPressed: _incrementIntensity,
-            ),
-            IconButton(
-              icon: const Icon(Icons.arrow_downward, size: 30, color: Colors.black),
-              onPressed: _decrementIntensity,
-            ),
-            Text(
-            selectedIntensity.toString(), 
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-            ),
-          ],
-          ),
           const Text(
             'Intensity',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
+            ),
+          ),
+          Expanded(
+            child: Slider(
+              value: selectedIntensity.toDouble(),
+              min: 1.0,
+              max: 10.0,
+              divisions: 9, // Number of divisions between min and max
+              label: selectedIntensity.toString(), // Display current value
+              onChanged: (double newValue) {
+                setState(() {
+                  selectedIntensity = newValue.round(); // Convert to int
+                  widget.onIntensityChanged(selectedIntensity);
+                });
+              },
             ),
           ),
         ],
@@ -180,7 +163,7 @@ class CloseDisplay extends StatelessWidget{
             Text(
               'Close Display',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 10,
               )
             )
