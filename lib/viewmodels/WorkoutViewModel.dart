@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:exercise_tracking_app/services/WorkoutService.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
-import 'package:path_provider/path_provider.dart';
 
 class WorkoutViewModel extends ChangeNotifier{
   Workout? _currentWorkout;
@@ -15,15 +11,24 @@ class WorkoutViewModel extends ChangeNotifier{
   Workout? get currentWorkout => _currentWorkout;
   List<Workout> get allWorkouts => _allWorkouts;
 
-  void addExercise(String name, List<Set> sets, String time){
+  void addExercise(String name, List<Set> sets, String notes){
     if(_currentWorkout != null){
-      _currentWorkout!.completed.add(WorkoutExercise(name: name, sets: sets));
+      _currentWorkout!.completed.add(WorkoutExercise(name: name, sets: sets, notes: notes));
       debugPrint("Added exercise: $name");
       notifyListeners();
     }
     else {
       debugPrint("Error: No workout started!");
     }
+  }
+
+  void updateNotes(String? workoutId, String exerciseName, String notes) async {
+    final workout = _allWorkouts.firstWhere((w) => w.id == workoutId);
+
+    final exercise = workout.completed.firstWhere((e) => e.name == exerciseName);
+    exercise.notes = notes;
+    await _workoutService.saveUpdatedWorkout(workout);
+    notifyListeners();
   }
 
   Future<void> updateIntensity(int newIntensity, Workout? curr) async {
@@ -63,3 +68,4 @@ class WorkoutViewModel extends ChangeNotifier{
     notifyListeners();
   }
 }
+

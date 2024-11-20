@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ExerciseTileListItem extends StatelessWidget {
+class ExerciseTileListItem extends StatelessWidget { // this is the line of sets, called in ExerciseTile
   final int setNumber;
   final TextEditingController repsController;
   final TextEditingController weightController;

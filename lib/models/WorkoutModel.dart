@@ -70,13 +70,16 @@ class Tag {
 class WorkoutExercise{
   String name;
   List<Set> sets;
+  String notes;
+  String? id;
 
-  WorkoutExercise({required this.name, required this.sets});
+  WorkoutExercise({id, required this.name, required this.sets, required this.notes}) : id = id ?? const Uuid().v4();
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'sets': sets.map((sets) => sets.toJson()).toList()
+      'sets': sets.map((sets) => sets.toJson()).toList(),
+      'notes': notes
     };
   }
 
@@ -86,6 +89,7 @@ class WorkoutExercise{
       sets: (json['sets'] as List<dynamic>)
       .map((sets) => Set.fromJson(sets))
       .toList(),
+      notes: json['notes'],
     );
   }
 

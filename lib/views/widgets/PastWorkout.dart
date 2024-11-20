@@ -12,6 +12,7 @@ class PastWorkout extends StatefulWidget {
   const PastWorkout({super.key, required this.template});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PastWorkoutState createState() => _PastWorkoutState();
 }
 
@@ -20,9 +21,8 @@ class _PastWorkoutState extends State<PastWorkout>{
   List<WorkoutExercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
   String _inputTime = '00:00:00';
-  //Duration workoutDuration = Duration.zero;
+  String workoutName = '';
 
-  //extract from template
   @override
   void initState() {
     super.initState();
@@ -43,6 +43,7 @@ class _PastWorkoutState extends State<PastWorkout>{
     return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
+      notes: ""
     );
   }
 
@@ -50,10 +51,11 @@ class _PastWorkoutState extends State<PastWorkout>{
     return exercises.map((exercise) => WorkoutExercise(
       name: exercise.name,
       sets: [Set(reps: 0, weight: 0)], 
+      notes: ""
     )).toList();
   }
 
-  void _addExercise() async {
+  void _addExercise() async { // add exercise to exercises list using Kyle's modal
     final selectedExercises = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddExerciseModal()),
@@ -65,7 +67,7 @@ class _PastWorkoutState extends State<PastWorkout>{
     }
 }
 
-  void _deleteExercise(int index){
+  void _deleteExercise(int index){ // remove exercises when they click x icon from the list and reset state
     setState(() {
       if (index >= 0 && index < exercises.length) {
         exercises.removeAt(index);
@@ -73,7 +75,7 @@ class _PastWorkoutState extends State<PastWorkout>{
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight) {
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight) { // if they change set numbers, this gets called to update that in the list
     setState(() { 
       final updatedSet = Set(reps: reps, weight: weight);
       exercises[exerciseIndex].sets[setIndex] = updatedSet;
@@ -86,9 +88,16 @@ class _PastWorkoutState extends State<PastWorkout>{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const WorkoutHeader(),
+            WorkoutHeader( // header w workout name
+              initialWorkoutName: workoutName,
+              onNameChanged: (name) {
+                setState(() {
+                  workoutName = name;
+                });
+              },
+            ),
             const SizedBox(height:15),
-            Row(
+            Row( // time they can input, currently has to be in hh:mm:ss format (will fix later)
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const SizedBox(width: 10),
@@ -102,11 +111,11 @@ class _PastWorkoutState extends State<PastWorkout>{
                     decoration: const InputDecoration(
                       hintText: 'HH:MM:SS',
                     ),
-                    keyboardType: TextInputType.text, // here is where i want them to input
+                    keyboardType: TextInputType.text, 
                   ),
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.6),
-                SetAdd(onAddSet: _addExercise),
+                ExerciseAdd(onAddExercise: _addExercise), // this is Add Exercise button, which will add another exercise
                 const SizedBox(width: 10)
               ],
             ),
@@ -116,19 +125,26 @@ class _PastWorkoutState extends State<PastWorkout>{
                 for(int i = 0; i < exercises.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ExerciseTile(
+                  child: ExerciseTile( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
                   onSetDetailsChanged: (setIndex, reps, weight) { 
                     _updateSetDetails(i, setIndex, reps, weight);
                   },
                   isEditable: true,
+                  updateNotes: (updatedNotes) {
+                    workoutViewModel.updateNotes(
+                      exercises[i].id,
+                      exercises[i].name,
+                      updatedNotes,
+                    );
+                  },
                 ),
                 ),
               ], 
             ),
             const SizedBox(height:15),
-            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises, workoutDuration: _inputTime),
+            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises, workoutDuration: _inputTime, workoutName: workoutName), // save workout button here, all of it gets saved in json
           ],
         )
       )
@@ -136,17 +152,17 @@ class _PastWorkoutState extends State<PastWorkout>{
   }
 }
 
-class SetAdd extends StatelessWidget{
-  final VoidCallback onAddSet;
-  const SetAdd({super.key, required this.onAddSet});
+class ExerciseAdd extends StatelessWidget{
+  final VoidCallback onAddExercise;
+  const ExerciseAdd({super.key, required this.onAddExercise});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox( // green + button
+    return SizedBox( 
       width: MediaQuery.of(context).size.width * 0.2, 
       height: 30, 
       child: ElevatedButton(
-        onPressed: onAddSet,
+        onPressed: onAddExercise,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
@@ -173,8 +189,9 @@ class SaveWorkout extends StatelessWidget{
   final WorkoutViewModel workoutViewModel;
   final List<WorkoutExercise> exercises;
   final String workoutDuration;
+  final String workoutName;
 
-  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises, required this.workoutDuration});
+  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises, required this.workoutDuration, required this.workoutName});
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +200,7 @@ class SaveWorkout extends StatelessWidget{
       height: 30, 
       child: ElevatedButton(
         onPressed: () {
-          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: workoutDuration, date: DateTime.now());
+          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: workoutName, intensity: 0, time: workoutDuration, date: DateTime.now());
           workoutViewModel.saveWorkout(currentWorkout);
           Navigator.pushReplacement(
             context,
@@ -216,23 +233,58 @@ class SaveWorkout extends StatelessWidget{
   }
 }
 
-class WorkoutHeader extends StatelessWidget{
-  const WorkoutHeader({super.key});
+class WorkoutHeader extends StatefulWidget {
+  final String initialWorkoutName;
+  final ValueChanged<String> onNameChanged;
+
+  const WorkoutHeader({super.key, required this.initialWorkoutName, required this.onNameChanged});
+
+  @override
+  State<WorkoutHeader> createState() => _WorkoutHeaderState();
+}
+
+class _WorkoutHeaderState extends State<WorkoutHeader> {
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: widget.initialWorkoutName);
+
+    _textController.addListener(() {
+      widget.onNameChanged(_textController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: const BoxDecoration(
-        color: Colors.blue, // Customize the background color
+        color: Colors.blue,
       ),
-      child: const Align(
-        alignment: Alignment.center, // Center the text horizontally
-        child: Text(
-          'CURRENT WORKOUT',
-          style: TextStyle(
-            color: Colors.white, // Customize the text color
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9, // Limit width
+          child: TextField(
+            controller: _textController,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none, // Remove default border
+              hintText: 'Enter workout name...',
+              hintStyle: TextStyle(color: Colors.white70),
+            ),
+            textAlign: TextAlign.center, // Center the text
           ),
         ),
       ),

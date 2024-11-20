@@ -1,6 +1,5 @@
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
 import 'package:exercise_tracking_app/views/MainView.dart';
-import 'package:exercise_tracking_app/views/StatsView.dart';
 import 'package:exercise_tracking_app/views/widgets/ExerciseTile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
   void initState() { 
     super.initState(); 
     WidgetsBinding.instance.addPostFrameCallback((_) { 
-      Provider.of<WorkoutViewModel>(context, listen: false).loadWorkouts(); 
+      Provider.of<WorkoutViewModel>(context, listen: false).loadWorkouts(); // we get the exercises from the provider
     }); 
   }
   
@@ -34,8 +33,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
     return Scaffold( 
       body: Consumer<WorkoutViewModel>( 
         builder: (context, workoutViewModel, child) { 
-          final exercises = widget.currentWorkout?.completed ?? [];
-          print('Current exercises: $exercises'); 
+          final exercises = widget.currentWorkout?.completed ?? []; // and we set them equal to the list here
           return SingleChildScrollView( 
             child: Column( 
               children: [ 
@@ -44,7 +42,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                   decoration: const BoxDecoration( color: Colors.blue, ), 
                   child: Row( 
                     mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                    children: [ 
+                    children: [ // header and tags
                       const SizedBox(width: 16.0),
                       WorkoutHeader(workout: widget.currentWorkout), 
                       const TagButton(),
@@ -54,15 +52,27 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 ), 
                 const SizedBox(height: 16.0), 
                 for (int i = 0; i < exercises.length; i++) 
-                ExerciseTile( exercise: exercises[i], isEditable: false, onDeleteExercise: () {}, onSetDetailsChanged: (int setIndex, int reps, int weight) {}, ), 
+                ExerciseTile( // the tiles but they are not editable!
+                  exercise: exercises[i], 
+                  isEditable: false, 
+                  onDeleteExercise: () {}, 
+                  onSetDetailsChanged: (int setIndex, int reps, int weight) {}, 
+                  updateNotes: (updatedNotes) {
+                    workoutViewModel.updateNotes(
+                      exercises[i].id,
+                      exercises[i].name,
+                      updatedNotes,
+                    );
+                  },
+                ), 
                 const SizedBox(height: 15), 
-                Intensity(onIntensityChanged: (int intensity){
+                Intensity(onIntensityChanged: (int intensity){ // intensity can only be edited here, so we have an update intensity function which updates it in the json
                   setState(() {
                     selectedIntensity = intensity;
                   });
                 }), 
                 const SizedBox(height: 16.0), 
-                CloseDisplay(selectedIntensity: selectedIntensity, workoutViewModel: workoutViewModel, currentWorkout: widget.currentWorkout), 
+                CloseDisplay(selectedIntensity: selectedIntensity, workoutViewModel: workoutViewModel, currentWorkout: widget.currentWorkout), // close display, everything is saved
                 const SizedBox(height: 16.0), 
               ], 
             ), 

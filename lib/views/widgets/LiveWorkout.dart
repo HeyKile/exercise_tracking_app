@@ -26,14 +26,13 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   bool _isTimerRunning = false;
   String workoutName = '';
 
-  // extract from selected template
   @override
   void initState() {
     super.initState();
     if (widget.template != null) {
       exercises = widget.template!.exercises.map((templateExercise) => _convertTemplateExercise(templateExercise)).toList();
     }
-    _stopwatch.start();
+    _stopwatch.start(); // set up stopwatch to start time
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState((){
         _elapsedTime = _stopwatch.elapsed;
@@ -47,6 +46,9 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     super.dispose();
   }
 
+  // the next two methods will need to be improved. currently there are 3 exercise classes so have to convert between them
+  // which is an L. so fixing that soon lol
+
   WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
     final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
       final map = templateSet as Map<String, dynamic>; 
@@ -59,6 +61,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
+      notes: "",
     );
   }
 
@@ -66,6 +69,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     return exercises.map((exercise) => WorkoutExercise(
       name: exercise.name,
       sets: [Set(reps: 0, weight: 0)], 
+      notes: "",
     )).toList();
   }
 
@@ -96,7 +100,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     }); 
   }
 
-  void _toggleTimer() {
+  void _toggleTimer() { // starts / stops based on pause / start
     setState(() {
       _isTimerRunning = !_isTimerRunning;
       if (_isTimerRunning) {
@@ -125,15 +129,15 @@ class _LiveWorkoutState extends State<LiveWorkout> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                StartStop(
+                StartStop( // timing, pause and start
                   icon: _isTimerRunning ? Icons.play_arrow : Icons.pause,
                   label: _isTimerRunning ? 'Start' :'Pause',
                   onPressed: () {
                     _toggleTimer();
                   },
                 ),
-                Text(_elapsedTime.toString().substring(0,7)),
-                StartStop(
+                Text(_elapsedTime.toString().substring(0,7)), // time that's passed
+                StartStop( 
                   icon: Icons.stop,
                   label: 'Finish',
                   onPressed: () {
@@ -151,20 +155,27 @@ class _LiveWorkoutState extends State<LiveWorkout> {
               ],
             ),
             const SizedBox(height:15), // gap
-            SetAdd(onAddSet: _addExercise),
+            ExerciseAdd(onAddExercise: _addExercise),
             const SizedBox(height:15),
             Column(
               children: [
                 for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ExerciseTile(
+                  child: ExerciseTile( // different sets, populates from template
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
                   onSetDetailsChanged: (setIndex, reps, weight) { 
                     _updateSetDetails(i, setIndex, reps, weight);
                   },
                   isEditable: true,
+                  updateNotes: (updatedNotes) {
+                    workoutViewModel.updateNotes(
+                      exercises[i].id,
+                      exercises[i].name,
+                      updatedNotes,
+                    );
+                  },
                 ),
                 ),
               ], 
@@ -178,9 +189,9 @@ class _LiveWorkoutState extends State<LiveWorkout> {
 
 }
 
-class SetAdd extends StatelessWidget{ // add exercise here
-  final VoidCallback onAddSet;
-  const SetAdd({super.key, required this.onAddSet});
+class ExerciseAdd extends StatelessWidget{ // add exercise here
+  final VoidCallback onAddExercise;
+  const ExerciseAdd({super.key, required this.onAddExercise});
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +199,7 @@ class SetAdd extends StatelessWidget{ // add exercise here
       width: MediaQuery.of(context).size.width * 0.9, 
       height: 30, 
       child: ElevatedButton(
-        onPressed: onAddSet,
+        onPressed: onAddExercise,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
@@ -249,7 +260,7 @@ class _WorkoutHeaderState extends State<WorkoutHeader> {
       ),
       child: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9, // Limit width
+          width: MediaQuery.of(context).size.width * 0.9, 
           child: TextField(
             controller: _textController,
             style: const TextStyle(
@@ -258,11 +269,11 @@ class _WorkoutHeaderState extends State<WorkoutHeader> {
               fontWeight: FontWeight.bold,
             ),
             decoration: const InputDecoration(
-              border: InputBorder.none, // Remove default border
+              border: InputBorder.none,
               hintText: 'Enter workout name...',
               hintStyle: TextStyle(color: Colors.white70),
             ),
-            textAlign: TextAlign.center, // Center the text
+            textAlign: TextAlign.center, 
           ),
         ),
       ),
