@@ -40,13 +40,16 @@ class ExerciseViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> addCustomWorkout(String name, bool hasDistance, bool hasRep, bool hasWeight, bool hasTime) async {
+  Future<bool> addCustomExercse(String name, bool hasDistance, bool hasRep, bool hasWeight, bool hasTime) async {
     Exercise exercise = Exercise.fromInput(name, hasDistance, hasRep, hasWeight, hasTime);
     Map<String, dynamic> exerciseJson = {
       "id": exercise.id,
       "name": exercise.name,
       "isCustom": exercise.isCustom,
-      "trackedStats": exercise.trackedStats
+      "trackedStats": exercise.trackedStats.map((stat) => {
+        "type": stat.type.toString().split('.').last[0].toUpperCase() + stat.type.toString().split('.').last.substring(1).toLowerCase(),
+        if (stat.unit != null) "unit": stat.unit
+      }).toList()
     };
     bool res = await _exerciseService.saveExercise(exerciseJson);
     await fetchExercises();

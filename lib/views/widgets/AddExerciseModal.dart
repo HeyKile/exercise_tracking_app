@@ -139,7 +139,7 @@ class _AddExerciseModalState extends State<AddExerciseModal> {
     );
     if (res != null) {
       setState(() {
-        Provider.of<ExerciseViewModel>(context, listen: false).addCustomWorkout(
+        Provider.of<ExerciseViewModel>(context, listen: false).addCustomExercse(
           res['name'],
           res['hasDistance'],
           res['hasReps'],
