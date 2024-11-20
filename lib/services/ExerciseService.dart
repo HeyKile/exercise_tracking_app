@@ -31,16 +31,14 @@ class ExerciseService {
       List<dynamic> jsonExercisesList;
       try {
         jsonExercisesList = jsonDecode(fileContent);
-      }
-      catch (_) {
+      } catch (_) {
         jsonExercisesList = [];
       }
       jsonExercisesList.add(exercise);
       String updatedJson = jsonEncode(jsonExercisesList);
       await file.writeAsString(updatedJson);
       return true;
-    }
-    catch (e) {
+    } catch (e) {
       print('Error saving the exercise: $e');
       return false;
     }
