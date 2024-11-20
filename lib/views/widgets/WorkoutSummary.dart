@@ -52,7 +52,9 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 ), 
                 const SizedBox(height: 16.0), 
                 for (int i = 0; i < exercises.length; i++) 
-                ExerciseTile( // the tiles but they are not editable!
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: ExerciseTile( // the tiles but they are not editable!
                   exercise: exercises[i], 
                   isEditable: false, 
                   onDeleteExercise: () {}, 
@@ -64,6 +66,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                       updatedNotes,
                     );
                   },
+                ),
                 ), 
                 const SizedBox(height: 15), 
                 Intensity(onIntensityChanged: (int intensity){ // intensity can only be edited here, so we have an update intensity function which updates it in the json
