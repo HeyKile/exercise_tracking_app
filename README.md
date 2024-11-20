@@ -50,13 +50,17 @@ To run the current SnapShot of AllMoves you will need:
 
 ### Workouts and Workout Logging
 
+
 - logging workouts is nearly feature complete, allowing users to select a template, add exercises, add notes to their exercises, fill out their sets, and complete their workout
 - what has yet to be done:
   - design-wise, we plan on making each exercise in the template closer to how they're displayed in template builder, which will be implemented in Beta
+  - after user feedback, we have a plan for how to better design adding notes to an exercise
+    - selecting the "Add Notes" button on an exercise will slide out a notes page for users to add details about their exercise
   - we have a plan for how to design adding tags to an exercise
     -  selecting the "Add Tags" button on a workout will slide allow you to select different tags (and potentially create custom tags)
   - we also need to tweak designs to better support logging different types of exercises, as we have mostly been testing with weight lifting
   - once viewing stats has been futher implemented, conntect workouts to those stats can be finalized
+
 
 ### Viewing Stats
 
