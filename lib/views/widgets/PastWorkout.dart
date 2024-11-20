@@ -1,6 +1,8 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
+import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
 import 'ExerciseTile.dart';
@@ -17,6 +19,8 @@ class _PastWorkoutState extends State<PastWorkout>{
   Workout? currentWorkout;
   List<WorkoutExercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
+  String _inputTime = '00:00:00';
+  //Duration workoutDuration = Duration.zero;
 
   //extract from template
   @override
@@ -39,15 +43,27 @@ class _PastWorkoutState extends State<PastWorkout>{
     return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
-      time: 0, 
     );
   }
 
-  void _addExercise(){
-    setState(() {
-      exercises.add(WorkoutExercise(name: 'New Exercise', sets: [], time: 0));
-    });
+  List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
+    return exercises.map((exercise) => WorkoutExercise(
+      name: exercise.name,
+      sets: [Set(reps: 0, weight: 0)], 
+    )).toList();
   }
+
+  void _addExercise() async {
+    final selectedExercises = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddExerciseModal()),
+    );
+    if (selectedExercises != null) {
+      setState(() {
+        exercises.addAll(convertExerciseToWorkoutExercise(selectedExercises));
+      });
+    }
+}
 
   void _deleteExercise(int index){
     setState(() {
@@ -64,7 +80,6 @@ class _PastWorkoutState extends State<PastWorkout>{
     }); 
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,12 +94,15 @@ class _PastWorkoutState extends State<PastWorkout>{
                 const SizedBox(width: 10),
                 const Text("Time:"),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
-                      hintText: '',
+                    onChanged: (value) {
+                      _inputTime = value;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'HH:MM:SS',
                     ),
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text, // here is where i want them to input
                   ),
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.6),
@@ -95,8 +113,10 @@ class _PastWorkoutState extends State<PastWorkout>{
             const SizedBox(height:15),
             Column(
               children: [
-                for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
-                ExerciseTile(
+                for(int i = 0; i < exercises.length; i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: ExerciseTile(
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
                   onSetDetailsChanged: (setIndex, reps, weight) { 
@@ -104,10 +124,11 @@ class _PastWorkoutState extends State<PastWorkout>{
                   },
                   isEditable: true,
                 ),
-              ],
+                ),
+              ], 
             ),
             const SizedBox(height:15),
-            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises),
+            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises, workoutDuration: _inputTime),
           ],
         )
       )
@@ -151,8 +172,9 @@ class SetAdd extends StatelessWidget{
 class SaveWorkout extends StatelessWidget{
   final WorkoutViewModel workoutViewModel;
   final List<WorkoutExercise> exercises;
+  final String workoutDuration;
 
-  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises});
+  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises, required this.workoutDuration});
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +183,7 @@ class SaveWorkout extends StatelessWidget{
       height: 30, 
       child: ElevatedButton(
         onPressed: () {
-          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: 0, date: DateTime.now());
-          debugPrint('Current Workout HUH??: $currentWorkout');
+          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: 'hi', intensity: 0, time: workoutDuration, date: DateTime.now());
           workoutViewModel.saveWorkout(currentWorkout);
           Navigator.pushReplacement(
             context,

@@ -15,9 +15,9 @@ class WorkoutViewModel extends ChangeNotifier{
   Workout? get currentWorkout => _currentWorkout;
   List<Workout> get allWorkouts => _allWorkouts;
 
-  void addExercise(String name, List<Set> sets, int time){
+  void addExercise(String name, List<Set> sets, String time){
     if(_currentWorkout != null){
-      _currentWorkout!.completed.add(WorkoutExercise(name: name, sets: sets, time: time));
+      _currentWorkout!.completed.add(WorkoutExercise(name: name, sets: sets));
       debugPrint("Added exercise: $name");
       notifyListeners();
     }

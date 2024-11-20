@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 class Workout{
   String? id;
   final List<WorkoutExercise> completed;
-  final int time;
+  final String time;
   final String workoutName;
   final DateTime date;
   int intensity;
@@ -17,7 +17,7 @@ class Workout{
     return {
       'id': id,
       'completed': completed.map((exercise) => exercise.toJson()).toList(),
-      'time': time,
+      'time': time.toString(),
       'workoutName': workoutName,
       'date': date.toIso8601String(),
       'intensity': intensity,
@@ -36,7 +36,7 @@ class Workout{
       completed: (json['completed'] as List<dynamic>)
           .map((exercise) => WorkoutExercise.fromJson(exercise))
           .toList(),
-      time: json['time'],
+      time: json['time'] as String,
       workoutName: json['workoutName'],
       date: DateTime.parse(json['date']),
       intensity: json['intensity'],
@@ -70,15 +70,13 @@ class Tag {
 class WorkoutExercise{
   String name;
   List<Set> sets;
-  int time;
 
-  WorkoutExercise({required this.name, required this.sets, required this.time});
+  WorkoutExercise({required this.name, required this.sets});
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'sets': sets.map((sets) => sets.toJson()).toList(),
-      'time': time,
+      'sets': sets.map((sets) => sets.toJson()).toList()
     };
   }
 
@@ -88,7 +86,6 @@ class WorkoutExercise{
       sets: (json['sets'] as List<dynamic>)
       .map((sets) => Set.fromJson(sets))
       .toList(),
-      time: json['time'],
     );
   }
 

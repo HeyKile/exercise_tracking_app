@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
@@ -18,6 +20,11 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   Workout? currentWorkout;
   List<WorkoutExercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
+  final Stopwatch _stopwatch = Stopwatch();
+  Duration _elapsedTime = const Duration();
+  late Timer timer;
+  bool _isTimerRunning = false;
+  String workoutName = '';
 
   // extract from selected template
   @override
@@ -26,6 +33,18 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     if (widget.template != null) {
       exercises = widget.template!.exercises.map((templateExercise) => _convertTemplateExercise(templateExercise)).toList();
     }
+    _stopwatch.start();
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState((){
+        _elapsedTime = _stopwatch.elapsed;
+      });
+    });
+  }
+
+   @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
@@ -40,8 +59,14 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
-      time: 0, 
     );
+  }
+
+  List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
+    return exercises.map((exercise) => WorkoutExercise(
+      name: exercise.name,
+      sets: [Set(reps: 0, weight: 0)], 
+    )).toList();
   }
 
   void _addExercise() async {
@@ -51,8 +76,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     );
     if (selectedExercises != null) {
       setState(() {
-        exercises.addAll(selectedExercises.cast<WorkoutExercise>());
-        print(exercises);
+        exercises.addAll(convertExerciseToWorkoutExercise(selectedExercises));
       });
     }
 }
@@ -72,29 +96,49 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     }); 
   }
 
+  void _toggleTimer() {
+    setState(() {
+      _isTimerRunning = !_isTimerRunning;
+      if (_isTimerRunning) {
+        _stopwatch.start();
+      } else {
+        _stopwatch.stop();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _elapsedTime = _stopwatch.elapsed;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const WorkoutHeader(),
+            WorkoutHeader(
+              initialWorkoutName: workoutName,
+              onNameChanged: (name) {
+                setState(() {
+                  workoutName = name;
+                });
+              },
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 StartStop(
-                  icon: Icons.pause,
-                  label: 'Pause',
+                  icon: _isTimerRunning ? Icons.play_arrow : Icons.pause,
+                  label: _isTimerRunning ? 'Start' :'Pause',
                   onPressed: () {
-
+                    _toggleTimer();
                   },
                 ),
-                const Text("20:32"),
+                Text(_elapsedTime.toString().substring(0,7)),
                 StartStop(
                   icon: Icons.stop,
                   label: 'Finish',
                   onPressed: () {
-                    final currentWorkout = Workout(completed: exercises, tags: [], workoutName: widget.template!.name, intensity: 0, time: 0, date: DateTime.now());
+                    final currentWorkout = Workout(completed: exercises, tags: [], workoutName: workoutName, intensity: 0, time: _elapsedTime.toString().substring(0,7), date: DateTime.now());
+                    debugPrint('current workout: $currentWorkout');
                     workoutViewModel.saveWorkout(currentWorkout);
                     Navigator.pushReplacement(
                       context,
@@ -123,7 +167,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   isEditable: true,
                 ),
                 ),
-              ],
+              ], 
             ),
             const SizedBox(height:15),
           ],
@@ -167,23 +211,58 @@ class SetAdd extends StatelessWidget{ // add exercise here
   }
 }
 
-class WorkoutHeader extends StatelessWidget{
-  const WorkoutHeader({super.key});
+class WorkoutHeader extends StatefulWidget {
+  final String initialWorkoutName;
+  final ValueChanged<String> onNameChanged;
+
+  const WorkoutHeader({super.key, required this.initialWorkoutName, required this.onNameChanged});
+
+  @override
+  State<WorkoutHeader> createState() => _WorkoutHeaderState();
+}
+
+class _WorkoutHeaderState extends State<WorkoutHeader> {
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: widget.initialWorkoutName);
+
+    _textController.addListener(() {
+      widget.onNameChanged(_textController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: const BoxDecoration(
-        color: Colors.blue, 
+        color: Colors.blue,
       ),
-      child: const Align(
-        alignment: Alignment.center, 
-        child: Text(
-          'CURRENT WORKOUT',
-          style: TextStyle(
-            color: Colors.white, 
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9, // Limit width
+          child: TextField(
+            controller: _textController,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none, // Remove default border
+              hintText: 'Enter workout name...',
+              hintStyle: TextStyle(color: Colors.white70),
+            ),
+            textAlign: TextAlign.center, // Center the text
           ),
         ),
       ),
