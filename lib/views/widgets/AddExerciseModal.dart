@@ -77,41 +77,71 @@ class _AddExerciseModalState extends State<AddExerciseModal> {
                     },
                   ),
                 ),
-                CheckboxListTile(
-                  title: const Text('Has Distance'),
-                  value: hasDistance,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      hasDistance = value ?? false;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: const Text('Has Reps'),
-                  value: hasReps,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      hasReps = value ?? false;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: const Text('Has Weight'),
-                  value: hasWeight,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      hasWeight = value ?? false;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: const Text('Has Time'),
-                  value: hasTime,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      hasTime = value ?? false;
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: 10.0,
+                          ),
+                          child: Text(
+                            "Attributes",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          )
+                        ),
+                      ),
+                      CheckboxListTile(
+                        contentPadding:const EdgeInsets.symmetric(horizontal: 50.0),
+                        activeColor: Colors.blue,
+                        title: const Text('Distance'),
+                        value: hasDistance,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            hasDistance = value ?? false;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        contentPadding:const EdgeInsets.symmetric(horizontal: 50.0),
+                        activeColor: Colors.blue,
+                        title: const Text('Reps'),
+                        value: hasReps,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            hasReps = value ?? false;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        contentPadding:const EdgeInsets.symmetric(horizontal: 50.0),
+                        activeColor: Colors.blue,
+                        title: const Text('Weight'),
+                        value: hasWeight,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            hasWeight = value ?? false;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        contentPadding:const EdgeInsets.symmetric(horizontal: 50.0),
+                        activeColor: Colors.blue,
+                        title: const Text('Time'),
+                        value: hasTime,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            hasTime = value ?? false;
+                          });
+                        },
+                      ),
+                    ],
+                  )
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
