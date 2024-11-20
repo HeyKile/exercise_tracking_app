@@ -1,10 +1,8 @@
-import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/models/UserModel.dart';
-import 'package:exercise_tracking_app/views/WorkoutView.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/UserViewModel.dart';
 import 'package:provider/provider.dart';
-import 'TemplateList.dart';
+import 'package:exercise_tracking_app/views/MainView.dart';
 
 class HomeWidget extends StatefulWidget {
   HomeWidget({super.key, required this.showWorkout});
@@ -45,7 +43,6 @@ class _HomeViewState extends State<HomeWidget> {
 
 
       ]),
-        WorkoutOptions(workoutVisible: widget.showWorkout, update: _toggleWorkout)
     ]));});
     }
   }
@@ -68,34 +65,13 @@ class HomeHeader extends StatelessWidget {
             Row(
           children: [
             Expanded(child:Column(children: [
-            Align(alignment: Alignment.centerLeft, child:Text(
+            Align(alignment: Alignment.center, child:Text(
               "Welcome Back",
               style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),)),
-            Align(alignment: Alignment.centerLeft, child:Text(
+            Align(alignment: Alignment.center, child:Text(
               userName + "!",
               style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),))])),
-           Expanded(child:Column(children:[
-            Material(
-      color: Color.fromARGB(255, 0, 149, 255),
-      child: Center(
-        
-        child: Ink(
-          decoration: const ShapeDecoration(
-            color: Color.fromARGB(255, 228, 230, 231),
-            shape: CircleBorder(),
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.add),
-            iconSize: 55.0,
-            color: Colors.black,
-            onPressed: () => update(true),
-          ),
-        ),
-      ),
-    ),
-            Text("New Workout",
-            style: TextStyle(color: Colors.white, fontSize:18 ),)
-           ]))
+           
           ],
         ),
           ]
@@ -112,7 +88,7 @@ class WorkoutSchedule extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: Column(
       children:[
-        Align( alignment: Alignment.centerLeft, child: Text("Weekly Schedule", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))), 
+        Align( alignment: Alignment.centerLeft, child: Text("Weekly Summary", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))), 
         Container(color: Color.fromARGB(255, 228, 230, 231),
         child:ListView(
       shrinkWrap: true,
@@ -296,58 +272,3 @@ class GoalTable extends StatelessWidget {
   }
 }
 
-class WorkoutOptions extends StatelessWidget {
-  WorkoutOptions({super.key, required this.workoutVisible, required this.update});
-  final ValueChanged<bool> update;
-  bool workoutVisible;
-  
-    @override
-    Widget build(BuildContext context) {
-      return Visibility(visible: workoutVisible, child:Stack( children: [
-        GestureDetector(onTap: () => update(false), child:
-        Container(width: double.infinity, color: Colors.black.withOpacity(0.5),)), 
-        Align(alignment: Alignment.bottomCenter, child: Container(height: 120, width: double.infinity, color: Colors.grey, 
-        child:Column(
-          children:[Expanded(child:TextButton.icon(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondRoute(isLive:true)));
-          }, label: Text("Track Live", style: TextStyle(color: Colors.black, fontSize: 24)), icon: Icon(Icons.radio_button_checked, color: Colors.black, size:40,))),
-        Expanded(child:TextButton.icon(onPressed: (){
-           Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondRoute(isLive:false)));
-          }
-        , label: Text("Log Past Workout", style: TextStyle(color: Colors.black, fontSize: 24)), icon: Icon(Icons.history, color: Colors.black, size: 40))),
-      ]
-      )
-      ))],
-      ));
-    }
-
-}
-
-class SecondRoute extends StatelessWidget {
-  SecondRoute({super.key, required this.isLive});
-  bool isLive;
-
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Workout Template'),
-      ),
-      body: Center(
-        child: TemplateList(isWorkout: true, chooseTemplate: (Template? template) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => WorkoutView(isLive: isLive, template: template)), (Route<dynamic> route) => false);
-          }
-          )
-        
-      ),
-    );
-  }
-  
-}

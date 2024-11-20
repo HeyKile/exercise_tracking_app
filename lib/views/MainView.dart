@@ -2,6 +2,7 @@ import 'package:exercise_tracking_app/views/HomeView.dart';
 import 'package:exercise_tracking_app/views/StatsView.dart';
 import 'package:exercise_tracking_app/views/TemplatesView.dart';
 import 'package:exercise_tracking_app/views/WorkoutView.dart';
+import 'package:exercise_tracking_app/views/widgets/WorkoutStarter.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
@@ -24,24 +25,15 @@ class _MainViewState extends State<MainView> {
       ),
       body: <Widget> [
           HomeView(showWorkout: _startWorkout),
-          const WorkoutView(isLive: true, template: null),
+          WorkoutOptions(),
           const TemplatesView(),
           const StatsView(),
       ][widget.selectedIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
-          if(index == 1){
-            setState(() {
-              _startWorkout = true;
-            });
-            
-          }
-          else{
-            _startWorkout = false;
             setState(() {
             widget.selectedIndex = index;
           });
-          }
           
         },
         indicatorColor: const Color.fromARGB(255, 0, 149, 255),
