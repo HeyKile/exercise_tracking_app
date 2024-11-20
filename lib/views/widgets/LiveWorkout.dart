@@ -94,6 +94,14 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   icon: Icons.stop,
                   label: 'Finish',
                   onPressed: () {
+                    final currentWorkout = Workout(completed: exercises, tags: [], workoutName: widget.template!.name, intensity: 0, time: 0, date: DateTime.now());
+                    workoutViewModel.saveWorkout(currentWorkout);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
+                      ),
+                    );
                   },
                 ),
               ],
@@ -104,7 +112,9 @@ class _LiveWorkoutState extends State<LiveWorkout> {
             Column(
               children: [
                 for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
-                ExerciseTile(
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: ExerciseTile(
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
                   onSetDetailsChanged: (setIndex, reps, weight) { 
@@ -112,10 +122,9 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   },
                   isEditable: true,
                 ),
+                ),
               ],
             ),
-            const SizedBox(height:15),
-            SaveWorkout(template: widget.template, workoutViewModel: workoutViewModel, exercises: exercises),
             const SizedBox(height:15),
           ],
         )
@@ -151,54 +160,6 @@ class SetAdd extends StatelessWidget{ // add exercise here
               size: 10, 
               color: Colors.black, 
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SaveWorkout extends StatelessWidget{
-  final Template? template;
-  final WorkoutViewModel workoutViewModel;
-  final List<WorkoutExercise> exercises;
-
-  const SaveWorkout({super.key, required this.workoutViewModel, required this.exercises, required this.template});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox( // green + button
-      width: MediaQuery.of(context).size.width * 0.95, 
-      height: 30, 
-      child: ElevatedButton(
-        onPressed: () {
-          // send info to workout view model to save workout in model
-          final currentWorkout = Workout(completed: exercises, tags: [], workoutName: template!.name, intensity: 0, time: 0, date: DateTime.now());
-          workoutViewModel.saveWorkout(currentWorkout);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
-            ),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ),
-          backgroundColor: Colors.blue,
-          padding: const EdgeInsets.all(16),
-        ),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Save Workout',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-              )
-            )
           ],
         ),
       ),

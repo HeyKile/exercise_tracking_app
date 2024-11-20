@@ -16,7 +16,7 @@ class ExerciseTile extends StatefulWidget{
 }
 
 class _ExerciseTileState extends State<ExerciseTile> {
-  String _selectedUnit = 'Unit';
+  String _selectedUnit = 'lbs';
 
   late List<TextEditingController> _repsControllers; 
   late List<TextEditingController> _weightControllers;
