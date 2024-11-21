@@ -15,7 +15,8 @@ To run the current SnapShot of AllMoves you will need:
 ### Running the application
 
 1. After cloning the repository, open the command line and navigate to the root directory of the repository
-2. run `flutter run -d {device}`
+2. run `flutter pub get`
+3. run `flutter run -d {device}`
 
 > Alternatively, if you have Flutter set up in VSCode or Android Studio, you *should* just be able to launch it as you normally would
 
