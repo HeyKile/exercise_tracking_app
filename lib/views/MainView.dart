@@ -1,11 +1,13 @@
 import 'package:exercise_tracking_app/views/HomeView.dart';
 import 'package:exercise_tracking_app/views/StatsView.dart';
 import 'package:exercise_tracking_app/views/TemplatesView.dart';
+import 'package:exercise_tracking_app/views/WorkoutView.dart';
+import 'package:exercise_tracking_app/views/widgets/WorkoutStarter.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({super.key});
-
+  MainView({super.key, this.selectedIndex=0});
+  int selectedIndex;
   @override
   State<MainView> createState() => _MainViewState();
 }
@@ -13,29 +15,29 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
 
   int _selectedIndex = 0;
+  bool _startWorkout = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stealing is good'),
+        title: const Text('AllMoves'),
       ),
       body: <Widget> [
-          const HomeView(),
-          const Card(
-            child: Text('lets fucking go')
-          ),
+          HomeView(showWorkout: _startWorkout),
+          WorkoutOptions(),
           const TemplatesView(),
           const StatsView(),
-      ][_selectedIndex],
+      ][widget.selectedIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
-          setState(() {
-            _selectedIndex = index;
+            setState(() {
+            widget.selectedIndex = index;
           });
+          
         },
         indicatorColor: const Color.fromARGB(255, 0, 149, 255),
-        selectedIndex: _selectedIndex,
+        selectedIndex: widget.selectedIndex,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         destinations: const <Widget> [
           NavigationDestination(

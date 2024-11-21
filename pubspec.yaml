@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   path_provider: ^2.1.5
   provider: ^6.1.2
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:
@@ -21,4 +22,6 @@ flutter:
   uses-material-design: true
   assets:
     - lib/data/templates.json
+    - lib/data/user.json
     - lib/data/exercises.json
+    - lib/data/workout.json

@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/UserViewModel.dart';
+import 'widgets/HomeWidget.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  HomeView({super.key, required this.showWorkout});
+  bool showWorkout;
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Card(
-        child: Text('Home View!')
-      )
+        child: ChangeNotifierProvider(
+          create: (_) => UserViewModel(),
+          child: HomeWidget(showWorkout: showWorkout,),
+        ),
+      ),
     );
   }
 }
