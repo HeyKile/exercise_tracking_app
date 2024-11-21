@@ -203,8 +203,8 @@ class AchievementsListItem extends StatelessWidget {
   }
 }
      
-class DataTableExample extends StatelessWidget {
-  DataTableExample({super.key, required this.goalsList});
+class GoalDataTable extends StatelessWidget {
+  GoalDataTable({super.key, required this.goalsList});
   List<Goal> goalsList;
 
   @override
@@ -267,7 +267,7 @@ class GoalTable extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child:Column(children: [
       Align( alignment: Alignment.centerLeft, child: Text("Goals", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))),
-      Container(width: double.infinity, child: DataTableExample(goalsList: goalsList)),
+      Container(width: double.infinity, child: GoalDataTable(goalsList: goalsList)),
     ]));
   }
 }
