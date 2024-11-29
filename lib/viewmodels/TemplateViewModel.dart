@@ -21,7 +21,8 @@ class TemplateViewModel extends ChangeNotifier {
   List<Template> get allTemplates => _allTemplates;
 
   Future<void> fetchTemplates() async {
-    _allTemplates = await _templateService.fetchTemplates();
+    // _allTemplates = await _templateService.fetchTemplates();
+    _allTemplates = await _templateService.createMockTemplates();
     if (_allTemplates.isNotEmpty) {
       _highestTemplateId = _getHighestTemplateId();
       _myTemplates = getMyTemplates();
