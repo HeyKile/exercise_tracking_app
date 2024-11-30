@@ -27,43 +27,57 @@ class WorkoutViewModel extends ChangeNotifier{
 
     final exercise = workout.completed.firstWhere((e) => e.name == exerciseName);
     exercise.notes = notes;
-    await _workoutService.saveUpdatedWorkout(workout);
+    // await _workoutService.saveUpdatedWorkout(workout);
     notifyListeners();
   }
 
   Future<void> updateIntensity(int newIntensity, Workout? curr) async {
     if (curr != null) {
       curr.updateIntensity(newIntensity); 
-      debugPrint("Updated intensity: $newIntensity");
 
-      final success = await _workoutService.saveUpdatedWorkout(curr);
-
-      if (success) {
-        notifyListeners();
-      } else {
-        debugPrint("Failed to update workout intensity!");
+      final replacementIndex = _allWorkouts.indexWhere((w) => w.id == curr.id);
+      if (replacementIndex != -1) {
+        _allWorkouts[replacementIndex] = curr;
       }
+
+
+      // debugPrint("Updated intensity: $newIntensity");
+
+      // final success = await _workoutService.saveUpdatedWorkout(curr);
+
+      // if (success) {
+      //   notifyListeners();
+      // } else {
+      //   debugPrint("Failed to update workout intensity!");
+      // }
     }
   }
 
   Future<void> saveWorkout(Workout workout) async {
-    debugPrint("Saving workout: ${workout.toJson()}");
-    final success = await _workoutService.saveWorkout(workout.toJson());
+    // debugPrint("Saving workout: ${workout.toJson()}");
+    // final success = await _workoutService.saveWorkout(workout.toJson());
+    if (_allWorkouts.isEmpty) {
+      _allWorkouts = _workoutService.createMockWorkouts();
+    }
+    _allWorkouts.add(workout);
 
-    if(success){
-      debugPrint("Workout saved successfully!");
-      _allWorkouts = await _workoutService.fetchWorkouts();
-      debugPrint("All workouts after saving: ${_allWorkouts.map((w) => w.toJson()).toList()}");
-      notifyListeners();
-    }
-    else {
-      debugPrint("Failed to save workout!");
-    }
+    // if(success){
+    //   debugPrint("Workout saved successfully!");
+    //   _allWorkouts = await _workoutService.fetchWorkouts();
+    //   debugPrint("All workouts after saving: ${_allWorkouts.map((w) => w.toJson()).toList()}");
+    //   notifyListeners();
+    // }
+    // else {
+    //   debugPrint("Failed to save workout!");
+    // }
   }
 
   Future<void> loadWorkouts() async {
     debugPrint("Loading workouts...");
-    _allWorkouts = await _workoutService.fetchWorkouts();
+    // _allWorkouts = await _workoutService.fetchWorkouts();
+    if (_allWorkouts.isEmpty) {
+      _allWorkouts = _workoutService.createMockWorkouts();
+    }
     debugPrint("Loaded workouts: ${_allWorkouts.map((w) => w.toJson()).toList()}");
     notifyListeners();
   }

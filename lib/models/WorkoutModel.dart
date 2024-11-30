@@ -9,8 +9,15 @@ class Workout{
   int intensity;
   final List<Tag> tags;
 
-  Workout({String? id, required this.completed, required this.time, required this.workoutName, required this.date, required this.intensity, required this.tags})
-  : id = id ?? const Uuid().v4();
+  Workout({
+    String? id,
+    required this.completed,
+    required this.time,
+    required this.workoutName,
+    required this.date,
+    required this.intensity,
+    required this.tags
+  }) : id = id ?? const Uuid().v4();
 
   // workout to json
   Map<String, dynamic> toJson() {
