@@ -18,7 +18,9 @@ class ExerciseViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchExercises() async {
-    exercises = await _exerciseService.fetchExercises();
+    if (exercises.isEmpty) {
+      exercises = await _exerciseService.createMockExercises();
+    }
     getCurrentExercises(ExerciseTab.allExercises, "");
     notifyListeners();
   }
@@ -41,20 +43,28 @@ class ExerciseViewModel extends ChangeNotifier {
   }
 
   Future<bool> addCustomExercse(String name, bool hasDistance, bool hasRep, bool hasWeight, bool hasTime) async {
-    Exercise exercise = Exercise.fromInput(name, hasDistance, hasRep, hasWeight, hasTime);
-    Map<String, dynamic> exerciseJson = {
-      "id": exercise.id,
-      "name": exercise.name,
-      "isCustom": exercise.isCustom,
-      "trackedStats": exercise.trackedStats.map((stat) => {
-        "type": stat.type.toString().split('.').last[0].toUpperCase() + stat.type.toString().split('.').last.substring(1).toLowerCase(),
-        if (stat.unit != null) "unit": stat.unit
-      }).toList()
-    };
-    bool res = await _exerciseService.saveExercise(exerciseJson);
-    await fetchExercises();
-    getCurrentExercises(ExerciseTab.customExercises, "");
-    return res;
+    try {
+      Exercise exercise = Exercise.fromInput(name, hasDistance, hasRep, hasWeight, hasTime);
+      if (exercises.isEmpty) {
+        await fetchExercises();
+      }
+      exercises.add(exercise);
+      getCurrentExercises(ExerciseTab.customExercises, "");
+      return true;
+    }
+    catch (_) {
+      return false;
+    }
+    // Map<String, dynamic> exerciseJson = {
+    //   "id": exercise.id,
+    //   "name": exercise.name,
+    //   "isCustom": exercise.isCustom,
+    //   "trackedStats": exercise.trackedStats.map((stat) => {
+    //     "type": stat.type.toString().split('.').last[0].toUpperCase() + stat.type.toString().split('.').last.substring(1).toLowerCase(),
+    //     if (stat.unit != null) "unit": stat.unit
+    //   }).toList()
+    // };
+    // bool res = await _exerciseService.saveExercise(exerciseJson);
   }
 
 }
