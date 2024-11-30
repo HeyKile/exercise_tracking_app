@@ -1,21 +1,58 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
 import '../models/UserModel.dart';
 
 class UserService {
-
-  Future<List<User>> fetchTemplates() async {
-    try {
-      String fileContent = await rootBundle.loadString('lib/data/user.json');
-      List<dynamic> jsonList = jsonDecode(fileContent);
-      List<User> user = jsonList.map((json) => User.fromJson(json)).toList();
-      return user;
-    }
-    catch (e) {
-      print('Error reading or parsing the file: $e');
-      return [User(name: '', achievements: [], goals:[])];
-    }
+  List<User> createMockUsers() {
+    return [
+      User(
+        name: "Pete",
+        achievements: [
+          Achievement(
+            date: DateTime.parse("2024-10-31"),
+            exerciseName: "Squat",
+            exerciseId: 1,
+            achievementThreshold: 1,
+          ),
+          Achievement(
+            date: DateTime.parse("2024-10-06"),
+            exerciseName: "1 mile",
+            exerciseId: 2,
+            achievementThreshold: 3,
+          ),
+          Achievement(
+            date: DateTime.parse("2024-09-25"),
+            exerciseName: "Bench Press",
+            exerciseId: 3,
+            achievementThreshold: 2,
+          ),
+        ],
+        goals: [
+          Goal(
+            exerciseName: "Bench Press",
+            exerciseId: 3,
+            goalThreshold: 100,
+            currPR: 80,
+          ),
+          Goal(
+            exerciseName: "Deadlift",
+            exerciseId: 4,
+            goalThreshold: 215,
+            currPR: 200,
+          ),
+          Goal(
+            exerciseName: "Hammer Curls",
+            exerciseId: 5,
+            goalThreshold: 45,
+            currPR: 20,
+          ),
+          Goal(
+            exerciseName: "Squat",
+            exerciseId: 1,
+            goalThreshold: 205,
+            currPR: 200,
+          ),
+        ],
+      ),
+    ];
   }
 
 }
