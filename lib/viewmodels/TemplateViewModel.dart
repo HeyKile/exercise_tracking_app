@@ -113,11 +113,11 @@ class TemplateViewModel extends ChangeNotifier {
           id: exerciseItem.exercise.id,
           name: exerciseItem.exercise.name,
           sets: exerciseItem.getSetValues().map((curSet) {
-            Map<String, dynamic> setJson = {};
+            Map<String, dynamic> setVals = {};
             for (int i = 0; i < curSet.length; i++) {
               var stat = exerciseItem.exercise.trackedStats[i];
               if (curSet[i] != "") {
-                setJson[stat.type.toString().split('.').last.toLowerCase()] = int.parse(curSet[i]);
+                setVals[stat.type.toString().split('.').last.toLowerCase()] = int.parse(curSet[i]);
               }
             }
           }).toList()
