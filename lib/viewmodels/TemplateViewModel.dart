@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../models/TemplateModel.dart';
 import '../services/TemplateService.dart';
@@ -102,34 +101,6 @@ class TemplateViewModel extends ChangeNotifier {
     return _allTemplates
       .where((template) => template.isPremade == true)
       .toList();
-  }
-
-  Map<String, dynamic> _templateToJsonObj(String title, List<TemplateExerciseListItem> exercises) {
-    Map<String, dynamic> templateJson = {
-      "id": _highestTemplateId + 1,
-      "name": title,
-      "isPremade": false,
-      "exercises": exercises.map((exerciseItem) {
-        return {
-          "id": exerciseItem.exercise.id,
-          "name": exerciseItem.exercise.name,
-          "sets": exerciseItem.getSetValues().map((set) {
-            Map<String, dynamic> setJson = {};
-            for (int i = 0; i < set.length; i++) {
-              var stat = exerciseItem.exercise.trackedStats[i];
-              print(stat.display);
-              print(stat.type.toString().split('.').last.toLowerCase());
-              print(set[i]);
-              if (set[i] != "") {
-                setJson[stat.type.toString().split('.').last.toLowerCase()] = int.parse(set[i]);
-              }
-            }
-            return setJson;
-          }).toList()
-        };
-      }).toList()
-    };
-    return templateJson;
   }
 
   Template _toTemplate(String title, List<TemplateExerciseListItem> exercises) {
