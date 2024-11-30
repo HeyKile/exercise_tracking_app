@@ -55,16 +55,6 @@ class ExerciseViewModel extends ChangeNotifier {
     catch (_) {
       return false;
     }
-    // Map<String, dynamic> exerciseJson = {
-    //   "id": exercise.id,
-    //   "name": exercise.name,
-    //   "isCustom": exercise.isCustom,
-    //   "trackedStats": exercise.trackedStats.map((stat) => {
-    //     "type": stat.type.toString().split('.').last[0].toUpperCase() + stat.type.toString().split('.').last.substring(1).toLowerCase(),
-    //     if (stat.unit != null) "unit": stat.unit
-    //   }).toList()
-    // };
-    // bool res = await _exerciseService.saveExercise(exerciseJson);
   }
 
 }
