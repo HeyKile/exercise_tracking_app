@@ -44,8 +44,8 @@ class TemplateListItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.accessibility_new_sharp,
+                Icon(
+                  template.icon.getIcon(),
                   size: 50.0,
                 ),
                 const SizedBox(width: 16),
