@@ -69,7 +69,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 ),
                 ), 
                 const SizedBox(height: 15), 
-                Intensity(onIntensityChanged: (int intensity){ // intensity can only be edited here, so we have an update intensity function which updates it in the json
+                Intensity(onIntensityChanged: (int intensity){ // intensity can only be edited here, so we have an update intensity function to update the workout list
                   setState(() {
                     selectedIntensity = intensity;
                   });
