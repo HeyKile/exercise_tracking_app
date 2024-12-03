@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../models/TemplateModel.dart';
 import '../services/TemplateService.dart';
@@ -21,13 +20,13 @@ class TemplateViewModel extends ChangeNotifier {
   List<Template> get allTemplates => _allTemplates;
 
   Future<void> fetchTemplates() async {
-    _allTemplates = await _templateService.fetchTemplates();
-    if (_allTemplates.isNotEmpty) {
-      _highestTemplateId = _getHighestTemplateId();
-      _myTemplates = getMyTemplates();
-      _premadeTemplates = getPremadeTemplates();
-      _updateFilteredTemplates();
+    if (_allTemplates.isEmpty) {
+      _allTemplates = await _templateService.createMockTemplates();
     }
+    _highestTemplateId = _getHighestTemplateId();
+    _myTemplates = getMyTemplates();
+    _premadeTemplates = getPremadeTemplates();
+    _updateFilteredTemplates();
     notifyListeners();
   }
 
@@ -35,13 +34,15 @@ class TemplateViewModel extends ChangeNotifier {
     if (_highestTemplateId == -1) {
       await fetchTemplates();
     }
-    Map jsonRes = _templateToJsonObj(title, exercises);
-    bool res = await _templateService.saveTemplate(jsonRes);
-    if (res == true) {
-      refreshTemplates();
+    try {
+      Template newTemplate = _toTemplate(title, exercises);
+      _allTemplates.add(newTemplate);
+      await fetchTemplates();
+      return true;
     }
-    notifyListeners();
-    return res;
+    catch (_) {
+      return false;
+    }
   }
 
   List<Template> getSearchedTemplates(String searchQuery) {
@@ -102,32 +103,26 @@ class TemplateViewModel extends ChangeNotifier {
       .toList();
   }
 
-  Map<String, dynamic> _templateToJsonObj(String title, List<TemplateExerciseListItem> exercises) {
-    print('highedt id: $_highestTemplateId');
-    Map<String, dynamic> templateJson = {
-      "id": _highestTemplateId + 1,
-      "name": title,
-      "isPremade": false,
-      "exercises": exercises.map((exerciseItem) {
-        return {
-          "id": exerciseItem.exercise.id,
-          "name": exerciseItem.exercise.name,
-          "sets": exerciseItem.getSetValues().map((set) {
-            Map<String, dynamic> setJson = {};
-            for (int i = 0; i < set.length; i++) {
+  Template _toTemplate(String title, List<TemplateExerciseListItem> exercises) {
+    return Template(
+      id: _highestTemplateId + 1,
+      name: title,
+      isPremade: false,
+      exercises: exercises.map((exerciseItem) {
+        return TemplateExercise(
+          id: exerciseItem.exercise.id,
+          name: exerciseItem.exercise.name,
+          sets: exerciseItem.getSetValues().map((curSet) {
+            Map<String, dynamic> setVals = {};
+            for (int i = 0; i < curSet.length; i++) {
               var stat = exerciseItem.exercise.trackedStats[i];
-              print(stat.display);
-              print(stat.type.toString().split('.').last.toLowerCase());
-              print(set[i]);
-              if (set[i] != "") {
-                setJson[stat.type.toString().split('.').last.toLowerCase()] = int.parse(set[i]);
+              if (curSet[i] != "") {
+                setVals[stat.type.toString().split('.').last.toLowerCase()] = int.parse(curSet[i]);
               }
             }
-            return setJson;
           }).toList()
-        };
+        );
       }).toList()
-    };
-    return templateJson;
+    );
   }
 }

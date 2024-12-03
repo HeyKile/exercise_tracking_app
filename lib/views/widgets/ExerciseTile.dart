@@ -1,5 +1,6 @@
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddNotesPopUp.dart';
+import 'package:exercise_tracking_app/views/widgets/CustomRoundedExpansionTile.dart';
 import 'package:flutter/material.dart';
 import 'ExerciseTileListItem.dart';
 
@@ -71,81 +72,120 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(30),
-      ),
-      width: MediaQuery.of(context).size.width * 0.97,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.exercise.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Row(
-                  children: [ // add notes, depending on if the screen is editable or not
-                    widget.isEditable ? const Text('Add Notes') : const Text(''),
-                    widget.isEditable ? IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        showDialog(
-                          context: context, 
-                          builder: (context) => AddNotesPopup(
-                            existingNote: widget.exercise.notes,
-                            onSave: saveNotes
-                          )
-                        );
-                      },
-                    ) : const SizedBox(),
-                    widget.isEditable ? IconButton( // same with deleting exercises
-                      icon: const Icon(Icons.close),
-                      onPressed: deleteExercise,
-                    ) : const SizedBox(),
-                  ],
-                ),
-              ],
-          ),
-          const SizedBox(height: 16),
-          for (int i = 0; i < widget.exercise.sets.length; i++)
-          ExerciseTileListItem( // printing the list of the sets
-              setNumber: i + 1,
-              repsController: TextEditingController(text: widget.exercise.sets[i].reps.toString()),
-              weightController: TextEditingController(text: widget.exercise.sets[i].weight.toString()),
-              onUnitChanged: changeUnit,
-              isEditable: widget.isEditable,
-              unit: _selectedUnit,
-              onRepsChanged: (reps) { 
-                setState(() { 
-                  widget.exercise.sets[i].reps = int.parse(reps); 
-                  widget.onSetDetailsChanged(i, widget.exercise.sets[i].reps, widget.exercise.sets[i].weight); 
-                }); 
-              }, 
-              onWeightChanged: (weight) { 
-                setState(() { 
-                  widget.exercise.sets[i].weight = int.parse(weight); 
-                  widget.onSetDetailsChanged(i, widget.exercise.sets[i].reps, widget.exercise.sets[i].weight); 
-                });
-              }
-          ),
-          widget.isEditable
-          ? ElevatedButton( // adding sets to the exercise
-            onPressed: addSet,
-            child: const Align(
-              alignment: Alignment.center,
-              child: Text('Add Set')
-            ),
-          )
-          : const SizedBox(),
-        ],
+    return Padding( 
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0), 
+      child: CustomRoundedExpansionTile( 
+        tileColor: Colors.blue, 
+        shape: RoundedRectangleBorder( 
+          borderRadius: BorderRadius.circular(8.0), 
+        ), 
+        boxDecoration: BoxDecoration( 
+          border: Border( 
+            bottom: BorderSide(width: 2.0, color: Colors.blue[800]!.withOpacity(0.4)), 
+            right: BorderSide(width: 2.0, color: Colors.blue[800]!.withOpacity(0.4)), 
+          ), 
+          borderRadius: const BorderRadius.only( 
+            bottomLeft: Radius.circular(10.0), 
+            bottomRight: Radius.circular(10.0), 
+            topLeft: Radius.zero, 
+            topRight: Radius.circular(10.0), 
+          ), 
+        ), 
+        duration: const Duration(milliseconds: 50), 
+        leading: const Icon(Icons.chevron_left_rounded), 
+        trailing: widget.isEditable ? IconButton( 
+          icon: const Icon(Icons.highlight_remove_rounded), 
+          onPressed: deleteExercise, 
+        ) : const SizedBox.shrink(),  
+        title: Text( 
+          widget.exercise.name, 
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20), 
+        ), 
+        children: [ 
+          Container( 
+            margin: const EdgeInsets.only(left: 6.0, right: 6.0), 
+            decoration: BoxDecoration( 
+              color: Colors.grey[200], 
+              border: Border( 
+                right: BorderSide(
+                  color: Colors.grey[700]!.withOpacity(0.35)), 
+                  bottom: BorderSide(color: Colors.grey[700]!.withOpacity(0.35)), 
+              ), 
+              borderRadius: const BorderRadius.only( 
+                bottomLeft: Radius.circular(10.0), 
+                bottomRight: Radius.circular(10.0), 
+                topLeft: Radius.zero, 
+                topRight: Radius.zero, 
+              ), 
+            ), 
+            child: Padding( 
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0), 
+              child: Column( 
+                children: [ 
+                  ...widget.exercise.sets.map((set) { 
+                    int index = widget.exercise.sets.indexOf(set);
+                    return Container( 
+                      decoration: BoxDecoration( 
+                        color: Colors.white, 
+                        border: Border( 
+                          right: BorderSide(color: Colors.grey[700]!.withOpacity(0.4)), 
+                          bottom: BorderSide(color: Colors.grey[700]!.withOpacity(0.4)), 
+                        ), 
+                        borderRadius: const BorderRadius.all(Radius.circular(10.0)), 
+                      ), 
+                      margin: const EdgeInsets.symmetric(vertical: 3.0), 
+                      child: Row( 
+                        children: [ 
+                          Expanded(
+                            child: ExerciseTileListItem(
+                              setNumber: index + 1, 
+                              repsController: _repsControllers[index], 
+                              weightController: _weightControllers[index], 
+                              onUnitChanged: changeUnit, 
+                              isEditable: widget.isEditable, 
+                              unit: _selectedUnit, 
+                              onRepsChanged: (reps) { 
+                                setState(() { 
+                                  widget.exercise.sets[index].reps = int.parse(reps); 
+                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index].reps, widget.exercise.sets[index].weight); 
+                                }); 
+                              }, 
+                              onWeightChanged: (weight) { 
+                                setState(() { 
+                                  widget.exercise.sets[index].weight = int.parse(weight); 
+                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index].reps, widget.exercise.sets[index].weight); 
+                                }); 
+                              },
+                            )), 
+                            widget.isEditable ? IconButton( 
+                              icon: const Icon(Icons.delete), 
+                              onPressed: () { 
+                                setState(() { 
+                                  widget.exercise.sets.removeAt(index); 
+                                }); 
+                              }, 
+                            ) : const SizedBox.shrink(), 
+                        ], 
+                      ), 
+                    ); 
+                  }), 
+                  widget.isEditable ? Padding( 
+                    padding: const EdgeInsets.symmetric(vertical: 3.0), 
+                    child: ElevatedButton( 
+                      onPressed: addSet, 
+                      style: const ButtonStyle( 
+                        foregroundColor: WidgetStatePropertyAll<Color>(Colors.black), 
+                        backgroundColor: WidgetStatePropertyAll<Color>(Colors.white), 
+                        shadowColor: WidgetStatePropertyAll<Color>(Colors.grey), 
+                      ), 
+                      child: const Text("Add Set"), 
+                    ), 
+                  ) : const SizedBox.shrink(), 
+                ], 
+              ), 
+            ), 
+          ), 
+        ], 
       ),
     );
   }
