@@ -2,6 +2,7 @@ import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
 import 'package:exercise_tracking_app/viewmodels/TemplateViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/ExerciseModel.dart';
 import '../models/TemplateModel.dart';
 import './widgets/AddExerciseModal.dart';
 import './widgets/CustomRoundedExpansionTile.dart';
@@ -29,19 +30,31 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
   void initState() {
     super.initState();
     titleController.addListener(_onTitleChanged);
-    if (widget.starterTemplate != null) {
-      title = widget.starterTemplate!.name;
-      titleController.text = title;
-    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ExerciseViewModel>(context, listen: false).fetchExercises();
     });
+    _initializeTemplate();
   }
 
   @override
   void dispose() {
     titleController.dispose();
     super.dispose();
+  }
+
+  Future<void> _initializeTemplate() async {
+    if (widget.starterTemplate != null) {
+      print("not null!");
+      title = widget.starterTemplate!.name;
+      titleController.text = title;
+      currentExercises = await Future.wait(widget.starterTemplate!.exercises.map((templateExercise) async {
+        Exercise? exercise = await Provider.of<ExerciseViewModel>(context, listen: false).getExerciseById(templateExercise.id);
+        return TemplateExerciseListItem.fromSet(exercise!, templateExercise);
+      }).toList());
+      setState(() {});
+    } else {
+      print("null :(");
+    }
   }
 
   void _onTitleChanged() {
