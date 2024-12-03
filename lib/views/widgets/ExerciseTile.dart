@@ -93,10 +93,24 @@ class _ExerciseTileState extends State<ExerciseTile> {
         ), 
         duration: const Duration(milliseconds: 50), 
         leading: const Icon(Icons.chevron_left_rounded), 
-        trailing: widget.isEditable ? IconButton( 
-          icon: const Icon(Icons.highlight_remove_rounded), 
-          onPressed: deleteExercise, 
-        ) : const SizedBox.shrink(),  
+        trailing: Row( 
+          mainAxisSize: MainAxisSize.min, 
+          children: [ 
+            widget.isEditable ? IconButton( 
+              icon: const Icon(Icons.edit), 
+              onPressed: () { 
+                showDialog( 
+                  context: context, 
+                  builder: (context) => AddNotesPopup( existingNote: widget.exercise.notes, onSave: saveNotes, ), 
+                ); 
+              }, 
+            ) : const SizedBox.shrink(), 
+            widget.isEditable ? IconButton( 
+              icon: const Icon(Icons.highlight_remove_rounded), 
+              onPressed: deleteExercise, 
+            ) : const SizedBox.shrink(), 
+          ], 
+        ),
         title: Text( 
           widget.exercise.name, 
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20), 
