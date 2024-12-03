@@ -65,15 +65,20 @@ class TemplateListItem extends StatelessWidget {
                   ],
                 ),
                 const Spacer(),
-                isWorkout
-                  ? const Icon(
-                      Icons.edit,
-                      size: 24.0,
-                    )
-                  : const Icon(
-                      Icons.check,
-                      size: 24.0,
-                    ),
+                Visibility(
+                  visible: isWorkout,
+                  child: const Icon(
+                    Icons.check,
+                    size: 24.0,
+                  )
+                ),
+                Visibility(
+                  visible: !isWorkout,
+                  child: const Icon(
+                    Icons.chevron_right,
+                    size: 24.0,
+                  )
+                ),
               ],
             ),
           ),

@@ -138,7 +138,7 @@ class _TemplateListState extends State<TemplateList> {
                           return TemplateListItem(
                             template: template,
                             onTap: chooseTemplate(template),
-                            isWorkout: false,
+                            isWorkout: widget.isWorkout,
                           );
                         }
                       )
