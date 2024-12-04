@@ -44,7 +44,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
 
   Future<void> _initializeTemplate() async {
     if (widget.starterTemplate != null) {
-      print("not null!");
       title = widget.starterTemplate!.name;
       titleController.text = title;
       currentExercises = await Future.wait(widget.starterTemplate!.exercises.map((templateExercise) async {
@@ -52,8 +51,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
         return TemplateExerciseListItem.fromSet(exercise!, templateExercise);
       }).toList());
       setState(() {});
-    } else {
-      print("null :(");
     }
   }
 
@@ -133,7 +130,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
         ),
       );
       await Future.delayed(const Duration(seconds: 2));
-      print("done lil bro");
       Navigator.pop(context);
     }
     // else, display error
