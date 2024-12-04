@@ -15,11 +15,10 @@ class TemplateExerciseListItem {
   });
 
   factory TemplateExerciseListItem.fromSet(Exercise exercise, TemplateExercise templateExercise) {
-     TemplateExerciseListItem item = TemplateExerciseListItem(
+    TemplateExerciseListItem item = TemplateExerciseListItem(
       exercise: exercise,
       isExpanded: templateExercise.sets.isNotEmpty
     );
-    item.addSet();
     return item;
   }
 
