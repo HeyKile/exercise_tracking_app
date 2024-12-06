@@ -24,6 +24,7 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
   TextEditingController titleController = TextEditingController();
   List<TemplateExerciseListItem> currentExercises = [];
   bool _isLoading = false;
+  TemplateIcon curIcon = TemplateIcon.person;
 
   @override
   void initState() {
@@ -107,7 +108,7 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
       },
     );
     // save template
-    bool result = await Provider.of<TemplateViewModel>(context, listen: false).saveTemplate(title, currentExercises);
+    bool result = await Provider.of<TemplateViewModel>(context, listen: false).saveTemplate(title, currentExercises, curIcon);
     // hide loading spinner
     await Future.delayed(const Duration(seconds: 1));
     Navigator.of(context).pop();
@@ -120,7 +121,6 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
         ),
       );
       await Future.delayed(const Duration(seconds: 2));
-      print("done lil bro");
       Navigator.pop(context);
     }
     // else, display error
@@ -137,6 +137,36 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
     }
   }
 
+  void _onSelectIcon(context) async {
+    var newIcon = await showDialog(
+      context: context, 
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: [
+            Scrollbar(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: TemplateIcon.values.map((icon) {
+                    return ListTile(
+                      leading: Icon(icon.getIcon()),
+                      title: Text(icon.toString().split('.').last),
+                      onTap: () {
+                        Navigator.pop(context, icon);
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ]
+        );
+      }
+    );
+    if (newIcon != null) {
+      setState(() => curIcon = newIcon);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -150,28 +180,64 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         elevation: 9.0,
-        title: TextField(
-          controller: titleController,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            color: Colors.white,
+        toolbarHeight: 80.0,
+        title: SizedBox(
+          width: width * 0.8,
+          child: TextField(
+            controller: titleController,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+              color: Colors.white,
+            ),
+            decoration: const InputDecoration(
+              hintText: 'Template Name',
+              enabledBorder: UnderlineInputBorder(),
+              focusedBorder: UnderlineInputBorder(),
+              fillColor: Colors.transparent,
+              filled: true,
+              prefixIcon: Icon(Icons.edit_outlined),
+            ),
+            cursorColor: Colors.white,
           ),
-          decoration: const InputDecoration(
-            hintText: 'New Custom Workout',
-            enabledBorder: UnderlineInputBorder(),
-            focusedBorder: UnderlineInputBorder(),
-            fillColor: Colors.transparent,
-            filled: true,
-            prefixIcon: Icon(Icons.edit_outlined),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0, bottom: 5.0),
+                child: TextButton.icon(
+                  onPressed: () => _onSelectIcon(context),
+                  icon: Icon(curIcon.getIcon()),
+                  label: const Text("Select Icon"),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0, bottom: 5.0),
+                child: TextButton.icon(
+                  onPressed: () => _showSnackBar(context),
+                  icon: const Icon(Icons.more),
+                  label: const Text("Tags"),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
-          cursorColor: Colors.white,
         ),
         actions: [
           IconButton(
-            onPressed: () => _showSnackBar(context),
-            icon: const Icon(Icons.tag),
+            onPressed: () => print("hi"),
+            icon: const Icon(Icons.more_vert),
             style: TextButton.styleFrom(
               backgroundColor: Colors.transparent,
               foregroundColor: Colors.black,

@@ -144,7 +144,8 @@ class _PastWorkoutState extends State<PastWorkout>{
               ], 
             ),
             const SizedBox(height:15),
-            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises, workoutDuration: _inputTime, workoutName: workoutName), // save workout button here, all of it gets saved in json
+            SaveWorkout(workoutViewModel: workoutViewModel, exercises: exercises, workoutDuration: _inputTime, workoutName: workoutName), // save workout button here
+            const SizedBox(height:15),
           ],
         )
       )

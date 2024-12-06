@@ -24,47 +24,33 @@ class WorkoutViewModel extends ChangeNotifier{
 
   void updateNotes(String? workoutId, String exerciseName, String notes) async {
     final workout = _allWorkouts.firstWhere((w) => w.id == workoutId);
-
     final exercise = workout.completed.firstWhere((e) => e.name == exerciseName);
     exercise.notes = notes;
-    await _workoutService.saveUpdatedWorkout(workout);
     notifyListeners();
   }
 
   Future<void> updateIntensity(int newIntensity, Workout? curr) async {
     if (curr != null) {
       curr.updateIntensity(newIntensity); 
-      debugPrint("Updated intensity: $newIntensity");
-
-      final success = await _workoutService.saveUpdatedWorkout(curr);
-
-      if (success) {
-        notifyListeners();
-      } else {
-        debugPrint("Failed to update workout intensity!");
+      final replacementIndex = _allWorkouts.indexWhere((w) => w.id == curr.id);
+      if (replacementIndex != -1) {
+        _allWorkouts[replacementIndex] = curr;
       }
     }
   }
 
   Future<void> saveWorkout(Workout workout) async {
-    debugPrint("Saving workout: ${workout.toJson()}");
-    final success = await _workoutService.saveWorkout(workout.toJson());
-
-    if(success){
-      debugPrint("Workout saved successfully!");
-      _allWorkouts = await _workoutService.fetchWorkouts();
-      debugPrint("All workouts after saving: ${_allWorkouts.map((w) => w.toJson()).toList()}");
-      notifyListeners();
+    if (_allWorkouts.isEmpty) {
+      _allWorkouts = _workoutService.createMockWorkouts();
     }
-    else {
-      debugPrint("Failed to save workout!");
-    }
+    _allWorkouts.add(workout);
   }
 
   Future<void> loadWorkouts() async {
     debugPrint("Loading workouts...");
-    _allWorkouts = await _workoutService.fetchWorkouts();
-    debugPrint("Loaded workouts: ${_allWorkouts.map((w) => w.toJson()).toList()}");
+    if (_allWorkouts.isEmpty) {
+      _allWorkouts = _workoutService.createMockWorkouts();
+    }
     notifyListeners();
   }
 }
