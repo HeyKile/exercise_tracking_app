@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:fl_chart/fl_chart.dart';

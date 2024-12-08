@@ -110,6 +110,7 @@ class _StatsViewState extends State<StatsView> {
               ),
             ),
           ),
+          Column(children: getExerciseStats("Lift", "lbs")),
            Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(left: 15.0),
@@ -122,10 +123,7 @@ class _StatsViewState extends State<StatsView> {
               ),
             ),
           ),
-        ExerciseStatListItem(exerciseName: "100 Free", goal: 68, currPr: 68.05, units: "sec"),
-          
-
-          
+        Column(children: getExerciseStats("Swim", "sec")),
            Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(left: 15.0),
@@ -137,7 +135,8 @@ class _StatsViewState extends State<StatsView> {
                 fontWeight: FontWeight.bold
               ),
             ),
-          )
+          ),
+          Column(children: getExerciseStats("Run", "min"))
           
         ]
       )
@@ -155,8 +154,27 @@ class ExerciseStatListItem extends StatelessWidget{
     @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(left:15.0, right: 15.0, top: 10.0, bottom: 10.0),
+      padding: new EdgeInsets.only(left: 15.0, top: 3.0, bottom: 3.0),
+      decoration: BoxDecoration(color: Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
       child: Row(
-        children: [Text(exerciseName), Text("PR: {currPR} {units}"), Text("Goal: {goal} {units}"), Icon(Icons.open_in_new)],)
+        children: [
+          Expanded(child:Text(exerciseName, style: TextStyle(color:Colors.black, fontWeight: FontWeight.bold))), 
+          Expanded(child:Text("PR: " + currPr.toString() + " " + units, style: TextStyle(color:Colors.black))), 
+          Expanded(child:Text("Goal: " + goal.toString() + " " + units, style: TextStyle(color:Colors.black))), 
+          Expanded(child:Icon(Icons.open_in_new, color: Colors.black,))],)
     );
   }
+}
+
+List<ExerciseStatListItem> getExerciseStats(String category, String units){
+  List<ExerciseStatListItem> exercises = <ExerciseStatListItem>[];
+  StatsViewModel statsVM = StatsViewModel();
+  List<ExerciseStats> trackedExercises = statsVM.genExerciseStats();
+  for (ExerciseStats stats in trackedExercises){
+    if(stats.category == category){
+      exercises.add(ExerciseStatListItem(exerciseName: stats.exerciseName, goal: stats.goalThreshold, currPr: stats.currPR, units: units));
+    }
+  }
+  return exercises;
 }
