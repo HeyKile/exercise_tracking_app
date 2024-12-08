@@ -87,6 +87,54 @@ class _StatsViewState extends State<StatsView> {
               ),
             ],
           ),
+          Container(
+            margin: const EdgeInsets.only(top: 15.0),
+            child: const Text(
+              "Stats Per Exercise",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.only(left: 15.0),
+            child: const Text(
+              "Lift:",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+           Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.only(left: 15.0),
+            child: const Text(
+              "Swim:",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+           Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.only(left: 15.0),
+            child: const Text(
+              "Run:",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          )
+          
         ]
       )
     );
