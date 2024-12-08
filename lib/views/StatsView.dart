@@ -122,6 +122,10 @@ class _StatsViewState extends State<StatsView> {
               ),
             ),
           ),
+        ExerciseStatListItem(exerciseName: "100 Free", goal: 68, currPr: 68.05, units: "sec"),
+          
+
+          
            Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(left: 15.0),
@@ -137,6 +141,22 @@ class _StatsViewState extends State<StatsView> {
           
         ]
       )
+    );
+  }
+}
+
+class ExerciseStatListItem extends StatelessWidget{
+  const ExerciseStatListItem({required this.exerciseName, required this.goal, required this.currPr, required this.units});
+  final String exerciseName;
+  final double goal;
+  final double currPr;
+  final String units;
+
+    @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [Text(exerciseName), Text("PR: {currPR} {units}"), Text("Goal: {goal} {units}"), Icon(Icons.open_in_new)],)
     );
   }
 }
