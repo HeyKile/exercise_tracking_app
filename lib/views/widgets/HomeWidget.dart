@@ -1,4 +1,7 @@
 import 'package:exercise_tracking_app/models/UserModel.dart';
+import 'package:exercise_tracking_app/models/WorkoutModel.dart';
+import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
+import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/UserViewModel.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,8 @@ class _HomeViewState extends State<HomeWidget> {
     
      WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<UserViewModel>(context, listen: false).fetchUser();
+      Provider.of<WorkoutViewModel>(context, listen: false).loadWorkouts();
+
     });
   }
 
@@ -93,21 +98,42 @@ class WorkoutSchedule extends StatelessWidget {
         child:ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
-      children: <Widget>[
+      children: getWeeklyWorkouts(),
+     /* for workout in getWeeklyWorkouts(){
+        <Widget>[
     ScheduleListItem(weekday: 'Mon', workoutName: "Morning Run",),
     ScheduleListItem(weekday: 'Wed', workoutName: "Lower Body Lift"),
     ScheduleListItem(weekday: 'Thurs', workoutName: "HIIT Workout",),
-  ],
+  ],*/
 ))
       ] ,
     ));
   }
 }
 
+List<ScheduleListItem> getWeeklyWorkouts(){
+  List<ScheduleListItem> weeklyWorkouts = <ScheduleListItem>[];
+  WorkoutViewModel workoutViewModel = WorkoutViewModel();
+  workoutViewModel.loadWorkouts();
+  List dayData =
+      ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun" ];
+  DateTime weekStart = DateTime.parse('2024-12-01T00:00:00');
+  DateTime weekEnd = DateTime.parse("2024-12-07T00:00:00");
+  for(Workout workout in workoutViewModel.allWorkouts){
+    if (workout.date.isAfter(weekStart) && workout.date.isBefore(weekEnd)){
+      weeklyWorkouts.add(ScheduleListItem(weekday: dayData[workout.date.weekday-1], workoutName: workout.workoutName, workout: workout, workoutViewModel: workoutViewModel));
+    }
+  }
+
+  return weeklyWorkouts;
+}
+
 class ScheduleListItem extends StatelessWidget {
-  const ScheduleListItem({required this.weekday, required this.workoutName});
+  const ScheduleListItem({required this.weekday, required this.workoutName, required this.workout, required this.workoutViewModel});
   final String weekday;
   final String workoutName;
+  final Workout workout;
+  final WorkoutViewModel workoutViewModel;
 
     @override
   Widget build(BuildContext context) {
@@ -121,7 +147,14 @@ class ScheduleListItem extends StatelessWidget {
           child: Center(child:Text(weekday, style:TextStyle(color: Colors.white))),
           ),
           Expanded(child:Center(child:Text(workoutName))),
-          Container(padding: EdgeInsets.all(8.0), child:TextButton(onPressed: (){}, child: Text("View", style: TextStyle(color: Colors.black)), style: TextButton.styleFrom(
+          Container(padding: EdgeInsets.all(8.0), child:TextButton(onPressed: (){
+            Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: workout),
+                      ), (Route<dynamic> route) => false
+                    );
+          }, child: Text("View", style: TextStyle(color: Colors.black)), style: TextButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 228, 230, 231),
           ))),
 
