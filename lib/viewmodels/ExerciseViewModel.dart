@@ -57,4 +57,16 @@ class ExerciseViewModel extends ChangeNotifier {
     }
   }
 
+  Future<Exercise?> getExerciseById(int id) async {
+    if (exercises.isEmpty) {
+      exercises = await _exerciseService.createMockExercises();
+    }
+    if (id < exercises.length) {
+      return exercises[id];
+    }
+    else {
+      return null;
+    }
+  }
+
 }

@@ -48,13 +48,24 @@ class _TemplateListState extends State<TemplateList> {
   }
 
   VoidCallback chooseTemplate(Template? template) {
-      return (){if (template == null) {
-        print("Selected null!");
-      }
-      else {
-        print('Selected ${template}');
-      }
-      widget.chooseTemplate(template);};
+    return () {
+      widget.chooseTemplate(template);
+    };
+  }
+
+  void _openTemplateBuilder(TemplateViewModel templateViewModel, Template? template) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: templateViewModel),
+            ChangeNotifierProvider.value(value: Provider.of<ExerciseViewModel>(context, listen: false))
+          ],
+          child: TemplateBuilderView(starterTemplate: template),
+        )
+      ),
+    );
   }
 
   @override
@@ -150,20 +161,7 @@ class _TemplateListState extends State<TemplateList> {
           floatingActionButton: Visibility(
             visible: !widget.isWorkout,
             child: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MultiProvider(
-                      providers: [
-                        ChangeNotifierProvider.value(value: templateViewModel),
-                        ChangeNotifierProvider.value(value: Provider.of<ExerciseViewModel>(context, listen: false))
-                      ],
-                      child: const TemplateBuilderView(),
-                    )
-                  ),
-                );
-              },
+              onPressed: () => _openTemplateBuilder(templateViewModel, null),
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(

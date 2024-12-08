@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../models/ExerciseModel.dart';
+import '../../models/TemplateModel.dart';
 
 class TemplateExerciseListItem {
   Exercise exercise;
@@ -12,6 +13,14 @@ class TemplateExerciseListItem {
     required this.exercise,
     required this.isExpanded
   });
+
+  factory TemplateExerciseListItem.fromSet(Exercise exercise, TemplateExercise templateExercise) {
+    TemplateExerciseListItem item = TemplateExerciseListItem(
+      exercise: exercise,
+      isExpanded: templateExercise.sets.isNotEmpty
+    );
+    return item;
+  }
 
   addSet() {
     List<TextEditingController> rowControllers = exercise.trackedStats.map((stat) => TextEditingController()).toList();
