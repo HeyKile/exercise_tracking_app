@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/views/widgets/ExerciseStatPopup.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -100,41 +101,55 @@ class _StatsViewState extends State<StatsView> {
           ),
         Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.only(left: 15.0),
-            child: const Text(
+         
+         // color: Colors.grey,
+          decoration: BoxDecoration(
+            border:Border(bottom: BorderSide(color: Colors.black,))),
+            child: Container(
+               margin: const EdgeInsets.only(left: 15.0),
+               child:Text(
               "Lift:",
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold
               ),
-            ),
+            )),
           ),
           Column(children: getExerciseStats("Lift", "lbs")),
-           Container(
+                   Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.only(left: 15.0),
-            child: const Text(
+         
+         // color: Colors.grey,
+          decoration: BoxDecoration(border:Border(bottom: BorderSide(color: Colors.black,))),
+            child: Container(
+               margin: const EdgeInsets.only(left: 15.0),
+               child:Text(
               "Swim:",
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold
               ),
-            ),
+            )),
           ),
         Column(children: getExerciseStats("Swim", "sec")),
-           Container(
+                   Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.only(left: 15.0),
-            child: const Text(
+         
+         // color: Colors.grey,
+          decoration: BoxDecoration(
+            border:Border(bottom: BorderSide(color: Colors.black,))),
+            child: Container(
+               margin: const EdgeInsets.only(left: 15.0),
+               child:Text(
               "Run:",
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold
               ),
-            ),
+            )),
           ),
           Column(children: getExerciseStats("Run", "min"))
           
@@ -145,24 +160,32 @@ class _StatsViewState extends State<StatsView> {
 }
 
 class ExerciseStatListItem extends StatelessWidget{
-  const ExerciseStatListItem({required this.exerciseName, required this.goal, required this.currPr, required this.units});
-  final String exerciseName;
-  final double goal;
-  final double currPr;
+  const ExerciseStatListItem({required this.exercise, required this.units});
   final String units;
+  final ExerciseStats exercise;
 
     @override
   Widget build(BuildContext context) {
-    return Container(
+    return
+    InkWell(
+      onTap: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => ExerciseStatPopup(exercise: exercise),
+            ));
+      },
+      borderRadius: BorderRadius.circular(60),
+      child: 
+    Container(
       margin: const EdgeInsets.only(left:15.0, right: 15.0, top: 10.0, bottom: 10.0),
       padding: new EdgeInsets.only(left: 15.0, top: 3.0, bottom: 3.0),
       decoration: BoxDecoration(color: Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
-          Expanded(child:Text(exerciseName, style: TextStyle(color:Colors.black, fontWeight: FontWeight.bold))), 
-          Expanded(child:Text("PR: " + currPr.toString() + " " + units, style: TextStyle(color:Colors.black))), 
-          Expanded(child:Text("Goal: " + goal.toString() + " " + units, style: TextStyle(color:Colors.black))), 
-          Expanded(child:Icon(Icons.open_in_new, color: Colors.black,))],)
+          Expanded(child:Text(exercise.exerciseName, style: TextStyle(color:Colors.white, fontWeight: FontWeight.bold))), 
+          Expanded(child:Text("PR: " + exercise.currPR.toString() + " " + units, style: TextStyle(color:Colors.white))), 
+          Expanded(child:Text("Goal: " + exercise.goalThreshold.toString() + " " + units, style: TextStyle(color:Colors.white))), 
+          Expanded(child:Icon(Icons.open_in_new, color: Colors.white,))],)
+    )
     );
   }
 }
@@ -173,7 +196,7 @@ List<ExerciseStatListItem> getExerciseStats(String category, String units){
   List<ExerciseStats> trackedExercises = statsVM.genExerciseStats();
   for (ExerciseStats stats in trackedExercises){
     if(stats.category == category){
-      exercises.add(ExerciseStatListItem(exerciseName: stats.exerciseName, goal: stats.goalThreshold, currPr: stats.currPR, units: units));
+      exercises.add(ExerciseStatListItem(exercise:stats, units: units));
     }
   }
   return exercises;
