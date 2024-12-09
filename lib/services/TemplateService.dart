@@ -125,6 +125,29 @@ class TemplateService {
           ),
         ]
       ),
+      Template(
+        id: 4,
+        name: "Push Day 2",
+        isPremade: false,
+        icon: TemplateIcon.dumbbell,
+        exercises: [
+          TemplateExercise(
+            id: 1,
+            name: "Barbell Bench Press",
+            sets: [],
+          ),
+          TemplateExercise(
+            id: 5,
+            name: "Dumbbell Shoulder Press",
+            sets: [],
+          ),
+          TemplateExercise(
+            id: 24,
+            name: "Dumbbell Fly",
+            sets: [],
+          ),
+        ],
+      ),
     ];
   }
 }

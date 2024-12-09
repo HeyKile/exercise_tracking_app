@@ -30,12 +30,12 @@ class TemplateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> saveTemplate(String title, List<TemplateExerciseListItem> exercises) async {
+  Future<bool> saveTemplate(String title, List<TemplateExerciseListItem> exercises, TemplateIcon icon) async {
     if (_highestTemplateId == -1) {
       await fetchTemplates();
     }
     try {
-      Template newTemplate = _toTemplate(title, exercises);
+      Template newTemplate = _toTemplate(title, exercises, icon);
       _allTemplates.add(newTemplate);
       await fetchTemplates();
       return true;
@@ -103,7 +103,7 @@ class TemplateViewModel extends ChangeNotifier {
       .toList();
   }
 
-  Template _toTemplate(String title, List<TemplateExerciseListItem> exercises) {
+  Template _toTemplate(String title, List<TemplateExerciseListItem> exercises, TemplateIcon icon) {
     // Inside your _toTemplate function
     for (var exerciseItem in exercises) { 
     print("Tracked Stats for Exercise: ${exerciseItem.exercise.name}");
@@ -117,6 +117,7 @@ class TemplateViewModel extends ChangeNotifier {
       id: _highestTemplateId + 1,
       name: title,
       isPremade: false,
+      icon: icon,
       exercises: exercises.map((exerciseItem) {
         return TemplateExercise(
           id: exerciseItem.exercise.id,

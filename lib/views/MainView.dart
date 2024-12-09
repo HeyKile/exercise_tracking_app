@@ -6,7 +6,7 @@ import 'package:exercise_tracking_app/views/widgets/WorkoutStarter.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
-  MainView({super.key, this.selectedIndex=0});
+  MainView({super.key, this.selectedIndex=3});
   int selectedIndex;
   @override
   State<MainView> createState() => _MainViewState();

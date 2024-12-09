@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/viewmodels/StatsViewModel.dart';
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
 import 'package:exercise_tracking_app/views/MainView.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TemplateViewModel()),
         ChangeNotifierProvider(create: (context) => ExerciseViewModel()),
         ChangeNotifierProvider(create: (context) => WorkoutViewModel()),
+        ChangeNotifierProvider(create: (context) => StatsViewModel()),
       ],
       child: MaterialApp(
         home: MainView(),
