@@ -58,7 +58,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                   exercise: exercises[i], 
                   isEditable: false, 
                   onDeleteExercise: () {}, 
-                  onSetDetailsChanged: (int setIndex, int reps, int weight) {}, 
+                  onSetDetailsChanged: (int setIndex, int reps, int weight, int distance, int time, String unit) {}, 
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
                       exercises[i].id,

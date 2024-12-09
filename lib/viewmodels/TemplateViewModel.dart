@@ -104,6 +104,15 @@ class TemplateViewModel extends ChangeNotifier {
   }
 
   Template _toTemplate(String title, List<TemplateExerciseListItem> exercises) {
+    // Inside your _toTemplate function
+    for (var exerciseItem in exercises) { 
+    print("Tracked Stats for Exercise: ${exerciseItem.exercise.name}");
+    for (var stat in exerciseItem.exercise.trackedStats) {
+      print("  - ${stat.type} (${stat.unit})"); 
+    }
+    }
+    String units = exercises[0].exercise.trackedStats[0].unit ?? '';
+    print(units);
     return Template(
       id: _highestTemplateId + 1,
       name: title,
@@ -112,6 +121,7 @@ class TemplateViewModel extends ChangeNotifier {
         return TemplateExercise(
           id: exerciseItem.exercise.id,
           name: exerciseItem.exercise.name,
+          unit: units,
           sets: exerciseItem.getSetValues().map((curSet) {
             Map<String, dynamic> setVals = {};
             for (int i = 0; i < curSet.length; i++) {
@@ -120,7 +130,7 @@ class TemplateViewModel extends ChangeNotifier {
                 setVals[stat.type.toString().split('.').last.toLowerCase()] = int.parse(curSet[i]);
               }
             }
-          }).toList()
+          }).toList(), 
         );
       }).toList()
     );

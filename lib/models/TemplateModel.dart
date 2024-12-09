@@ -17,10 +17,12 @@ class TemplateExercise {
   final int id;
   final String name;
   final List<dynamic> sets;
+  final String unit;
 
   TemplateExercise({
     required this.id,
     required this.name,
-    required this.sets
+    required this.sets,
+    required this.unit
   });
 }

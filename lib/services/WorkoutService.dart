@@ -12,11 +12,17 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 12,
-                weight: 1020
+                weight: 1020,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 110
+                weight: 110,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""

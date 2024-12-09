@@ -34,9 +34,13 @@ class _PastWorkoutState extends State<PastWorkout>{
   WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
     final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
       final map = templateSet as Map<String, dynamic>; // Cast to Map
+      String units = templateExercise.unit;
       return Set(
         reps: map['reps'] != null ? map['reps'] as int : 0,
         weight: map['weight'] != null ? map['weight'] as int : 0,
+        unit: units,
+        distance: map['distance'] != null ? map['distance'] as int : 0,
+        time: map['time'] != null ? map['time'] as int : 0,
       );
     }).toList();
 
@@ -50,7 +54,7 @@ class _PastWorkoutState extends State<PastWorkout>{
   List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
     return exercises.map((exercise) => WorkoutExercise(
       name: exercise.name,
-      sets: [Set(reps: 0, weight: 0)], 
+      sets: [Set(reps: 0, weight: 0, unit: exercises[0].trackedStats[0].unit ?? '', distance: 0, time: 0)], 
       notes: ""
     )).toList();
   }
@@ -75,9 +79,9 @@ class _PastWorkoutState extends State<PastWorkout>{
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight) { // if they change set numbers, this gets called to update that in the list
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) { // if they change set numbers, this gets called to update that in the list
     setState(() { 
-      final updatedSet = Set(reps: reps, weight: weight);
+      final updatedSet = Set(reps: reps, weight: weight, unit: unit, distance: distance, time: time);
       exercises[exerciseIndex].sets[setIndex] = updatedSet;
     }); 
   }
@@ -128,8 +132,8 @@ class _PastWorkoutState extends State<PastWorkout>{
                   child: ExerciseTile( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight) { 
-                    _updateSetDetails(i, setIndex, reps, weight);
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
+                    _updateSetDetails(i, setIndex, reps, weight, distance, time, unit);
                   },
                   isEditable: true,
                   updateNotes: (updatedNotes) {

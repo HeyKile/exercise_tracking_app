@@ -15,6 +15,7 @@ class TemplateService {
               {"weight": 180, "reps": 12},
               {"weight": 200, "reps": 8}
             ],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 3,
@@ -25,6 +26,7 @@ class TemplateService {
               {"weight": 280, "reps": 3},
               {"weight": 315, "reps": 3}
             ],
+            unit: "lbs"
           ),
         ],
       ),
@@ -37,16 +39,19 @@ class TemplateService {
             id: 1,
             name: "Barbell Bench Press",
             sets: [],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 24,
             name: "Dumbbell Fly",
             sets: [],
+            unit: "lbs"
           ),
         ],
       ),
@@ -59,11 +64,12 @@ class TemplateService {
             id: 2,
             name: "Run",
             sets: [
-              {"Distance": 1, "Time": 10},
+              {"Distance": 1, "Time": 10,},
               {"Distance": 3, "Time": 25},
               {"Distance": 2, "Time": 16},
               {"Distance": 1, "Time": 10},
-            ]
+            ],
+            unit:"mins"
           )
         ]
       ),
@@ -78,7 +84,8 @@ class TemplateService {
             sets: [
               {"weight": 10, "reps": 12},
               {"weight": 15, "reps": 10},
-            ]
+            ],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 13,
@@ -86,7 +93,8 @@ class TemplateService {
             sets: [
               {"weight": 50, "reps": 12},
               {"weight": 60, "reps": 10},
-            ]
+            ],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 15,
@@ -94,7 +102,8 @@ class TemplateService {
             sets: [
               {"weight": 120, "reps": 12},
               {"weight": 145, "reps": 8},
-            ]
+            ],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 1,
@@ -102,7 +111,8 @@ class TemplateService {
             sets: [
               {"weight": 120, "reps": 12},
               {"weight": 135, "reps": 10},
-            ]
+            ],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 5,
@@ -110,7 +120,8 @@ class TemplateService {
             sets: [
               {"weight": 30, "reps": 12},
               {"weight": 40, "reps": 8},
-            ]
+            ],
+            unit: "lbs"
           ),
         ]
       ),
