@@ -135,16 +135,19 @@ class TemplateService {
             id: 1,
             name: "Barbell Bench Press",
             sets: [],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [],
+            unit: "lbs"
           ),
           TemplateExercise(
             id: 24,
             name: "Dumbbell Fly",
             sets: [],
+            unit: "lbs"
           ),
         ],
       ),

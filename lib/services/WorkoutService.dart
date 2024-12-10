@@ -42,11 +42,17 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 12,
-                weight: 120
+                weight: 120,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 110
+                weight: 110,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""
@@ -56,15 +62,24 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 12,
-                weight: 130
+                weight: 130,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 120
+                weight: 120,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 8,
-                weight: 110
+                weight: 110,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""
@@ -74,15 +89,24 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 10,
-                weight: 80
+                weight: 80,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 80
+                weight: 80,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 8,
-                weight: 80
+                weight: 80,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""
@@ -92,11 +116,17 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 10,
-                weight: 30
+                weight: 30,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 30
+                weight: 30,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
             ],
             notes: ""
@@ -116,11 +146,17 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 12,
-                weight: 30
+                weight: 30,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 30
+                weight: 30,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""
@@ -130,15 +166,24 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 12,
-                weight: 10
+                weight: 10,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 12,
-                weight: 10
+                weight: 10,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 12,
-                weight: 10
+                weight: 10,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""
@@ -148,15 +193,24 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 10,
-                weight: 80
+                weight: 80,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 10,
-                weight: 80
+                weight: 80,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 8,
-                weight: 80
+                weight: 80,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               )
             ],
             notes: ""
@@ -166,11 +220,17 @@ class WorkoutService {
             sets: [
               Set(
                 reps: 20,
-                weight: 30
+                weight: 30,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
               Set(
                 reps: 20,
-                weight: 30
+                weight: 30,
+                time: -1,
+                distance: -1,
+                unit: "lbs"
               ),
             ],
             notes: "These were hard."
