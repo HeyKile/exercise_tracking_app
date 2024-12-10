@@ -4,9 +4,47 @@ import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddNotesPopUp.dart';
 import 'package:exercise_tracking_app/views/widgets/CustomRoundedExpansionTile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'ExerciseTileListItem.dart';
 
+class ExerciseTileStateNotifier extends ChangeNotifier{
+  bool hasReps = false;
+  bool hasDistance = false;
+  bool hasTime = false;
+  bool hasWeight = false;
+
+  Future<void> fetchAndSetState(BuildContext context, String exerciseName) async {
+    try{
+      final exerciseViewModel = Provider.of<ExerciseViewModel>(context, listen:false);
+      await exerciseViewModel.fetchExercises();
+
+      Exercise? exercise = exerciseViewModel.exercises.firstWhere(
+        (exercise) => exercise.name == exerciseName,
+      );
+
+      for(var stat in exercise.trackedStats){
+        if(stat.type == TrackableStat.weight){
+          hasWeight = true;
+        }
+        else if(stat.type == TrackableStat.time){
+          hasTime = true;
+        }
+        else if(stat.type == TrackableStat.distance){
+          hasDistance = true;
+        }
+        else if(stat.type == TrackableStat.reps){
+          hasReps = true;
+        }
+      }
+
+      notifyListeners();
+    }
+    catch(e){
+      print("ERROR: $e");
+    }
+  }
+}
 class ExerciseTile extends StatefulWidget{
   final WorkoutExercise exercise;
   final bool isEditable;
@@ -28,10 +66,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
   late List<TextEditingController> _distanceControllers; 
   late List<TextEditingController> _timeControllers;
   late TextEditingController _notesController;
-  bool hasReps = false;
-  bool hasDistance = false;
-  bool hasTime = false;
-  bool hasWeight = false;
 
   @override void initState() { // initialize controllers for the text fields
     super.initState(); 
@@ -40,6 +74,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
     print('Set:');
     print('  Reps: ${set.reps}');
     print('  Weight: ${set.weight}');
+    print('  Time:   ${set.time}');
+    print('  Distance ${set.distance}');
     print('  Unit: ${set.unit}');
     print('-------------------'); 
   });
@@ -50,46 +86,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
     _timeControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index].time.toString())); 
     _notesController = TextEditingController(text: widget.exercise.notes);
 
-    WidgetsBinding.instance.addPostFrameCallback((_){
-        fetchAndSetExerciseBooleans();
-    });// have to figure out how to pass in booleans into exercise tile item
-
+    context.read<ExerciseTileStateNotifier>().fetchAndSetState(context, widget.exercise.name);// have to figure out how to pass in booleans into exercise tile item
   } 
-
-  void fetchAndSetExerciseBooleans() async{
-    await Provider.of<ExerciseViewModel>(context, listen: false).fetchExercises();
-    Exercise? exercise = getExerciseByName(widget.exercise.name);
-
-    if(exercise != null){
-      for(var stat in exercise.trackedStats){
-        if(stat.type == TrackableStat.weight){
-          hasWeight = true;
-        }
-        else if(stat.type == TrackableStat.time){
-          hasTime = true;
-        }
-        else if(stat.type == TrackableStat.distance){
-          hasDistance = true;
-        }
-        else if(stat.type == TrackableStat.reps){
-          hasReps = true;
-        }
-      }
-    }
-  }
-
-  Exercise? getExerciseByName(String name){
-    try{
-      List<Exercise> allExercises = Provider.of<ExerciseViewModel>(context, listen: false).exercises;
-      return allExercises.firstWhere(
-        (exercise) => exercise.name == name,
-      );
-    }
-    catch (e){
-      print("error");
-      return null;
-    }
-  }
   
   @override void dispose() { 
     _notesController.dispose();
@@ -142,10 +140,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   @override
   Widget build(BuildContext context) {
-    print("reps $hasReps");
-    print("weight $hasWeight");
-    print("time $hasTime");
-    print("distance $hasDistance");
+    final exerciseTileState = Provider.of<ExerciseTileStateNotifier>(context, listen: true); 
     return Padding( 
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0), 
       child: CustomRoundedExpansionTile( 
@@ -230,10 +225,10 @@ class _ExerciseTileState extends State<ExerciseTile> {
                               repsController: _repsControllers[index], 
                               weightController: _weightControllers[index], 
                               onUnitChanged: changeUnit, 
-                              hasDistance: hasDistance,
-                              hasReps: hasReps,
-                              hasTime: hasTime,
-                              hasWeight: hasWeight,
+                              hasDistance: exerciseTileState.hasDistance,
+                              hasReps: exerciseTileState.hasReps,
+                              hasTime: exerciseTileState.hasTime,
+                              hasWeight: exerciseTileState.hasWeight,
                               isEditable: widget.isEditable, 
                               distanceController: TextEditingController(text: set.distance.toString()),
                               timeController: TextEditingController(text: set.time.toString()),

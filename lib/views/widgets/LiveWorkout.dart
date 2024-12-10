@@ -4,6 +4,7 @@ import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'ExerciseTile.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
 import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
@@ -23,7 +24,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   final Stopwatch _stopwatch = Stopwatch();
   Duration _elapsedTime = const Duration();
   late Timer timer;
-  bool _isTimerRunning = false;
+  bool _isTimerRunning = true;
   String workoutName = '';
 
   @override
@@ -181,6 +182,8 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                 for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: ChangeNotifierProvider(
+                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile( // different sets, populates from template
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
@@ -196,6 +199,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                     );
                   },
                 ),
+                )
                 ),
               ], 
             ),

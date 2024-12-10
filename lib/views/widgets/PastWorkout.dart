@@ -5,6 +5,7 @@ import 'package:exercise_tracking_app/viewmodels/WorkoutViewModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'ExerciseTile.dart';
 
 class PastWorkout extends StatefulWidget {
@@ -27,34 +28,50 @@ class _PastWorkoutState extends State<PastWorkout>{
   void initState() {
     super.initState();
     if (widget.template != null) {
-      exercises = widget.template!.exercises.map((templateExercise) => _convertTemplateExercise(templateExercise)).toList();
+      exercises = widget.template!.exercises.map((templateExercise) {
+      print("Processing TemplateExercise: ${templateExercise.name}"); 
+      return _convertTemplateExercise(templateExercise); 
+    }).toList();
+    print("Exercises after conversion: $exercises");
     }
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
+    print(templateExercise.unit);
+    print("Processing TemplateExercise: ${templateExercise.name}"); 
+    print("TemplateExercise sets: ${templateExercise.sets}"); 
+    String units = templateExercise.unit;
     final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
-      final map = templateSet as Map<String, dynamic>; // Cast to Map
-      String units = templateExercise.unit;
+      print(templateSet);
+      final map = templateSet as Map<String, dynamic>;
+      print("yooo $map");
+      print("unit from template $units");
       return Set(
         reps: map['reps'] != null ? map['reps'] as int : 0,
         weight: map['weight'] != null ? map['weight'] as int : 0,
         unit: units,
-        distance: map['distance'] != null ? map['distance'] as int : 0,
-        time: map['time'] != null ? map['time'] as int : 0,
+        time: map['Time'] != null ? map['Time'] as int : 0,
+        distance: map['Distance'] != null ? map['Distance'] as int : 0
       );
     }).toList();
 
     return WorkoutExercise(
       name: templateExercise.name,
       sets: convertedSets,
-      notes: ""
+      notes: "",
     );
   }
 
   List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
+    String units = exercises[0].trackedStats[0].unit ?? '';
     return exercises.map((exercise) => WorkoutExercise(
       name: exercise.name,
-      sets: [Set(reps: 0, weight: 0, unit: exercises[0].trackedStats[0].unit ?? '', distance: 0, time: 0)], 
+      sets: [Set(reps: 0, weight: 0, unit: units, distance: 0, time: 0)], 
       notes: ""
     )).toList();
   }
@@ -129,7 +146,9 @@ class _PastWorkoutState extends State<PastWorkout>{
                 for(int i = 0; i < exercises.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ExerciseTile( // adds the different sets 
+                  child: ChangeNotifierProvider(
+                  create: (context) => ExerciseTileStateNotifier(),
+                  child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
                   onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
@@ -144,6 +163,7 @@ class _PastWorkoutState extends State<PastWorkout>{
                     );
                   },
                 ),
+                )
                 ),
               ], 
             ),
