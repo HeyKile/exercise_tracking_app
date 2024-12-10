@@ -48,11 +48,17 @@ class WorkoutExercise{
 }
 
 class Set{
-  int reps;
-  int weight;
+  int? reps;
+  int? weight;
+  String unit;
+  int? distance;
+  int? time;
 
   Set({
     required this.reps,
     required this.weight,
+    required this.unit, 
+    required this.time,
+    required this.distance,
   });
 }

@@ -1,13 +1,22 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseTileListItem extends StatelessWidget { // this is the line of sets, called in ExerciseTile
   final int setNumber;
   final TextEditingController repsController;
   final TextEditingController weightController;
+  final TextEditingController distanceController;
+  final TextEditingController timeController;
   final ValueChanged<String?>? onUnitChanged;
   final ValueChanged<String> onRepsChanged; 
   final ValueChanged<String> onWeightChanged;
+  final ValueChanged<String> onDistanceChanged; 
+  final ValueChanged<String> onTimeChanged;
   final bool isEditable;
+  final bool hasReps;
+  final bool hasDistance;
+  final bool hasTime;
+  final bool hasWeight;
   final String unit;
 
   const ExerciseTileListItem({
@@ -15,21 +24,30 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
     required this.setNumber,
     required this.repsController,
     required this.weightController,
+    required this.distanceController,
+    required this.timeController,
     required this.onUnitChanged,
     required this.isEditable,
-    required this.unit,
     required this.onRepsChanged,
     required this.onWeightChanged,
+    required this.unit, 
+    required this.onDistanceChanged, 
+    required this.onTimeChanged, 
+    required this.hasReps, 
+    required this.hasDistance, 
+    required this.hasTime, 
+    required this.hasWeight, 
   });
 
   @override
   Widget build(BuildContext context) {
+    print('Building ExerciseTileListItem with unit: $unit');
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
           Text('$setNumber. '),
-          Expanded(
+          if(hasReps) Expanded(
             child: TextField(
               controller: repsController,
               enabled: isEditable,
@@ -44,8 +62,8 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
               },
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
+          if(hasReps) const SizedBox(width: 16),
+          if(hasWeight) Expanded(
             child: TextField(
               controller: weightController,
               enabled: isEditable,
@@ -60,14 +78,92 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
               },
             ),
           ),
-          Expanded(
-            child: isEditable ? DropdownButtonFormField(
-              value: 'lbs', // Default value
+          if(hasWeight) const SizedBox(width: 16),
+          if(hasDistance) Expanded(
+            child: TextField(
+              controller: distanceController,
+              enabled: isEditable,
+              decoration: const InputDecoration(
+                hintText: 'Distance',
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) { 
+                int distance = int.tryParse(value) ?? 0; 
+                distanceController.text = distance.toString();
+                onDistanceChanged(distance.toString());
+              },
+            ),
+          ),
+          if(hasDistance) const SizedBox(width: 16),
+          if(hasDistance) Expanded(
+            child: isEditable ? DropdownButtonFormField<String>(
+              value: '', // Default value
               items: const [
+                DropdownMenuItem(value: '', child: Text('')),
+                DropdownMenuItem(value: 'mi', child: Text('mi')),
+                DropdownMenuItem(value: 'km', child: Text('km')),
+                DropdownMenuItem(value: 'yds', child: Text('yds')),
+                DropdownMenuItem(value: 'meters', child: Text('m')),
+              ],
+              onChanged: (value) { 
+                print('Unit changed: $value'); 
+                if (onUnitChanged != null) { 
+                  onUnitChanged!(value); 
+                } 
+              }
+            ) : Text(
+                    unit, 
+                    style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          if(hasTime) Expanded(
+            child: TextField(
+              controller: timeController,
+              enabled: isEditable,
+              decoration: const InputDecoration(
+                hintText: 'Time',
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) { 
+                int time = int.tryParse(value) ?? 0; 
+                timeController.text = time.toString();
+                onTimeChanged(time.toString());
+              },
+            ),
+          ),
+          if(hasTime) Expanded(
+            child: isEditable ? DropdownButtonFormField<String>(
+              value: unit, // Default value
+              items: const [
+                DropdownMenuItem(value: '', child: Text('')),
+                DropdownMenuItem(value: 'mins', child: Text('mins')),
+                DropdownMenuItem(value: 'secs', child: Text('secs')),
+              ],
+              onChanged: (value) { 
+                print('Unit changed: $value'); 
+                if (onUnitChanged != null) { 
+                  onUnitChanged!(value); 
+                } 
+              }
+            ) : Text(
+                    unit, 
+                    style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          if(hasWeight) Expanded(
+            child: isEditable ? DropdownButtonFormField<String>(
+              value: unit, // Default value
+              items: const [
+                DropdownMenuItem(value: '', child: Text('weight')),
                 DropdownMenuItem(value: 'lbs', child: Text('lbs')),
                 DropdownMenuItem(value: 'kgs', child: Text('kgs')),
               ],
-              onChanged: onUnitChanged,
+              onChanged: (value) { 
+                print('Unit changed: $value'); 
+                if (onUnitChanged != null) { 
+                  onUnitChanged!(value); 
+                } 
+              }
             ) : Text(
                     unit, 
                     style: const TextStyle(fontSize: 16),
