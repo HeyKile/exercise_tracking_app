@@ -1,3 +1,5 @@
+
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -68,4 +70,27 @@ class StatsViewModel extends ChangeNotifier {
       }
     });
   }
+  List<ExerciseStats> genExerciseStats(){
+    List<ExerciseStats> trackedExercises = <ExerciseStats>[]; 
+
+    trackedExercises.add(ExerciseStats(exerciseName: "Squats", exerciseId: 1, goalThreshold: 150.0, currPR: 140, category: "Lift"));
+    trackedExercises.add(ExerciseStats(exerciseName: "Bench Press", exerciseId: 2, goalThreshold: 100, currPR: 60, category: "Lift"));
+    trackedExercises.add(ExerciseStats(exerciseName: "Hammer Curls", exerciseId: 3, goalThreshold: 40, currPR: 35, category: "Lift"));
+    trackedExercises.add(ExerciseStats(exerciseName: "5K", exerciseId: 4, goalThreshold: 21, currPR: 22.4, category: "Run"));
+    trackedExercises.add(ExerciseStats(exerciseName: "100 Free", exerciseId: 5, goalThreshold: 58.3, currPR: 59.45, category: "Swim"));
+    trackedExercises.add(ExerciseStats(exerciseName: "100 Fly", exerciseId: 6, goalThreshold: 68, currPR: 68.5, category: "Swim"));
+    return trackedExercises;
+  }
+
+}
+
+
+class ExerciseStats {
+  String exerciseName;
+  int exerciseId;
+  double goalThreshold;
+  double currPR;
+  String category;
+
+  ExerciseStats({required this.exerciseName, required this.exerciseId, required this.goalThreshold, required this.currPR, required this.category});
 }

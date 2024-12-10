@@ -54,11 +54,13 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 for (int i = 0; i < exercises.length; i++) 
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ExerciseTile( // the tiles but they are not editable!
-                  exercise: exercises[i], 
-                  isEditable: false, 
-                  onDeleteExercise: () {}, 
-                  onSetDetailsChanged: (int setIndex, int reps, int weight) {}, 
+                  child: ChangeNotifierProvider(
+                  create: (context) => ExerciseTileStateNotifier(),
+                  child: ExerciseTile ( // adds the different sets 
+                  exercise: exercises[i],
+                  onDeleteExercise: () => {},
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) {},
+                  isEditable: true,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
                       exercises[i].id,
@@ -67,6 +69,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                     );
                   },
                 ),
+                )
                 ), 
                 const SizedBox(height: 15), 
                 Intensity(onIntensityChanged: (int intensity){ // intensity can only be edited here, so we have an update intensity function to update the workout list
