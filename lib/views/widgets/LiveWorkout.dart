@@ -29,8 +29,15 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   @override
   void initState() {
     super.initState();
+    print(widget.template != null);
+    print(widget.template?.name);
     if (widget.template != null) {
-      exercises = widget.template!.exercises.map((templateExercise) => _convertTemplateExercise(templateExercise)).toList();
+      exercises = widget.template!.exercises.map((templateExercise) {
+      print("Processing TemplateExercise: ${templateExercise.name}"); 
+      return _convertTemplateExercise(templateExercise); 
+    }).toList();
+
+    print("Exercises after conversion: $exercises"); 
     }
     _stopwatch.start(); // set up stopwatch to start time
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -50,11 +57,21 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   // which is an L. so fixing that soon lol
 
   WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
+    print(templateExercise.unit);
+    print("Processing TemplateExercise: ${templateExercise.name}"); 
+    print("TemplateExercise sets: ${templateExercise.sets}"); 
+    String units = templateExercise.unit;
     final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
-      final map = templateSet as Map<String, dynamic>; 
+      print(templateSet);
+      final map = templateSet as Map<String, dynamic>;
+      print("yooo $map");
+      print("unit from template $units");
       return Set(
         reps: map['reps'] != null ? map['reps'] as int : 0,
         weight: map['weight'] != null ? map['weight'] as int : 0,
+        unit: units,
+        time: map['Time'] != null ? map['Time'] as int : 0,
+        distance: map['Distance'] != null ? map['Distance'] as int : 0
       );
     }).toList();
 
@@ -66,9 +83,11 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   }
 
   List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
+    String unit = exercises[0].trackedStats[0].unit ?? '';
+    print("unit from exercise model $unit");
     return exercises.map((exercise) => WorkoutExercise(
       name: exercise.name,
-      sets: [Set(reps: 0, weight: 0)], 
+      sets: [Set(reps: 0, weight: 0, unit: unit, time: 0, distance: 0)], 
       notes: "",
     )).toList();
   }
@@ -93,9 +112,9 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight) {
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) {
     setState(() { 
-      final updatedSet = Set(reps: reps, weight: weight);
+      final updatedSet = Set(reps: reps, weight: weight, unit: unit, distance: distance, time: time);
       exercises[exerciseIndex].sets[setIndex] = updatedSet;
     }); 
   }
@@ -165,8 +184,8 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   child: ExerciseTile( // different sets, populates from template
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight) { 
-                    _updateSetDetails(i, setIndex, reps, weight);
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
+                    _updateSetDetails(i, setIndex, reps, weight, distance, time, unit);
                   },
                   isEditable: true,
                   updateNotes: (updatedNotes) {
