@@ -1,3 +1,5 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
+
 import '../models/TemplateModel.dart';
 
 class TemplateService {
@@ -8,16 +10,26 @@ class TemplateService {
         name: "Leg Day",
         isPremade: false,
         exercises: [
-          TemplateExercise(
+          Exercise(
             id: 0,
             name: "Barbell Squat",
             sets: [
               {"weight": 180, "reps": 12},
               {"weight": 200, "reps": 8}
             ],
-            unit: "lbs"
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 3,
             name: "Deadlift",
             sets: [
@@ -26,7 +38,17 @@ class TemplateService {
               {"weight": 280, "reps": 3},
               {"weight": 315, "reps": 3}
             ],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
         ],
       ),
@@ -35,23 +57,53 @@ class TemplateService {
         name: "Push Day",
         isPremade: false,
         exercises: [
-          TemplateExercise(
+          Exercise(
             id: 1,
             name: "Barbell Bench Press",
             sets: [],
-            unit: "lbs"
+            unit: "lbs", 
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 24,
             name: "Dumbbell Fly",
             sets: [],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
         ],
       ),
@@ -60,7 +112,7 @@ class TemplateService {
         name: "Intense Run",
         isPremade: true,
         exercises: [
-          TemplateExercise(
+          Exercise(
             id: 2,
             name: "Run",
             sets: [
@@ -69,7 +121,17 @@ class TemplateService {
               {"Distance": 2, "Time": 16},
               {"Distance": 1, "Time": 10},
             ],
-            unit:"mins"
+            unit:"mins",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.distance, display: "Distance", unit: "mi"),
+              const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
+            ],
+            isCustom: false,
+            hasDistance: true,
+            hasReps: false,
+            hasTime: true,
+            hasWeight: false,
+            notes: "",
           )
         ]
       ),
@@ -78,50 +140,100 @@ class TemplateService {
         name: "Full Body Workout",
         isPremade: true,
         exercises: [
-          TemplateExercise(
+          Exercise(
             id: 9,
             name: "Dumbbell Curl",
             sets: [
               {"weight": 10, "reps": 12},
               {"weight": 15, "reps": 10},
             ],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 13,
             name: "Lat Pulldown",
             sets: [
               {"weight": 50, "reps": 12},
               {"weight": 60, "reps": 10},
             ],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 15,
             name: "Leg Press",
             sets: [
               {"weight": 120, "reps": 12},
               {"weight": 145, "reps": 8},
             ],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 1,
             name: "Barbell Bench Press",
             sets: [
               {"weight": 120, "reps": 12},
               {"weight": 135, "reps": 10},
             ],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [
               {"weight": 30, "reps": 12},
               {"weight": 40, "reps": 8},
             ],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
         ]
       ),
@@ -131,23 +243,53 @@ class TemplateService {
         isPremade: false,
         icon: TemplateIcon.dumbbell,
         exercises: [
-          TemplateExercise(
+          Exercise(
             id: 1,
             name: "Barbell Bench Press",
             sets: [],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
-          TemplateExercise(
+          Exercise(
             id: 24,
             name: "Dumbbell Fly",
             sets: [],
-            unit: "lbs"
+            unit: "lbs",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            notes: ""
           ),
         ],
       ),

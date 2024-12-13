@@ -14,7 +14,7 @@ class TemplateExerciseListItem {
     required this.isExpanded
   });
 
-  factory TemplateExerciseListItem.fromSet(Exercise exercise, TemplateExercise templateExercise) {
+  factory TemplateExerciseListItem.fromSet(Exercise exercise, Exercise templateExercise) {
     TemplateExerciseListItem item = TemplateExerciseListItem(
       exercise: exercise,
       isExpanded: templateExercise.sets.isNotEmpty

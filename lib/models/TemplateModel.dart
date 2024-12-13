@@ -1,10 +1,11 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 
 class Template {
   final int id;
   final String name;
   final bool isPremade;
-  final List<TemplateExercise> exercises;
+  final List<Exercise> exercises;
   final TemplateIcon icon;
 
   Template({
@@ -13,21 +14,6 @@ class Template {
     required this.isPremade,
     required this.exercises,
     this.icon = TemplateIcon.person,
-  });
-}
-
-// temporary class until Exercise model is finished?
-class TemplateExercise {
-  final int id;
-  final String name;
-  final List<dynamic> sets;
-  final String unit;
-
-  TemplateExercise({
-    required this.id,
-    required this.name,
-    required this.sets,
-    required this.unit
   });
 }
 

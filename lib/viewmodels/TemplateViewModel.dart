@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 import '../models/TemplateModel.dart';
 import '../services/TemplateService.dart';
@@ -119,10 +120,17 @@ class TemplateViewModel extends ChangeNotifier {
       isPremade: false,
       icon: icon,
       exercises: exercises.map((exerciseItem) {
-        return TemplateExercise(
+        return Exercise(
           id: exerciseItem.exercise.id,
           name: exerciseItem.exercise.name,
           unit: units,
+          trackedStats: exerciseItem.exercise.trackedStats,
+          isCustom: exerciseItem.exercise.isCustom,
+          hasDistance: exerciseItem.exercise.hasDistance,
+          hasReps: exerciseItem.exercise.hasReps,
+          hasTime: exerciseItem.exercise.hasTime,
+          hasWeight: exerciseItem.exercise.hasWeight,
+          notes: exerciseItem.exercise.notes,
           sets: exerciseItem.getSetValues().map((curSet) {
             Map<String, dynamic> setVals = {};
             for (int i = 0; i < curSet.length; i++) {

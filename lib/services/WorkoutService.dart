@@ -1,3 +1,5 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
+
 import '../models/WorkoutModel.dart';
 
 class WorkoutService {
@@ -7,25 +9,24 @@ class WorkoutService {
       Workout(
         id: "f882cc45-aaf1-4025-9b5d-87d2a29911e3",
         completed: [
-          WorkoutExercise(
+          Exercise(
+            id: 15,
             name: "Leg Press",
             sets: [
-              Set(
-                reps: 12,
-                weight: 1020,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 110,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              {"weight": 120, "reps": 12},
+              {"weight": 135, "reps": 10},
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           )
         ],
         time: "00:00:00",
@@ -37,99 +38,81 @@ class WorkoutService {
       Workout(
         id: "f882cc45-aaf1-4025-9b5d-87d2a29911e4",
         completed: [
-          WorkoutExercise(
+          Exercise(
+            id: 15,
             name: "Leg Press",
             sets: [
-              Set(
-                reps: 12,
-                weight: 120,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 110,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              {"weight": 120, "reps": 12},
+              {"weight": 135, "reps": 10},
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           ),
-          WorkoutExercise(
+          Exercise(
+            id: 0,
             name: "Squats",
             sets: [
-              Set(
-                reps: 12,
-                weight: 130,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 120,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 8,
-                weight: 110,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              {"weight": 120, "reps": 12},
+              {"weight": 135, "reps": 10},
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           ),
-          WorkoutExercise(
+          Exercise(
+            id: 31, 
             name: "Calf Raises",
             sets: [
-              Set(
-                reps: 10,
-                weight: 80,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 80,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 8,
-                weight: 80,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              {"weight": 120, "reps": 12},
+              {"weight": 135, "reps": 10},
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           ),
-          WorkoutExercise(
+          Exercise(
+            id: 34,
             name: "Bulgarian Split Squat",
             sets: [
-              Set(
-                reps: 10,
-                weight: 30,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 30,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
+              {"weight": 120, "reps": 12},
+              {"weight": 135, "reps": 10},
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           )
         ],
         time: "00:41:23",
@@ -141,98 +124,75 @@ class WorkoutService {
             Workout(
         id: "f882cc45-aaf1-4025-9b5d-87d2a29911e5",
         completed: [
-          WorkoutExercise(
+          Exercise(
+            id: 33,
             name: "Dumbell Rows",
             sets: [
-              Set(
-                reps: 12,
-                weight: 30,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 30,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              {"weight": 120, "reps": 12},
+              {"weight": 135, "reps": 10},
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           ),
-          WorkoutExercise(
+          Exercise(
+            id: 32,
             name: "Jump Squats",
             sets: [
-              Set(
-                reps: 12,
-                weight: 10,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 12,
-                weight: 10,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 12,
-                weight: 10,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: false,
+            unit: "",
           ),
-          WorkoutExercise(
+          Exercise(
+            id: 30,
             name: "Calf Raises",
             sets: [
-              Set(
-                reps: 10,
-                weight: 80,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 10,
-                weight: 80,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 8,
-                weight: 80,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              )
+              
             ],
-            notes: ""
+            notes: "",
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
           ),
-          WorkoutExercise(
+          Exercise(
+            id: 31,
             name: "Russian Twists",
             sets: [
-              Set(
-                reps: 20,
-                weight: 30,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
-              Set(
-                reps: 20,
-                weight: 30,
-                time: -1,
-                distance: -1,
-                unit: "lbs"
-              ),
+              
             ],
+            trackedStats: [
+              const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
+            ],
+            isCustom: false,
+            hasDistance: false,
+            hasReps: true,
+            hasTime: false,
+            hasWeight: true,
+            unit: "lbs",
             notes: "These were hard."
           )
         ],

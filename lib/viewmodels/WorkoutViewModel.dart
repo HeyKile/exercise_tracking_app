@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:exercise_tracking_app/services/WorkoutService.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
@@ -11,9 +12,9 @@ class WorkoutViewModel extends ChangeNotifier{
   Workout? get currentWorkout => _currentWorkout;
   List<Workout> get allWorkouts => _allWorkouts;
 
-  void addExercise(String name, List<Set> sets, String notes){
+void addExercise(int id, String name, List<dynamic> sets, String notes, List<ExerciseStat> trackedStats, bool isCustom, bool hasDistance, bool hasReps, bool hasTime, bool hasWeight, String unit){
     if(_currentWorkout != null){
-      _currentWorkout!.completed.add(WorkoutExercise(name: name, sets: sets, notes: notes));
+      _currentWorkout!.completed.add(Exercise(id: id, name: name, sets: sets, notes: notes, trackedStats: trackedStats, isCustom: isCustom, hasDistance: hasDistance, hasReps: hasReps, hasTime: hasTime, hasWeight: hasWeight, unit: unit));
       debugPrint("Added exercise: $name");
       notifyListeners();
     }

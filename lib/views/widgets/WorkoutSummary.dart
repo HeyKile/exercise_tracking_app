@@ -63,7 +63,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                   isEditable: true,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
-                      exercises[i].id,
+                      exercises[i].id as String?,
                       exercises[i].name,
                       updatedNotes,
                     );

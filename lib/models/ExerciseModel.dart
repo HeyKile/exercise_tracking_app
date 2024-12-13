@@ -3,12 +3,26 @@ class Exercise {
   final String name;
   final List<ExerciseStat> trackedStats;
   final bool isCustom;
+  final bool hasReps;
+  final bool hasDistance;
+  final bool hasWeight;
+  final bool hasTime;
+  final List<dynamic> sets;
+  String unit;
+  String notes;
 
   Exercise({
     required this.id,
     required this.name,
     required this.trackedStats,
-    required this.isCustom
+    required this.isCustom,
+    required this.hasReps,
+    required this.hasDistance,
+    required this.hasTime,
+    required this.hasWeight,
+    required this.notes,
+    required this.sets,
+    required this.unit,
   });
 
   factory Exercise.fromInput(String name, bool hasDistance, bool hasRep, bool hasWeight, bool hasTime) {
@@ -52,7 +66,14 @@ class Exercise {
       id: -1,
       name: name,
       trackedStats: statsToTrack,
-      isCustom: true
+      isCustom: true,
+      hasDistance: hasDistance,
+      hasReps: hasRep,
+      hasTime: hasTime,
+      hasWeight: hasWeight,
+      notes: "",
+      unit: "",
+      sets: List.empty(),
     );
   }
 }

@@ -11,6 +11,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 1,
@@ -20,6 +27,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 2,
@@ -29,6 +43,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
         ],
         isCustom: false,
+        hasDistance: true,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "mins",
+        notes: "" 
       ),
       Exercise(
         id: 3,
@@ -38,6 +59,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 4,
@@ -46,6 +74,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: ""
       ),
       Exercise(
         id: 5,
@@ -55,6 +90,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 6,
@@ -64,6 +106,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
         ],
         isCustom: false,
+        hasDistance: true,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "mins",
+        notes: "" 
       ),
       Exercise(
         id: 7,
@@ -72,6 +121,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "secs"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "secs",
+        notes: "" 
       ),
       Exercise(
         id: 8,
@@ -81,6 +137,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 9,
@@ -90,6 +153,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 10,
@@ -99,6 +169,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 11,
@@ -107,6 +184,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: "" 
       ),
       Exercise(
         id: 12,
@@ -115,6 +199,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "mins",
+        notes: "" 
       ),
       Exercise(
         id: 13,
@@ -124,6 +215,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 14,
@@ -133,6 +231,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 15,
@@ -142,6 +247,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 16,
@@ -151,6 +263,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
         ],
         isCustom: false,
+        hasDistance: true,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "mins",
+        notes: "" 
       ),
       Exercise(
         id: 17,
@@ -160,6 +279,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "secs"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "secs",
+        notes: ""
       ),
       Exercise(
         id: 18,
@@ -168,6 +294,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: "" 
       ),
       Exercise(
         id: 19,
@@ -177,6 +310,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 20,
@@ -185,6 +325,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: ""
       ),
       Exercise(
         id: 21,
@@ -193,6 +340,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: ""
       ),
       Exercise(
         id: 22,
@@ -201,6 +355,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: ""
       ),
       Exercise(
         id: 23,
@@ -209,6 +370,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "secs"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "secs",
+        notes: ""
       ),
       Exercise(
         id: 24,
@@ -218,6 +386,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 25,
@@ -227,6 +402,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
       Exercise(
         id: 26,
@@ -236,6 +418,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
         ],
         isCustom: false,
+        hasDistance: true,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: false,
+        sets: [],
+        unit: "mins",
+        notes: ""
       ),
       Exercise(
         id: 27,
@@ -244,6 +433,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: false,
+        sets: [],
+        unit: "",
+        notes: ""
       ),
       Exercise(
         id: 28,
@@ -253,6 +449,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.distance, display: "Distance", unit: "m"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: false,
+        hasTime: true,
+        hasWeight: true,
+        sets: [],
+        unit: "m",
+        notes: ""
       ),
       Exercise(
         id: 29,
@@ -262,6 +465,13 @@ class ExerciseService {
           const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
         ],
         isCustom: false,
+        hasDistance: false,
+        hasReps: true,
+        hasTime: false,
+        hasWeight: true,
+        sets: [],
+        unit: "lbs",
+        notes: "" 
       ),
     ];
   }

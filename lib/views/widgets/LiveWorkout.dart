@@ -19,12 +19,12 @@ class LiveWorkout extends StatefulWidget {
 
 class _LiveWorkoutState extends State<LiveWorkout> {
   Workout? currentWorkout;
-  List<WorkoutExercise> exercises = [];
+  List<Exercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
   final Stopwatch _stopwatch = Stopwatch();
   Duration _elapsedTime = const Duration();
   late Timer timer;
-  bool _isTimerRunning = true;
+  bool _isTimerRunning = false;
   String workoutName = '';
 
   @override
@@ -35,7 +35,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     if (widget.template != null) {
       exercises = widget.template!.exercises.map((templateExercise) {
       print("Processing TemplateExercise: ${templateExercise.name}"); 
-      return _convertTemplateExercise(templateExercise); 
+      return templateExercise; 
     }).toList();
 
     print("Exercises after conversion: $exercises"); 
@@ -57,42 +57,6 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   // the next two methods will need to be improved. currently there are 3 exercise classes so have to convert between them
   // which is an L. so fixing that soon lol
 
-  WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
-    print(templateExercise.unit);
-    print("Processing TemplateExercise: ${templateExercise.name}"); 
-    print("TemplateExercise sets: ${templateExercise.sets}"); 
-    String units = templateExercise.unit;
-    final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
-      print(templateSet);
-      final map = templateSet as Map<String, dynamic>;
-      print("yooo $map");
-      print("unit from template $units");
-      return Set(
-        reps: map['reps'] != null ? map['reps'] as int : 0,
-        weight: map['weight'] != null ? map['weight'] as int : 0,
-        unit: units,
-        time: map['Time'] != null ? map['Time'] as int : 0,
-        distance: map['Distance'] != null ? map['Distance'] as int : 0
-      );
-    }).toList();
-
-    return WorkoutExercise(
-      name: templateExercise.name,
-      sets: convertedSets,
-      notes: "",
-    );
-  }
-
-  List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
-    String unit = exercises[0].trackedStats[0].unit ?? '';
-    print("unit from exercise model $unit");
-    return exercises.map((exercise) => WorkoutExercise(
-      name: exercise.name,
-      sets: [Set(reps: 0, weight: 0, unit: unit, time: 0, distance: 0)], 
-      notes: "",
-    )).toList();
-  }
-
   void _addExercise() async {
     final selectedExercises = await Navigator.push(
       context,
@@ -100,7 +64,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     );
     if (selectedExercises != null) {
       setState(() {
-        exercises.addAll(convertExerciseToWorkoutExercise(selectedExercises));
+        exercises.addAll(selectedExercises);
       });
     }
 }
@@ -115,8 +79,26 @@ class _LiveWorkoutState extends State<LiveWorkout> {
 
   void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) {
     setState(() { 
-      final updatedSet = Set(reps: reps, weight: weight, unit: unit, distance: distance, time: time);
-      exercises[exerciseIndex].sets[setIndex] = updatedSet;
+      final exercise = exercises[exerciseIndex]; 
+      final currentSet = exercise.sets[setIndex] as Map<String, dynamic>; 
+      
+      if (exercise.hasReps) { 
+        currentSet['reps'] = reps; 
+      } 
+      
+      if (exercise.hasWeight) { 
+        currentSet['weight'] = weight; 
+      } 
+      
+      if (exercise.hasDistance) { 
+        currentSet['Distance'] = distance; 
+      } 
+      
+      if (exercise.hasTime) { 
+        currentSet['time'] = time; 
+      } 
+      
+      exercises[exerciseIndex].sets[setIndex] = currentSet;
     }); 
   }
 
@@ -193,7 +175,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   isEditable: true,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
-                      exercises[i].id,
+                      exercises[i].id as String?,
                       exercises[i].name,
                       updatedNotes,
                     );
