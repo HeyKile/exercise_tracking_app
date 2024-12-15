@@ -1,8 +1,6 @@
-import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseTileListItem extends StatelessWidget { // this is the line of sets, called in ExerciseTile
-  final int setNumber;
   final TextEditingController repsController;
   final TextEditingController weightController;
   final TextEditingController distanceController;
@@ -21,7 +19,6 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
 
   const ExerciseTileListItem({
     super.key,
-    required this.setNumber,
     required this.repsController,
     required this.weightController,
     required this.distanceController,
@@ -46,7 +43,6 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          Text('$setNumber. '),
           if(hasReps) Expanded(
             child: TextField(
               controller: repsController,

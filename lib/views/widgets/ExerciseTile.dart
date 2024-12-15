@@ -21,19 +21,20 @@ class ExerciseTileStateNotifier extends ChangeNotifier{
         (exercise) => exercise.name == exerciseName,
       );
 
-      for(var stat in exercise.trackedStats){
-        if(stat.type == TrackableStat.weight){
-          hasWeight = true;
-        }
-        else if(stat.type == TrackableStat.time){
-          hasTime = true;
-        }
-        else if(stat.type == TrackableStat.distance){
-          hasDistance = true;
-        }
-        else if(stat.type == TrackableStat.reps){
-          hasReps = true;
-        }
+      if(exercise.hasWeight){ 
+        hasWeight = true; 
+      }
+      
+      if(exercise.hasTime){ 
+        hasTime = true; 
+      } 
+
+      if(exercise.hasDistance){ 
+        hasDistance = true; 
+      } 
+      
+      if(exercise.hasReps){ 
+        hasReps = true; 
       }
 
       notifyListeners();
@@ -43,7 +44,6 @@ class ExerciseTileStateNotifier extends ChangeNotifier{
     }
   }
 }
-
 class ExerciseTile extends StatefulWidget{
   final Exercise exercise;
   final bool isEditable;
@@ -228,7 +228,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         children: [ 
                           Expanded(
                             child: ExerciseTileListItem(
-                              setNumber: index + 1, 
                               repsController: _repsControllers[index], 
                               weightController: _weightControllers[index], 
                               onUnitChanged: changeUnit, 
