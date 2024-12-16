@@ -158,9 +158,7 @@ class WorkoutService {
           Exercise(
             id: 32,
             name: "Jump Squats",
-            sets: [
-              
-            ],
+            sets: [],
             notes: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -197,8 +195,7 @@ class WorkoutService {
           Exercise(
             id: 31,
             name: "Russian Twists",
-            sets: [
-              
+            sets: [              
             ],
             trackedStats: [
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),

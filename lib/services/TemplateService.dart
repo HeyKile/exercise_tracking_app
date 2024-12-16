@@ -17,6 +17,7 @@ class TemplateService {
               {"weight": 180, "reps": 12},
               {"weight": 200, "reps": 8}
             ],
+
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),

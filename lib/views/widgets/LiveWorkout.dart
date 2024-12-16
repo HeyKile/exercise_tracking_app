@@ -25,13 +25,12 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   final Stopwatch _stopwatch = Stopwatch();
   Duration _elapsedTime = const Duration();
   late Timer timer;
-  bool _isTimerRunning = false;
+  bool _isTimerRunning = true;
   String workoutName = '';
 
   @override
   void initState() {
     super.initState();
-    
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (widget.template != null) {
         setState(() {
@@ -55,7 +54,6 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     timer.cancel();
     super.dispose();
   }
-
 
   void _addExercise() async {
     final selectedExercises = await Navigator.push(
@@ -183,6 +181,8 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                 for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: ChangeNotifierProvider(
+                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile( // different sets, populates from template
                     exercise: exercises[i],
                     onDeleteExercise: () => _deleteExercise(i),

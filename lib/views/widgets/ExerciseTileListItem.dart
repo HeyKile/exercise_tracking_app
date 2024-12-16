@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseTileListItem extends StatelessWidget { // this is the line of sets, called in ExerciseTile
@@ -46,6 +47,7 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
 
   @override
   Widget build(BuildContext context) {
+    print('Building ExerciseTileListItem with unit: $unit');
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -160,7 +162,7 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
                 DropdownMenuItem(value: 'lbs', child: Text('lbs')),
                 DropdownMenuItem(value: 'kgs', child: Text('kgs')),
               ],
-              onChanged: (value) { 
+              onChanged: (value) {
                 if (onWeightUnitChanged != null) { 
                   onWeightUnitChanged!(value); 
                 } 
