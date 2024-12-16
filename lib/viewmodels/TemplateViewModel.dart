@@ -142,6 +142,7 @@ class TemplateViewModel extends ChangeNotifier {
                 setVals[stat.type.toString().split('.').last.toLowerCase()] = int.parse(curSet[i]);
               }
             }
+            return setVals;
           }).toList(), 
         );
       }).toList()

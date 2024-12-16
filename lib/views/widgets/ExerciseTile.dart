@@ -1,9 +1,7 @@
 import 'package:exercise_tracking_app/models/ExerciseModel.dart';
-import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddNotesPopUp.dart';
 import 'package:exercise_tracking_app/views/widgets/CustomRoundedExpansionTile.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'ExerciseTileListItem.dart';
 
 class ExerciseTile extends StatefulWidget{
