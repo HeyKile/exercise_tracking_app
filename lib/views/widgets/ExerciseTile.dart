@@ -6,43 +6,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'ExerciseTileListItem.dart';
 
-class ExerciseTileStateNotifier extends ChangeNotifier{
-  bool hasReps = false;
-  bool hasDistance = false;
-  bool hasTime = false;
-  bool hasWeight = false;
-
-  Future<void> fetchAndSetState(BuildContext context, String exerciseName) async {
-    try{
-      final exerciseViewModel = Provider.of<ExerciseViewModel>(context, listen:false);
-      await exerciseViewModel.fetchExercises();
-
-      Exercise? exercise = exerciseViewModel.exercises.firstWhere(
-        (exercise) => exercise.name == exerciseName,
-      );
-
-      for(var stat in exercise.trackedStats){
-        if(stat.type == TrackableStat.weight){
-          hasWeight = true;
-        }
-        else if(stat.type == TrackableStat.time){
-          hasTime = true;
-        }
-        else if(stat.type == TrackableStat.distance){
-          hasDistance = true;
-        }
-        else if(stat.type == TrackableStat.reps){
-          hasReps = true;
-        }
-      }
-
-      notifyListeners();
-    }
-    catch(e){
-      print("ERROR: $e");
-    }
-  }
-}
 class ExerciseTile extends StatefulWidget{
   final Exercise exercise;
   final bool isEditable;
