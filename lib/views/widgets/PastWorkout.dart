@@ -19,7 +19,7 @@ class PastWorkout extends StatefulWidget {
 
 class _PastWorkoutState extends State<PastWorkout>{
   Workout? currentWorkout;
-  List<WorkoutExercise> exercises = [];
+  List<Exercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
   String _inputTime = '00:00:00';
   String workoutName = '';
@@ -29,51 +29,14 @@ class _PastWorkoutState extends State<PastWorkout>{
     super.initState();
     if (widget.template != null) {
       exercises = widget.template!.exercises.map((templateExercise) {
-      print("Processing TemplateExercise: ${templateExercise.name}"); 
-      return _convertTemplateExercise(templateExercise); 
+      return templateExercise; 
     }).toList();
-    print("Exercises after conversion: $exercises");
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
-    print(templateExercise.unit);
-    print("Processing TemplateExercise: ${templateExercise.name}"); 
-    print("TemplateExercise sets: ${templateExercise.sets}"); 
-    String units = templateExercise.unit;
-    final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
-      print(templateSet);
-      final map = templateSet as Map<String, dynamic>;
-      print("yooo $map");
-      print("unit from template $units");
-      return Set(
-        reps: map['reps'] != null ? map['reps'] as int : 0,
-        weight: map['weight'] != null ? map['weight'] as int : 0,
-        unit: units,
-        time: map['Time'] != null ? map['Time'] as int : 0,
-        distance: map['Distance'] != null ? map['Distance'] as int : 0
-      );
-    }).toList();
-
-    return WorkoutExercise(
-      name: templateExercise.name,
-      sets: convertedSets,
-      notes: "",
-    );
-  }
-
-  List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
-    String units = exercises[0].trackedStats[0].unit ?? '';
-    return exercises.map((exercise) => WorkoutExercise(
-      name: exercise.name,
-      sets: [Set(reps: 0, weight: 0, unit: units, distance: 0, time: 0)], 
-      notes: ""
-    )).toList();
   }
 
   void _addExercise() async { // add exercise to exercises list using Kyle's modal
@@ -83,7 +46,7 @@ class _PastWorkoutState extends State<PastWorkout>{
     );
     if (selectedExercises != null) {
       setState(() {
-        exercises.addAll(convertExerciseToWorkoutExercise(selectedExercises));
+        exercises.addAll(selectedExercises);
       });
     }
 }
@@ -96,10 +59,32 @@ class _PastWorkoutState extends State<PastWorkout>{
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) { // if they change set numbers, this gets called to update that in the list
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String timeUnit, String weightUnit, String distanceUnit) { // if they change set numbers, this gets called to update that in the list
     setState(() { 
-      final updatedSet = Set(reps: reps, weight: weight, unit: unit, distance: distance, time: time);
-      exercises[exerciseIndex].sets[setIndex] = updatedSet;
+      final exercise = exercises[exerciseIndex]; 
+      final currentSet = exercise.sets[setIndex] as Map<String, dynamic>; 
+      
+      if (exercise.hasReps) { 
+        currentSet['reps'] = reps; 
+      } 
+      
+      if (exercise.hasWeight) { 
+        currentSet['weight'] = weight; 
+      } 
+      
+      if (exercise.hasDistance) { 
+        currentSet['Distance'] = distance; 
+      } 
+      
+      if (exercise.hasTime) { 
+        currentSet['time'] = time; 
+      } 
+      
+      exercise.distanceUnit = distanceUnit;
+      exercise.weightUnit = weightUnit;
+      exercise.timeUnit = timeUnit;
+
+      exercises[exerciseIndex].sets[setIndex] = currentSet;
     }); 
   }
 
@@ -146,25 +131,22 @@ class _PastWorkoutState extends State<PastWorkout>{
                 for(int i = 0; i < exercises.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ChangeNotifierProvider(
-                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
-                    _updateSetDetails(i, setIndex, reps, weight, distance, time, unit);
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) { 
+                    _updateSetDetails(i, setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit);
                   },
                   isEditable: true,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
-                      exercises[i].id,
+                      exercises[i].id as String?,
                       exercises[i].name,
                       updatedNotes,
                     );
                   },
                 ),
                 )
-                ),
               ], 
             ),
             const SizedBox(height:15),
@@ -212,7 +194,7 @@ class ExerciseAdd extends StatelessWidget{
 
 class SaveWorkout extends StatelessWidget{
   final WorkoutViewModel workoutViewModel;
-  final List<WorkoutExercise> exercises;
+  final List<Exercise> exercises;
   final String workoutDuration;
   final String workoutName;
 
@@ -227,12 +209,13 @@ class SaveWorkout extends StatelessWidget{
         onPressed: () {
           final currentWorkout = Workout(completed: exercises, tags: [], workoutName: workoutName, intensity: 0, time: workoutDuration, date: DateTime.now());
           workoutViewModel.saveWorkout(currentWorkout);
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
-            ), (Route<dynamic> route) => false
-          );
+          Navigator.popUntil(
+                      context,
+                      (route) => route.isFirst,);
+          Navigator.push(context,
+                MaterialPageRoute(
+                  builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout)
+        ));
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

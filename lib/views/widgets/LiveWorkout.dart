@@ -4,6 +4,7 @@ import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'ExerciseTile.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
@@ -19,7 +20,7 @@ class LiveWorkout extends StatefulWidget {
 
 class _LiveWorkoutState extends State<LiveWorkout> {
   Workout? currentWorkout;
-  List<WorkoutExercise> exercises = [];
+  List<Exercise> exercises = [];
   WorkoutViewModel workoutViewModel = WorkoutViewModel();
   final Stopwatch _stopwatch = Stopwatch();
   Duration _elapsedTime = const Duration();
@@ -30,20 +31,20 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   @override
   void initState() {
     super.initState();
-    print(widget.template != null);
-    print(widget.template?.name);
-    if (widget.template != null) {
-      exercises = widget.template!.exercises.map((templateExercise) {
-      print("Processing TemplateExercise: ${templateExercise.name}"); 
-      return _convertTemplateExercise(templateExercise); 
-    }).toList();
-
-    print("Exercises after conversion: $exercises"); 
-    }
-    _stopwatch.start(); // set up stopwatch to start time
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState((){
-        _elapsedTime = _stopwatch.elapsed;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (widget.template != null) {
+        setState(() {
+          exercises = widget.template!.exercises.map((templateExercise) {
+            return templateExercise;
+          }).toList();
+        });
+      }
+      
+      _stopwatch.start();
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          _elapsedTime = _stopwatch.elapsed;
+        });
       });
     });
   }
@@ -54,69 +55,68 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     super.dispose();
   }
 
-  // the next two methods will need to be improved. currently there are 3 exercise classes so have to convert between them
-  // which is an L. so fixing that soon lol
-
-  WorkoutExercise _convertTemplateExercise(TemplateExercise templateExercise) {
-    print(templateExercise.unit);
-    print("Processing TemplateExercise: ${templateExercise.name}"); 
-    print("TemplateExercise sets: ${templateExercise.sets}"); 
-    String units = templateExercise.unit;
-    final List<Set> convertedSets = templateExercise.sets.map((templateSet) {
-      print(templateSet);
-      final map = templateSet as Map<String, dynamic>;
-      print("yooo $map");
-      print("unit from template $units");
-      return Set(
-        reps: map['reps'] != null ? map['reps'] as int : 0,
-        weight: map['weight'] != null ? map['weight'] as int : 0,
-        unit: units,
-        time: map['Time'] != null ? map['Time'] as int : 0,
-        distance: map['Distance'] != null ? map['Distance'] as int : 0
-      );
-    }).toList();
-
-    return WorkoutExercise(
-      name: templateExercise.name,
-      sets: convertedSets,
-      notes: "",
-    );
-  }
-
-  List<WorkoutExercise> convertExerciseToWorkoutExercise(List<Exercise> exercises) {
-    String unit = exercises[0].trackedStats[0].unit ?? '';
-    print("unit from exercise model $unit");
-    return exercises.map((exercise) => WorkoutExercise(
-      name: exercise.name,
-      sets: [Set(reps: 0, weight: 0, unit: unit, time: 0, distance: 0)], 
-      notes: "",
-    )).toList();
-  }
-
   void _addExercise() async {
     final selectedExercises = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddExerciseModal()),
     );
     if (selectedExercises != null) {
-      setState(() {
-        exercises.addAll(convertExerciseToWorkoutExercise(selectedExercises));
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          exercises.addAll(selectedExercises);
+        });
       });
     }
-}
+  }
+
 
   void _deleteExercise(int index){
     setState(() {
       if (index >= 0 && index < exercises.length) {
         exercises.removeAt(index);
+      } else {
+        print("Index out of range: $index");
       }
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) {
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String timeUnit, String weightUnit, String distanceUnit) {
     setState(() { 
-      final updatedSet = Set(reps: reps, weight: weight, unit: unit, distance: distance, time: time);
-      exercises[exerciseIndex].sets[setIndex] = updatedSet;
+      if (exerciseIndex < 0 || exerciseIndex >= exercises.length) { 
+        print("Exercise index out of range: $exerciseIndex"); 
+        return; 
+      }
+
+      final exercise = exercises[exerciseIndex]; 
+
+      if (setIndex < 0 || setIndex >= exercise.sets.length) { 
+        print("Set index out of range: $setIndex"); 
+        return; 
+      }
+
+      final currentSet = exercise.sets[setIndex] as Map<String, dynamic>; 
+      
+      if (exercise.hasReps) { 
+        currentSet['reps'] = reps; 
+      } 
+      
+      if (exercise.hasWeight) { 
+        currentSet['weight'] = weight; 
+      } 
+      
+      if (exercise.hasDistance) { 
+        currentSet['Distance'] = distance; 
+      } 
+      
+      if (exercise.hasTime) { 
+        currentSet['time'] = time; 
+      } 
+
+      exercise.distanceUnit = distanceUnit;
+      exercise.weightUnit = weightUnit;
+      exercise.timeUnit = timeUnit;
+      
+      exercises[exerciseIndex].sets[setIndex] = currentSet;
     }); 
   }
 
@@ -152,9 +152,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                 StartStop( // timing, pause and start
                   icon: _isTimerRunning ? Icons.play_arrow : Icons.pause,
                   label: _isTimerRunning ? 'Start' :'Pause',
-                  onPressed: () {
-                    _toggleTimer();
-                  },
+                  onPressed: _toggleTimer,
                 ),
                 Text(_elapsedTime.toString().substring(0,7)), // time that's passed
                 StartStop( 
@@ -164,12 +162,13 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                     final currentWorkout = Workout(completed: exercises, tags: [], workoutName: workoutName, intensity: 0, time: _elapsedTime.toString().substring(0,7), date: DateTime.now());
                     debugPrint('current workout: $currentWorkout');
                     workoutViewModel.saveWorkout(currentWorkout);
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.popUntil(
                       context,
+                      (route) => route.isFirst,);
+                      Navigator.push(context,
                       MaterialPageRoute(
-                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
-                      ), (Route<dynamic> route) => false
-                    );
+                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout)
+                      ));
                   },
                 ),
               ],
@@ -185,22 +184,21 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   child: ChangeNotifierProvider(
                   create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile( // different sets, populates from template
-                  exercise: exercises[i],
-                  onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
-                    _updateSetDetails(i, setIndex, reps, weight, distance, time, unit);
-                  },
-                  isEditable: true,
-                  updateNotes: (updatedNotes) {
-                    workoutViewModel.updateNotes(
-                      exercises[i].id,
-                      exercises[i].name,
-                      updatedNotes,
-                    );
-                  },
-                ),
+                    exercise: exercises[i],
+                    onDeleteExercise: () => _deleteExercise(i),
+                    onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) { 
+                      _updateSetDetails(i, setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit);
+                    },
+                    isEditable: true,
+                    updateNotes: (updatedNotes) {
+                      workoutViewModel.updateNotes(
+                        exercises[i].id as String?,
+                        exercises[i].name,
+                        updatedNotes,
+                      );
+                    },
+                  ),
                 )
-                ),
               ], 
             ),
             const SizedBox(height:15),

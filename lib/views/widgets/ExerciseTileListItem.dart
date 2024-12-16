@@ -2,12 +2,13 @@ import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseTileListItem extends StatelessWidget { // this is the line of sets, called in ExerciseTile
-  final int setNumber;
   final TextEditingController repsController;
   final TextEditingController weightController;
   final TextEditingController distanceController;
   final TextEditingController timeController;
-  final ValueChanged<String?>? onUnitChanged;
+  final ValueChanged<String?>? onWeightUnitChanged;
+  final ValueChanged<String?>? onDistanceUnitChanged;
+  final ValueChanged<String?>? onTimeUnitChanged;
   final ValueChanged<String> onRepsChanged; 
   final ValueChanged<String> onWeightChanged;
   final ValueChanged<String> onDistanceChanged; 
@@ -17,20 +18,25 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
   final bool hasDistance;
   final bool hasTime;
   final bool hasWeight;
-  final String unit;
+  final String distanceUnit;
+  final String weightUnit;
+  final String timeUnit;
 
   const ExerciseTileListItem({
     super.key,
-    required this.setNumber,
     required this.repsController,
     required this.weightController,
     required this.distanceController,
     required this.timeController,
-    required this.onUnitChanged,
+    required this.onWeightUnitChanged,
+    required this.onTimeUnitChanged,
+    required this.onDistanceUnitChanged,
     required this.isEditable,
     required this.onRepsChanged,
     required this.onWeightChanged,
-    required this.unit, 
+    required this.weightUnit,
+    required this.timeUnit,
+    required this.distanceUnit, 
     required this.onDistanceChanged, 
     required this.onTimeChanged, 
     required this.hasReps, 
@@ -46,7 +52,7 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          Text('$setNumber. '),
+          if(hasReps) const SizedBox(width: 16),
           if(hasReps) Expanded(
             child: TextField(
               controller: repsController,
@@ -62,7 +68,7 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
               },
             ),
           ),
-          if(hasReps) const SizedBox(width: 16),
+          if(hasReps || hasWeight) const SizedBox(width: 16),
           if(hasWeight) Expanded(
             child: TextField(
               controller: weightController,
@@ -78,7 +84,7 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
               },
             ),
           ),
-          if(hasWeight) const SizedBox(width: 16),
+          if(hasWeight || hasDistance) const SizedBox(width: 16),
           if(hasDistance) Expanded(
             child: TextField(
               controller: distanceController,
@@ -97,7 +103,7 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
           if(hasDistance) const SizedBox(width: 16),
           if(hasDistance) Expanded(
             child: isEditable ? DropdownButtonFormField<String>(
-              value: '', // Default value
+              value: distanceUnit, // Default value
               items: const [
                 DropdownMenuItem(value: '', child: Text('')),
                 DropdownMenuItem(value: 'mi', child: Text('mi')),
@@ -106,13 +112,12 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
                 DropdownMenuItem(value: 'meters', child: Text('m')),
               ],
               onChanged: (value) { 
-                print('Unit changed: $value'); 
-                if (onUnitChanged != null) { 
-                  onUnitChanged!(value); 
+                if (onDistanceUnitChanged != null) { 
+                  onDistanceUnitChanged!(value); 
                 } 
               }
             ) : Text(
-                    unit, 
+                    distanceUnit, 
                     style: const TextStyle(fontSize: 16),
             ),
           ),
@@ -133,39 +138,37 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
           ),
           if(hasTime) Expanded(
             child: isEditable ? DropdownButtonFormField<String>(
-              value: unit, // Default value
+              value: timeUnit, // Default value
               items: const [
                 DropdownMenuItem(value: '', child: Text('')),
                 DropdownMenuItem(value: 'mins', child: Text('mins')),
                 DropdownMenuItem(value: 'secs', child: Text('secs')),
               ],
               onChanged: (value) { 
-                print('Unit changed: $value'); 
-                if (onUnitChanged != null) { 
-                  onUnitChanged!(value); 
+                if (onTimeUnitChanged != null) { 
+                  onTimeUnitChanged!(value); 
                 } 
               }
             ) : Text(
-                    unit, 
+                    timeUnit, 
                     style: const TextStyle(fontSize: 16),
             ),
           ),
           if(hasWeight) Expanded(
             child: isEditable ? DropdownButtonFormField<String>(
-              value: unit, // Default value
+              value: weightUnit, // Default value
               items: const [
                 DropdownMenuItem(value: '', child: Text('weight')),
                 DropdownMenuItem(value: 'lbs', child: Text('lbs')),
                 DropdownMenuItem(value: 'kgs', child: Text('kgs')),
               ],
-              onChanged: (value) { 
-                print('Unit changed: $value'); 
-                if (onUnitChanged != null) { 
-                  onUnitChanged!(value); 
+              onChanged: (value) {
+                if (onWeightUnitChanged != null) { 
+                  onWeightUnitChanged!(value); 
                 } 
               }
             ) : Text(
-                    unit, 
+                    weightUnit, 
                     style: const TextStyle(fontSize: 16),
             ),
           ),

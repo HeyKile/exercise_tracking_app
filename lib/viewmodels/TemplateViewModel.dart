@@ -1,3 +1,4 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:flutter/material.dart';
 import '../models/TemplateModel.dart';
 import '../services/TemplateService.dart';
@@ -105,24 +106,28 @@ class TemplateViewModel extends ChangeNotifier {
 
   Template _toTemplate(String title, List<TemplateExerciseListItem> exercises, TemplateIcon icon) {
     // Inside your _toTemplate function
-    for (var exerciseItem in exercises) { 
-    print("Tracked Stats for Exercise: ${exerciseItem.exercise.name}");
-    for (var stat in exerciseItem.exercise.trackedStats) {
-      print("  - ${stat.type} (${stat.unit})"); 
-    }
-    }
-    String units = exercises[0].exercise.trackedStats[0].unit ?? '';
-    print(units);
+    String timeUnit = exercises[0].exercise.timeUnit;
+    String weightUnit = exercises[0].exercise.weightUnit;
+    String distanceUnit = exercises[0].exercise.distanceUnit;
     return Template(
       id: _highestTemplateId + 1,
       name: title,
       isPremade: false,
       icon: icon,
       exercises: exercises.map((exerciseItem) {
-        return TemplateExercise(
+        return Exercise(
           id: exerciseItem.exercise.id,
           name: exerciseItem.exercise.name,
-          unit: units,
+          distanceUnit: distanceUnit,
+          weightUnit: weightUnit,
+          timeUnit: timeUnit,
+          trackedStats: exerciseItem.exercise.trackedStats,
+          isCustom: exerciseItem.exercise.isCustom,
+          hasDistance: exerciseItem.exercise.hasDistance,
+          hasReps: exerciseItem.exercise.hasReps,
+          hasTime: exerciseItem.exercise.hasTime,
+          hasWeight: exerciseItem.exercise.hasWeight,
+          notes: exerciseItem.exercise.notes,
           sets: exerciseItem.getSetValues().map((curSet) {
             Map<String, dynamic> setVals = {};
             for (int i = 0; i < curSet.length; i++) {
@@ -131,6 +136,7 @@ class TemplateViewModel extends ChangeNotifier {
                 setVals[stat.type.toString().split('.').last.toLowerCase()] = int.parse(curSet[i]);
               }
             }
+            return setVals;
           }).toList(), 
         );
       }).toList()

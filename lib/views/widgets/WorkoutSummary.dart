@@ -45,7 +45,6 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                     children: [ // header and tags
                       const SizedBox(width: 16.0),
                       WorkoutHeader(workout: widget.currentWorkout), 
-                      const TagButton(),
                       const SizedBox(height: 16.0), 
                     ], 
                   ), 
@@ -54,16 +53,14 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 for (int i = 0; i < exercises.length; i++) 
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ChangeNotifierProvider(
-                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => {},
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) {},
-                  isEditable: true,
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) {},
+                  isEditable: false,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
-                      exercises[i].id,
+                      exercises[i].id as String?,
                       exercises[i].name,
                       updatedNotes,
                     );
@@ -159,12 +156,7 @@ class CloseDisplay extends StatelessWidget{
         onPressed: () {
           // send info to workout view model to save workout in model
           workoutViewModel.updateIntensity(selectedIntensity, currentWorkout);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainView(selectedIndex: 3),
-            ),
-          );
+          Navigator.pop(context, 0);
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -185,38 +177,6 @@ class CloseDisplay extends StatelessWidget{
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TagButton extends StatelessWidget{
-  const TagButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.05,
-      child: ElevatedButton(
-      onPressed: (){},
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        backgroundColor: Colors.white,
-        padding: const EdgeInsets.all(16),
-      ),
-      child:  const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.tag_outlined,
-            size: 10, 
-            color: Colors.black, 
-          ),
-          Text('Tags', style: TextStyle(color: Colors.black),),
-        ],
-      ),
       ),
     );
   }
