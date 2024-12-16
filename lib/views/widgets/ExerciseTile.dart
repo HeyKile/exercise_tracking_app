@@ -58,7 +58,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
       if(widget.exercise.hasTime){
         newSet['Time'] = 0;
       }
-
+      widget.exercise.sets = List.from(widget.exercise.sets);
       widget.exercise.sets.add(newSet);
     });
   }
