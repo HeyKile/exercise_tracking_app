@@ -98,7 +98,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
     setState(() {
       widget.exercise.notes = updatedNotes;
     });
-    widget.updateNotes(updatedNotes);
   }
 
   @override

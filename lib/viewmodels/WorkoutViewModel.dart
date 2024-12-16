@@ -23,7 +23,7 @@ class WorkoutViewModel extends ChangeNotifier{
   }
 
   void updateNotes(String? workoutId, String exerciseName, String notes) async {
-    final workout = _allWorkouts.firstWhere((w) => w.id == workoutId);
+    final workout = _allWorkouts.firstWhere((w) => w.id == '$workoutId');
     final exercise = workout.completed.firstWhere((e) => e.name == exerciseName);
     exercise.notes = notes;
     notifyListeners();
