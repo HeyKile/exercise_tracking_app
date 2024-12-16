@@ -59,7 +59,7 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                   child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => {},
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) {},
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) {},
                   isEditable: true,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(

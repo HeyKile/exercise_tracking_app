@@ -112,8 +112,9 @@ class TemplateViewModel extends ChangeNotifier {
       print("  - ${stat.type} (${stat.unit})"); 
     }
     }
-    String units = exercises[0].exercise.trackedStats[0].unit ?? '';
-    print(units);
+    String timeUnit = exercises[0].exercise.timeUnit;
+    String weightUnit = exercises[0].exercise.weightUnit;
+    String distanceUnit = exercises[0].exercise.distanceUnit;
     return Template(
       id: _highestTemplateId + 1,
       name: title,
@@ -123,7 +124,9 @@ class TemplateViewModel extends ChangeNotifier {
         return Exercise(
           id: exerciseItem.exercise.id,
           name: exerciseItem.exercise.name,
-          unit: units,
+          distanceUnit: distanceUnit,
+          weightUnit: weightUnit,
+          timeUnit: timeUnit,
           trackedStats: exerciseItem.exercise.trackedStats,
           isCustom: exerciseItem.exercise.isCustom,
           hasDistance: exerciseItem.exercise.hasDistance,

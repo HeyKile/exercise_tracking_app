@@ -26,7 +26,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           )
         ],
         time: "00:00:00",
@@ -55,7 +57,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           ),
           Exercise(
             id: 0,
@@ -74,7 +78,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           ),
           Exercise(
             id: 31, 
@@ -93,7 +99,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           ),
           Exercise(
             id: 34,
@@ -112,7 +120,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           )
         ],
         time: "00:41:23",
@@ -141,7 +151,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           ),
           Exercise(
             id: 32,
@@ -158,7 +170,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: false,
-            unit: "",
+            distanceUnit: "",
+            weightUnit: "",
+            timeUnit: "",
           ),
           Exercise(
             id: 30,
@@ -176,7 +190,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
           ),
           Exercise(
             id: 31,
@@ -192,7 +208,9 @@ class WorkoutService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "",
+            timeUnit: "",
             notes: "These were hard."
           )
         ],

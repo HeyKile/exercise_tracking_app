@@ -61,7 +61,7 @@ class _PastWorkoutState extends State<PastWorkout>{
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) { // if they change set numbers, this gets called to update that in the list
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String timeUnit, String weightUnit, String distanceUnit) { // if they change set numbers, this gets called to update that in the list
     setState(() { 
       final exercise = exercises[exerciseIndex]; 
       final currentSet = exercise.sets[setIndex] as Map<String, dynamic>; 
@@ -82,6 +82,10 @@ class _PastWorkoutState extends State<PastWorkout>{
         currentSet['time'] = time; 
       } 
       
+      exercise.distanceUnit = distanceUnit;
+      exercise.weightUnit = weightUnit;
+      exercise.timeUnit = timeUnit;
+
       exercises[exerciseIndex].sets[setIndex] = currentSet;
     }); 
   }
@@ -134,8 +138,8 @@ class _PastWorkoutState extends State<PastWorkout>{
                   child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
-                    _updateSetDetails(i, setIndex, reps, weight, distance, time, unit);
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) { 
+                    _updateSetDetails(i, setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit);
                   },
                   isEditable: true,
                   updateNotes: (updatedNotes) {

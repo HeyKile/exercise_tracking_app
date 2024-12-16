@@ -26,7 +26,9 @@ class TemplateService {
             hasReps: true,
             hasTime: false,
             hasWeight: true,
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             notes: ""
           ),
           Exercise(
@@ -38,7 +40,9 @@ class TemplateService {
               {"weight": 280, "reps": 3},
               {"weight": 315, "reps": 3}
             ],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -61,7 +65,9 @@ class TemplateService {
             id: 1,
             name: "Barbell Bench Press",
             sets: [],
-            unit: "lbs", 
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -77,7 +83,9 @@ class TemplateService {
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -93,7 +101,9 @@ class TemplateService {
             id: 24,
             name: "Dumbbell Fly",
             sets: [],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -121,7 +131,9 @@ class TemplateService {
               {"Distance": 2, "Time": 16},
               {"Distance": 1, "Time": 10},
             ],
-            unit:"mins",
+            distanceUnit: "mi",
+            weightUnit: "",
+            timeUnit: "mins",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.distance, display: "Distance", unit: "mi"),
               const ExerciseStat(type: TrackableStat.time, display: "Time", unit: "mins"),
@@ -147,7 +159,9 @@ class TemplateService {
               {"weight": 10, "reps": 12},
               {"weight": 15, "reps": 10},
             ],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -166,7 +180,9 @@ class TemplateService {
               {"weight": 50, "reps": 12},
               {"weight": 60, "reps": 10},
             ],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -185,7 +201,9 @@ class TemplateService {
               {"weight": 120, "reps": 12},
               {"weight": 145, "reps": 8},
             ],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -204,7 +222,9 @@ class TemplateService {
               {"weight": 120, "reps": 12},
               {"weight": 135, "reps": 10},
             ],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -223,7 +243,9 @@ class TemplateService {
               {"weight": 30, "reps": 12},
               {"weight": 40, "reps": 8},
             ],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -247,7 +269,9 @@ class TemplateService {
             id: 1,
             name: "Barbell Bench Press",
             sets: [],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -263,7 +287,9 @@ class TemplateService {
             id: 5,
             name: "Dumbbell Shoulder Press",
             sets: [],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),
@@ -279,7 +305,9 @@ class TemplateService {
             id: 24,
             name: "Dumbbell Fly",
             sets: [],
-            unit: "lbs",
+            distanceUnit: "",
+            weightUnit: "lbs",
+            timeUnit: "",
             trackedStats: [
               const ExerciseStat(type: TrackableStat.weight, display: "Weight", unit: "lbs"),
               const ExerciseStat(type: TrackableStat.reps, display: "Reps"),

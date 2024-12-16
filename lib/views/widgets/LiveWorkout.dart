@@ -77,7 +77,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     });
   }
 
-  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String unit) {
+  void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String timeUnit, String weightUnit, String distanceUnit) {
     setState(() { 
       final exercise = exercises[exerciseIndex]; 
       final currentSet = exercise.sets[setIndex] as Map<String, dynamic>; 
@@ -97,6 +97,10 @@ class _LiveWorkoutState extends State<LiveWorkout> {
       if (exercise.hasTime) { 
         currentSet['time'] = time; 
       } 
+
+      exercise.distanceUnit = distanceUnit;
+      exercise.weightUnit = weightUnit;
+      exercise.timeUnit = timeUnit;
       
       exercises[exerciseIndex].sets[setIndex] = currentSet;
     }); 
@@ -169,8 +173,8 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                   child: ExerciseTile( // different sets, populates from template
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, unit) { 
-                    _updateSetDetails(i, setIndex, reps, weight, distance, time, unit);
+                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) { 
+                    _updateSetDetails(i, setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit);
                   },
                   isEditable: true,
                   updateNotes: (updatedNotes) {

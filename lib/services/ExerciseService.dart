@@ -16,7 +16,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -32,7 +34,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -48,7 +52,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "mins",
+        distanceUnit: "mi",
+        weightUnit: "",
+        timeUnit: "mins",
         notes: "" 
       ),
       Exercise(
@@ -64,7 +70,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -79,7 +87,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "",
         notes: ""
       ),
       Exercise(
@@ -95,7 +105,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -111,7 +123,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "mins",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "mins",
         notes: "" 
       ),
       Exercise(
@@ -126,7 +140,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "secs",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "secs",
         notes: "" 
       ),
       Exercise(
@@ -142,7 +158,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -158,7 +176,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -174,7 +194,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -189,7 +211,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -204,7 +228,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "mins",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "mins",
         notes: "" 
       ),
       Exercise(
@@ -220,7 +246,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -236,7 +264,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -252,7 +282,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -268,7 +300,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "mins",
+        distanceUnit: "yds",
+        weightUnit: "",
+        timeUnit: "mins",
         notes: "" 
       ),
       Exercise(
@@ -284,7 +318,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "secs",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "secs",
         notes: ""
       ),
       Exercise(
@@ -299,7 +335,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -315,7 +353,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -330,7 +370,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "",
         notes: ""
       ),
       Exercise(
@@ -345,7 +387,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "",
         notes: ""
       ),
       Exercise(
@@ -360,7 +404,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "", 
         notes: ""
       ),
       Exercise(
@@ -375,7 +421,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "secs",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "secs",
         notes: ""
       ),
       Exercise(
@@ -391,7 +439,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -407,7 +457,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
       Exercise(
@@ -423,7 +475,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: false,
         sets: [],
-        unit: "mins",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "mins",
         notes: ""
       ),
       Exercise(
@@ -438,7 +492,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: false,
         sets: [],
-        unit: "",
+        distanceUnit: "",
+        weightUnit: "",
+        timeUnit: "",
         notes: ""
       ),
       Exercise(
@@ -454,7 +510,9 @@ class ExerciseService {
         hasTime: true,
         hasWeight: true,
         sets: [],
-        unit: "m",
+        distanceUnit: "m",
+        weightUnit: "",
+        timeUnit: "",
         notes: ""
       ),
       Exercise(
@@ -470,7 +528,9 @@ class ExerciseService {
         hasTime: false,
         hasWeight: true,
         sets: [],
-        unit: "lbs",
+        distanceUnit: "",
+        weightUnit: "lbs",
+        timeUnit: "",
         notes: "" 
       ),
     ];

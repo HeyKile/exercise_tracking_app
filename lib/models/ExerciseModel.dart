@@ -8,7 +8,9 @@ class Exercise {
   final bool hasWeight;
   final bool hasTime;
   final List<dynamic> sets;
-  String unit;
+  String timeUnit;
+  String distanceUnit;
+  String weightUnit;
   String notes;
 
   Exercise({
@@ -22,11 +24,16 @@ class Exercise {
     required this.hasWeight,
     required this.notes,
     required this.sets,
-    required this.unit,
+    required this.timeUnit,
+    required this.distanceUnit,
+    required this.weightUnit,
   });
 
   factory Exercise.fromInput(String name, bool hasDistance, bool hasRep, bool hasWeight, bool hasTime) {
     List<ExerciseStat> statsToTrack = [];
+    String distanceUnit = "";
+    String timeUnit = "";
+    String weightUnit = "";
     if (hasDistance) {
       statsToTrack.add(
         const ExerciseStat(
@@ -35,6 +42,7 @@ class Exercise {
           unit: "mi"
         )
       );
+      distanceUnit = "mi";
     }
     if (hasRep) {
       statsToTrack.add(
@@ -52,6 +60,7 @@ class Exercise {
           unit: "lbs"
         )
       );
+      weightUnit = "lbs";
     }
     if (hasTime) {
       statsToTrack.add(
@@ -61,6 +70,7 @@ class Exercise {
           unit: "mins"
         )
       );
+      timeUnit = "mins";
     }
     return Exercise(
       id: -1,
@@ -72,7 +82,9 @@ class Exercise {
       hasTime: hasTime,
       hasWeight: hasWeight,
       notes: "",
-      unit: "",
+      distanceUnit: distanceUnit,
+      weightUnit: weightUnit,
+      timeUnit: timeUnit,
       sets: List.empty(),
     );
   }
