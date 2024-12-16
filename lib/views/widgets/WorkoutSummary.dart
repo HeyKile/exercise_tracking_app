@@ -45,7 +45,6 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                     children: [ // header and tags
                       const SizedBox(width: 16.0),
                       WorkoutHeader(workout: widget.currentWorkout), 
-                      const TagButton(),
                       const SizedBox(height: 16.0), 
                     ], 
                   ), 
@@ -182,38 +181,6 @@ class CloseDisplay extends StatelessWidget{
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TagButton extends StatelessWidget{
-  const TagButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.05,
-      child: ElevatedButton(
-      onPressed: (){},
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        backgroundColor: Colors.white,
-        padding: const EdgeInsets.all(16),
-      ),
-      child:  const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.tag_outlined,
-            size: 10, 
-            color: Colors.black, 
-          ),
-          Text('Tags', style: TextStyle(color: Colors.black),),
-        ],
-      ),
       ),
     );
   }

@@ -12,7 +12,7 @@ class WorkoutViewModel extends ChangeNotifier{
   Workout? get currentWorkout => _currentWorkout;
   List<Workout> get allWorkouts => _allWorkouts;
 
-void addExercise(int id, String name, List<dynamic> sets, String notes, List<ExerciseStat> trackedStats, bool isCustom, bool hasDistance, bool hasReps, bool hasTime, bool hasWeight, String distanceUnit, String timeUnit, String weightUnit){
+  void addExercise(int id, String name, List<dynamic> sets, String notes, List<ExerciseStat> trackedStats, bool isCustom, bool hasDistance, bool hasReps, bool hasTime, bool hasWeight, String distanceUnit, String timeUnit, String weightUnit){
     if(_currentWorkout != null){
       _currentWorkout!.completed.add(Exercise(id: id, name: name, sets: sets, notes: notes, trackedStats: trackedStats, isCustom: isCustom, hasDistance: hasDistance, hasReps: hasReps, hasTime: hasTime, hasWeight: hasWeight, distanceUnit: distanceUnit, weightUnit: weightUnit, timeUnit: timeUnit));
       notifyListeners();
