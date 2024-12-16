@@ -181,8 +181,6 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                 for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ChangeNotifierProvider(
-                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile( // different sets, populates from template
                     exercise: exercises[i],
                     onDeleteExercise: () => _deleteExercise(i),
