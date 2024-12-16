@@ -29,10 +29,8 @@ class _PastWorkoutState extends State<PastWorkout>{
     super.initState();
     if (widget.template != null) {
       exercises = widget.template!.exercises.map((templateExercise) {
-      print("Processing TemplateExercise: ${templateExercise.name}"); 
       return templateExercise; 
     }).toList();
-    print("Exercises after conversion: $exercises");
     }
   }
 

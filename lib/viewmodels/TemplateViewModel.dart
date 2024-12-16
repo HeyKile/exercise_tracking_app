@@ -106,12 +106,6 @@ class TemplateViewModel extends ChangeNotifier {
 
   Template _toTemplate(String title, List<TemplateExerciseListItem> exercises, TemplateIcon icon) {
     // Inside your _toTemplate function
-    for (var exerciseItem in exercises) { 
-    print("Tracked Stats for Exercise: ${exerciseItem.exercise.name}");
-    for (var stat in exerciseItem.exercise.trackedStats) {
-      print("  - ${stat.type} (${stat.unit})"); 
-    }
-    }
     String timeUnit = exercises[0].exercise.timeUnit;
     String weightUnit = exercises[0].exercise.weightUnit;
     String distanceUnit = exercises[0].exercise.distanceUnit;

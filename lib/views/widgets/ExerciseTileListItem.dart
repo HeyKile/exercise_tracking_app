@@ -110,7 +110,6 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
                 DropdownMenuItem(value: 'meters', child: Text('m')),
               ],
               onChanged: (value) { 
-                print('Unit changed: g$value'); 
                 if (onDistanceUnitChanged != null) { 
                   onDistanceUnitChanged!(value); 
                 } 
@@ -144,7 +143,6 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
                 DropdownMenuItem(value: 'secs', child: Text('secs')),
               ],
               onChanged: (value) { 
-                print('Unit changed: $value'); 
                 if (onTimeUnitChanged != null) { 
                   onTimeUnitChanged!(value); 
                 } 
@@ -163,7 +161,6 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
                 DropdownMenuItem(value: 'kgs', child: Text('kgs')),
               ],
               onChanged: (value) { 
-                print('Unit changed: $value'); 
                 if (onWeightUnitChanged != null) { 
                   onWeightUnitChanged!(value); 
                 } 

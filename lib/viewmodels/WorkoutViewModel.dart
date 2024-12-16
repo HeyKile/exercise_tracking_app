@@ -15,7 +15,6 @@ class WorkoutViewModel extends ChangeNotifier{
 void addExercise(int id, String name, List<dynamic> sets, String notes, List<ExerciseStat> trackedStats, bool isCustom, bool hasDistance, bool hasReps, bool hasTime, bool hasWeight, String distanceUnit, String timeUnit, String weightUnit){
     if(_currentWorkout != null){
       _currentWorkout!.completed.add(Exercise(id: id, name: name, sets: sets, notes: notes, trackedStats: trackedStats, isCustom: isCustom, hasDistance: hasDistance, hasReps: hasReps, hasTime: hasTime, hasWeight: hasWeight, distanceUnit: distanceUnit, weightUnit: weightUnit, timeUnit: timeUnit));
-      debugPrint("Added exercise: $name");
       notifyListeners();
     }
     else {
@@ -48,7 +47,6 @@ void addExercise(int id, String name, List<dynamic> sets, String notes, List<Exe
   }
 
   Future<void> loadWorkouts() async {
-    debugPrint("Loading workouts...");
     if (_allWorkouts.isEmpty) {
       _allWorkouts = _workoutService.createMockWorkouts();
     }
