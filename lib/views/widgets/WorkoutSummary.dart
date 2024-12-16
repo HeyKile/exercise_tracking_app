@@ -155,12 +155,7 @@ class CloseDisplay extends StatelessWidget{
         onPressed: () {
           // send info to workout view model to save workout in model
           workoutViewModel.updateIntensity(selectedIntensity, currentWorkout);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainView(selectedIndex: 3),
-            ),
-          );
+          Navigator.pop(context, 0);
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

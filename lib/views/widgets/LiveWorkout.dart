@@ -164,12 +164,13 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                     final currentWorkout = Workout(completed: exercises, tags: [], workoutName: workoutName, intensity: 0, time: _elapsedTime.toString().substring(0,7), date: DateTime.now());
                     debugPrint('current workout: $currentWorkout');
                     workoutViewModel.saveWorkout(currentWorkout);
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.popUntil(
                       context,
+                      (route) => route.isFirst,);
+                      Navigator.push(context,
                       MaterialPageRoute(
-                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
-                      ), (Route<dynamic> route) => false
-                    );
+                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout)
+                      ));
                   },
                 ),
               ],

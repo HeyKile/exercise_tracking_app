@@ -209,12 +209,13 @@ class SaveWorkout extends StatelessWidget{
         onPressed: () {
           final currentWorkout = Workout(completed: exercises, tags: [], workoutName: workoutName, intensity: 0, time: workoutDuration, date: DateTime.now());
           workoutViewModel.saveWorkout(currentWorkout);
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout),
-            ), (Route<dynamic> route) => false
-          );
+          Navigator.popUntil(
+                      context,
+                      (route) => route.isFirst,);
+          Navigator.push(context,
+                MaterialPageRoute(
+                  builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: currentWorkout)
+        ));
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
