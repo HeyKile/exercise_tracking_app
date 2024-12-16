@@ -5,7 +5,6 @@ import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/UserViewModel.dart';
 import 'package:provider/provider.dart';
-import 'package:exercise_tracking_app/views/MainView.dart';
 
 class HomeWidget extends StatefulWidget {
   HomeWidget({super.key, required this.showWorkout});
@@ -42,7 +41,7 @@ class _HomeViewState extends State<HomeWidget> {
       body: Stack(children: [
        ListView(children: [
         HomeHeader(userName: userViewModel.getUser(), update:_toggleWorkout),
-        WorkoutSchedule(),
+        const WorkoutSchedule(),
         AchievementsList(achievementsList: userViewModel.getUserAchievements()),//userViewModel.getUserAchievements()),
         GoalTable(goalsList: userViewModel.getUserGoals(),),//userViewModel.getUserGoals()),
 
@@ -62,20 +61,20 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
         width: double.infinity,
-        color: Color.fromARGB(255, 0, 149, 255),
-        padding: new EdgeInsets.all(50.0),
+        color: const Color.fromARGB(255, 0, 149, 255),
+        padding: const EdgeInsets.all(50.0),
         child: 
         Column(
           children: [
             Row(
           children: [
             Expanded(child:Column(children: [
-            Align(alignment: Alignment.center, child:Text(
+            const Align(alignment: Alignment.center, child:Text(
               "Welcome Back",
               style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),)),
             Align(alignment: Alignment.center, child:Text(
-              userName + "!",
-              style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),))])),
+              "$userName!",
+              style: const TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold),))])),
            
           ],
         ),
@@ -90,11 +89,11 @@ class WorkoutSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
       children:[
-        Align( alignment: Alignment.centerLeft, child: Text("Weekly Summary", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))), 
-        Container(color: Color.fromARGB(255, 228, 230, 231),
+        const Align( alignment: Alignment.centerLeft, child: Text("Weekly Summary", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))), 
+        Container(color: const Color.fromARGB(255, 228, 230, 231),
         child:ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
@@ -129,7 +128,7 @@ List<ScheduleListItem> getWeeklyWorkouts(){
 }
 
 class ScheduleListItem extends StatelessWidget {
-  const ScheduleListItem({required this.weekday, required this.workoutName, required this.workout, required this.workoutViewModel});
+  const ScheduleListItem({super.key, required this.weekday, required this.workoutName, required this.workout, required this.workoutViewModel});
   final String weekday;
   final String workoutName;
   final Workout workout;
@@ -143,20 +142,20 @@ class ScheduleListItem extends StatelessWidget {
           Container(
             width:50.0,
             height: 50.0,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
-          child: Center(child:Text(weekday, style:TextStyle(color: Colors.white))),
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+          child: Center(child:Text(weekday, style:const TextStyle(color: Colors.white))),
           ),
           Expanded(child:Center(child:Text(workoutName))),
-          Container(padding: EdgeInsets.all(8.0), child:TextButton(onPressed: (){
+          Container(padding: const EdgeInsets.all(8.0), child:TextButton(onPressed: (){
             Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                         builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: workout),
                       ), (Route<dynamic> route) => false
                     );
-          }, child: Text("View", style: TextStyle(color: Colors.black)), style: TextButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 228, 230, 231),
-          ))),
+          }, style: TextButton.styleFrom(
+            backgroundColor:const Color.fromARGB(255, 228, 230, 231),
+          ), child: const Text("View", style: TextStyle(color: Colors.black)))),
 
 
           
@@ -172,10 +171,10 @@ class AchievementsList extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(children:
     [
-      Align( alignment: Alignment.centerLeft, child: Text("Achievements", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))),
+      const Align( alignment: Alignment.centerLeft, child: Text("Achievements", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold))),
       Container(
                   child: SizedBox(height: 120, child:achievementsList.isNotEmpty
                     ? ListView.builder(
@@ -195,13 +194,6 @@ class AchievementsList extends StatelessWidget {
                     : const Text('No Achievements Yet!')
                 )),
     ]));
-      ListView(scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics()/*
-        padding: const EdgeInsets.all(8),
-        children: [
-          AchievementsListItem(), AchievementsListItem()
-          ]*/);
 
 
   }

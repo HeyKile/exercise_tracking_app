@@ -103,11 +103,11 @@ class _StatsViewState extends State<StatsView> {
           alignment: Alignment.centerLeft,
          
          // color: Colors.grey,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border:Border(bottom: BorderSide(color: Colors.black,))),
             child: Container(
                margin: const EdgeInsets.only(left: 15.0),
-               child:Text(
+               child:const Text(
               "Lift:",
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -120,11 +120,10 @@ class _StatsViewState extends State<StatsView> {
                    Container(
           alignment: Alignment.centerLeft,
          
-         // color: Colors.grey,
           decoration: BoxDecoration(border:Border(bottom: BorderSide(color: Colors.black,))),
             child: Container(
                margin: const EdgeInsets.only(left: 15.0),
-               child:Text(
+               child:const Text(
               "Swim:",
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -138,11 +137,11 @@ class _StatsViewState extends State<StatsView> {
           alignment: Alignment.centerLeft,
          
          // color: Colors.grey,
-          decoration: BoxDecoration(
-            border:Border(bottom: BorderSide(color: Colors.black,))),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.black,))),
             child: Container(
                margin: const EdgeInsets.only(left: 15.0),
-               child:Text(
+               child:const Text(
               "Run:",
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -160,7 +159,7 @@ class _StatsViewState extends State<StatsView> {
 }
 
 class ExerciseStatListItem extends StatelessWidget{
-  const ExerciseStatListItem({required this.exercise, required this.units});
+  const ExerciseStatListItem({super.key, required this.exercise, required this.units});
   final String units;
   final ExerciseStats exercise;
 
@@ -169,7 +168,7 @@ class ExerciseStatListItem extends StatelessWidget{
     return
     InkWell(
       onTap: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(
+        Navigator.push(context, MaterialPageRoute(
               builder: (context) => ExerciseStatPopup(exercise: exercise),
             ));
       },
@@ -177,14 +176,14 @@ class ExerciseStatListItem extends StatelessWidget{
       child: 
     Container(
       margin: const EdgeInsets.only(left:15.0, right: 15.0, top: 10.0, bottom: 10.0),
-      padding: new EdgeInsets.only(left: 15.0, top: 3.0, bottom: 3.0),
-      decoration: BoxDecoration(color: Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.only(left: 15.0, top: 3.0, bottom: 3.0),
+      decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
-          Expanded(child:Text(exercise.exerciseName, style: TextStyle(color:Colors.white, fontWeight: FontWeight.bold))), 
-          Expanded(child:Text("PR: " + exercise.currPR.toString() + " " + units, style: TextStyle(color:Colors.white))), 
-          Expanded(child:Text("Goal: " + exercise.goalThreshold.toString() + " " + units, style: TextStyle(color:Colors.white))), 
-          Expanded(child:Icon(Icons.open_in_new, color: Colors.white,))],)
+          Expanded(child:Text(exercise.exerciseName, style: const TextStyle(color:Colors.white, fontWeight: FontWeight.bold))), 
+          Expanded(child:Text("PR: ${exercise.currPR} $units", style: const TextStyle(color:Colors.white))), 
+          Expanded(child:Text("Goal: ${exercise.goalThreshold} $units", style: const TextStyle(color:Colors.white))), 
+          const Expanded(child:Icon(Icons.open_in_new, color: Colors.white,))],)
     )
     );
   }

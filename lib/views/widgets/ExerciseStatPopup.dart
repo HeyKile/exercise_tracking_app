@@ -1,10 +1,7 @@
-import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../viewmodels/StatsViewModel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:exercise_tracking_app/views/MainView.dart';
-import '../../viewmodels/StatsViewModel.dart';
+
 
 
 class ExerciseStatPopup extends StatefulWidget{
@@ -20,17 +17,30 @@ class _ExerciseStatPopupState extends State<ExerciseStatPopup>{
   @override 
   Widget build(BuildContext context) { 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Exercise Stats'),
+      ),
       body:SingleChildScrollView( 
       child: Column(
         children:[
           Container( 
             width: MediaQuery.of(context).size.width * 0.95, 
             height: 30,
-            margin: const EdgeInsets.only(left:15.0, right: 15.0, top: 20.0, bottom: 20.0),
-            //padding: new EdgeInsets.only(left: 30.0, right: 30.0, top: 3.0, bottom: 3.0),
-            decoration: BoxDecoration(color: Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
-            child: Text(widget.exercise.exerciseName, textAlign: TextAlign.center ,style:TextStyle(color: Colors.white, fontSize: 20.0))),
-            LineChartSample2(exercise: widget.exercise),
+            margin: const EdgeInsets.only(left:15.0, right: 15.0, top: 20.0, bottom: 0.0),
+            decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
+            child: Text(widget.exercise.exerciseName, textAlign: TextAlign.center ,style: const TextStyle(color: Colors.white, fontSize: 20.0))),
+            Container(
+            margin: const EdgeInsets.only(top: 15.0),
+            child: const Text(
+              "Progress",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+            ProgressLineChart(exercise: widget.exercise),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
             margin: const EdgeInsets.all(15.0),
@@ -48,7 +58,7 @@ class _ExerciseStatPopupState extends State<ExerciseStatPopup>{
             child: Text(
               '${widget.exercise.goalThreshold}',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20.0,
                
               ),
@@ -70,7 +80,7 @@ class _ExerciseStatPopupState extends State<ExerciseStatPopup>{
             child: Text(
               '${widget.exercise.currPR}',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20.0,
                 
               ),
@@ -88,47 +98,65 @@ class _ExerciseStatPopupState extends State<ExerciseStatPopup>{
               ),
             ),
           ),
-          Column(children: getExerciseStats(widget.exercise)),
-          CloseDisplay()])
+          HistoryDataTable(historyList: widget.exercise.history, category: widget.exercise.category,),
+          const CloseDisplay()])
     ));
 }}
 
-class ExerciseStatListItem extends StatelessWidget{
-  const ExerciseStatListItem({required this.date, required this.units, required this.amount});
-  final String units;
-  final String date;
-  final String amount;
+class HistoryDataTable extends StatelessWidget {
+  HistoryDataTable({super.key, required this.historyList, required this.category});
+  List<History> historyList;
+  String category;
 
-    @override
+  @override
   Widget build(BuildContext context) {
-    return
-    Container(
-      margin: const EdgeInsets.only(left:15.0, right: 15.0, top: 10.0, bottom: 10.0),
-      padding: new EdgeInsets.only(left: 15.0, top: 3.0, bottom: 3.0),
-      decoration: BoxDecoration(color: Color.fromARGB(255, 0, 149, 255), borderRadius: BorderRadius.circular(20)),
-      child: Row(
-        children: [
-          Expanded(child:Text(date, style: TextStyle(color:Colors.white))), 
-          Expanded(child:Text("$amount $units", style: TextStyle(color:Colors.white))), 
-          ],)
+    return DataTable(
+      columnSpacing: 200,
+      columns: <DataColumn>[
+        const DataColumn(
+          label: Expanded(
+            child: Text(
+              'Date',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              switch(category){
+                "Run" => "min",
+                "Swim" => "sec",
+                _ => "lbs"
+              },
+              style: const TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+        ),
+      ],
+      rows: getHistoryRows(historyList),
+      
     );
   }
 }
 
-List<Widget> getExerciseStats(ExerciseStats exercise){
-  List<Widget> historyList = [];
-  for(History stat in exercise.history){
-    String units = switch(exercise.category){
-      "Run" => "min",
-      "Swim" => "sec",
-      _ => "lbs"
-    };
-    historyList.add(ExerciseStatListItem(date: stat.date, amount: stat.amount.toString(), units: units));
-  }
-  return historyList;
+List<DataRow> getHistoryRows(List<History> historyList){
+  List<DataRow> historyRows = <DataRow>[];
+  for(History history in historyList){
+        DataRow row = DataRow(cells: [
+          DataCell(Text(history.date)),
+          DataCell(Text(history.amount.toString()))
+        ]);
+        historyRows.add(row);
+      }
+   return historyRows;   
+
+
 }
 
 class CloseDisplay extends StatelessWidget{
+  const CloseDisplay({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +166,7 @@ class CloseDisplay extends StatelessWidget{
       child: ElevatedButton(
         onPressed: () {
           // send info to workout view model to save workout in model
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainView(selectedIndex: 3),
-            ),
-          );
+          Navigator.pop(context,);
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -170,9 +193,9 @@ class CloseDisplay extends StatelessWidget{
   }
 }
 
-class LineChartSample2 extends StatelessWidget {
+class ProgressLineChart extends StatelessWidget {
   final ExerciseStats exercise;
-  LineChartSample2({super.key, required this.exercise});
+  ProgressLineChart({super.key, required this.exercise});
   
 
   final List<Color> gradientColors = [
@@ -188,8 +211,8 @@ class LineChartSample2 extends StatelessWidget {
           aspectRatio: 1.70,
           child: Padding(
             padding: const EdgeInsets.only(
-              right: 18,
-              left: 12,
+              right: 30,
+              left: 5,
               top: 24,
               bottom: 12,
             ),
@@ -266,6 +289,11 @@ class LineChartSample2 extends StatelessWidget {
           ),
         ),
         leftTitles: AxisTitles(
+          axisNameWidget: Text(switch(exercise.category){
+              "Run" => "min",
+              "Swim" => "sec",
+              _=>"lbs"
+           }),
           sideTitles: SideTitles(
             showTitles: true,
             interval: switch(exercise.category){
