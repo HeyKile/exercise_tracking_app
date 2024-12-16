@@ -190,7 +190,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                     isEditable: true,
                     updateNotes: (updatedNotes) {
                       workoutViewModel.updateNotes(
-                        exercises[i].id as String?,
+                        '${exercises[i].id}',
                         exercises[i].name,
                         updatedNotes,
                       );

@@ -7,7 +7,7 @@ class Exercise {
   final bool hasDistance;
   final bool hasWeight;
   final bool hasTime;
-  final List<dynamic> sets;
+  List<dynamic> sets;
   String timeUnit;
   String distanceUnit;
   String weightUnit;
