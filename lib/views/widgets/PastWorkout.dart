@@ -133,8 +133,6 @@ class _PastWorkoutState extends State<PastWorkout>{
                 for(int i = 0; i < exercises.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ChangeNotifierProvider(
-                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => _deleteExercise(i),
@@ -151,7 +149,6 @@ class _PastWorkoutState extends State<PastWorkout>{
                   },
                 ),
                 )
-                ),
               ], 
             ),
             const SizedBox(height:15),

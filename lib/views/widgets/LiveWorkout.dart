@@ -4,6 +4,7 @@ import 'package:exercise_tracking_app/models/TemplateModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddExerciseModal.dart';
 import 'package:exercise_tracking_app/views/widgets/WorkoutSummary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'ExerciseTile.dart';
 import 'package:exercise_tracking_app/models/WorkoutModel.dart';
@@ -30,20 +31,21 @@ class _LiveWorkoutState extends State<LiveWorkout> {
   @override
   void initState() {
     super.initState();
-    print(widget.template != null);
-    print(widget.template?.name);
-    if (widget.template != null) {
-      exercises = widget.template!.exercises.map((templateExercise) {
-      print("Processing TemplateExercise: ${templateExercise.name}"); 
-      return templateExercise; 
-    }).toList();
-
-    print("Exercises after conversion: $exercises"); 
-    }
-    _stopwatch.start(); // set up stopwatch to start time
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState((){
-        _elapsedTime = _stopwatch.elapsed;
+    
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (widget.template != null) {
+        setState(() {
+          exercises = widget.template!.exercises.map((templateExercise) {
+            return templateExercise;
+          }).toList();
+        });
+      }
+      
+      _stopwatch.start();
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          _elapsedTime = _stopwatch.elapsed;
+        });
       });
     });
   }
@@ -54,8 +56,6 @@ class _LiveWorkoutState extends State<LiveWorkout> {
     super.dispose();
   }
 
-  // the next two methods will need to be improved. currently there are 3 exercise classes so have to convert between them
-  // which is an L. so fixing that soon lol
 
   void _addExercise() async {
     final selectedExercises = await Navigator.push(
@@ -63,23 +63,39 @@ class _LiveWorkoutState extends State<LiveWorkout> {
       MaterialPageRoute(builder: (context) => const AddExerciseModal()),
     );
     if (selectedExercises != null) {
-      setState(() {
-        exercises.addAll(selectedExercises);
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          exercises.addAll(selectedExercises);
+        });
       });
     }
-}
+  }
+
 
   void _deleteExercise(int index){
     setState(() {
       if (index >= 0 && index < exercises.length) {
         exercises.removeAt(index);
+      } else {
+        print("Index out of range: $index");
       }
     });
   }
 
   void _updateSetDetails(int exerciseIndex, int setIndex, int reps, int weight, int distance, int time, String timeUnit, String weightUnit, String distanceUnit) {
     setState(() { 
+      if (exerciseIndex < 0 || exerciseIndex >= exercises.length) { 
+        print("Exercise index out of range: $exerciseIndex"); 
+        return; 
+      }
+
       final exercise = exercises[exerciseIndex]; 
+
+      if (setIndex < 0 || setIndex >= exercise.sets.length) { 
+        print("Set index out of range: $setIndex"); 
+        return; 
+      }
+
       final currentSet = exercise.sets[setIndex] as Map<String, dynamic>; 
       
       if (exercise.hasReps) { 
@@ -138,9 +154,7 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                 StartStop( // timing, pause and start
                   icon: _isTimerRunning ? Icons.play_arrow : Icons.pause,
                   label: _isTimerRunning ? 'Start' :'Pause',
-                  onPressed: () {
-                    _toggleTimer();
-                  },
+                  onPressed: _toggleTimer,
                 ),
                 Text(_elapsedTime.toString().substring(0,7)), // time that's passed
                 StartStop( 
@@ -168,25 +182,22 @@ class _LiveWorkoutState extends State<LiveWorkout> {
                 for(int i = 0; i < exercises.length; i++) // have to incorporate as custom based on templates
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ChangeNotifierProvider(
-                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile( // different sets, populates from template
-                  exercise: exercises[i],
-                  onDeleteExercise: () => _deleteExercise(i),
-                  onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) { 
-                    _updateSetDetails(i, setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit);
-                  },
-                  isEditable: true,
-                  updateNotes: (updatedNotes) {
-                    workoutViewModel.updateNotes(
-                      exercises[i].id as String?,
-                      exercises[i].name,
-                      updatedNotes,
-                    );
-                  },
-                ),
+                    exercise: exercises[i],
+                    onDeleteExercise: () => _deleteExercise(i),
+                    onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) { 
+                      _updateSetDetails(i, setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit);
+                    },
+                    isEditable: true,
+                    updateNotes: (updatedNotes) {
+                      workoutViewModel.updateNotes(
+                        exercises[i].id as String?,
+                        exercises[i].name,
+                        updatedNotes,
+                      );
+                    },
+                  ),
                 )
-                ),
               ], 
             ),
             const SizedBox(height:15),

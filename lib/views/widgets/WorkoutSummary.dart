@@ -54,13 +54,11 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                 for (int i = 0; i < exercises.length; i++) 
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: ChangeNotifierProvider(
-                  create: (context) => ExerciseTileStateNotifier(),
                   child: ExerciseTile ( // adds the different sets 
                   exercise: exercises[i],
                   onDeleteExercise: () => {},
                   onSetDetailsChanged: (setIndex, reps, weight, distance, time, timeUnit, weightUnit, distanceUnit) {},
-                  isEditable: true,
+                  isEditable: false,
                   updateNotes: (updatedNotes) {
                     workoutViewModel.updateNotes(
                       exercises[i].id as String?,
@@ -69,7 +67,6 @@ class _WorkoutSummaryState extends State<WorkoutSummary>{
                     );
                   },
                 ),
-                )
                 ), 
                 const SizedBox(height: 15), 
                 Intensity(onIntensityChanged: (int intensity){ // intensity can only be edited here, so we have an update intensity function to update the workout list

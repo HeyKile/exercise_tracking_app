@@ -6,44 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'ExerciseTileListItem.dart';
 
-class ExerciseTileStateNotifier extends ChangeNotifier{
-  bool hasReps = false;
-  bool hasDistance = false;
-  bool hasTime = false;
-  bool hasWeight = false;
-
-  Future<void> fetchAndSetState(BuildContext context, String exerciseName) async {
-    try{
-      final exerciseViewModel = Provider.of<ExerciseViewModel>(context, listen:false);
-      await exerciseViewModel.fetchExercises();
-
-      Exercise? exercise = exerciseViewModel.exercises.firstWhere(
-        (exercise) => exercise.name == exerciseName,
-      );
-
-      if(exercise.hasWeight){ 
-        hasWeight = true; 
-      }
-      
-      if(exercise.hasTime){ 
-        hasTime = true; 
-      } 
-
-      if(exercise.hasDistance){ 
-        hasDistance = true; 
-      } 
-      
-      if(exercise.hasReps){ 
-        hasReps = true; 
-      }
-
-      notifyListeners();
-    }
-    catch(e){
-      print("ERROR: $e");
-    }
-  }
-}
 class ExerciseTile extends StatefulWidget{
   final Exercise exercise;
   final bool isEditable;
@@ -62,10 +24,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
   late String _timeUnit; // still have yet to implement units! and other exercises besides lifting
   late String _weightUnit;
   late String _distanceUnit;
-  late List<TextEditingController> _repsControllers; 
-  late List<TextEditingController> _weightControllers;
-  late List<TextEditingController> _distanceControllers; 
-  late List<TextEditingController> _timeControllers;
   late TextEditingController _notesController;
 
   @override void initState() { // initialize controllers for the text fields
@@ -73,29 +31,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
     _timeUnit = widget.exercise.timeUnit;
     _distanceUnit = widget.exercise.distanceUnit;
     _weightUnit = widget.exercise.weightUnit;
-    _repsControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index]['reps'].toString())); 
-    _weightControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index]['weight'].toString())); 
-    _distanceControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index]['Distance'].toString())); 
-    _timeControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index]['Time'].toString())); 
     _notesController = TextEditingController(text: widget.exercise.notes);
 
-    context.read<ExerciseTileStateNotifier>().fetchAndSetState(context, widget.exercise.name);// have to figure out how to pass in booleans into exercise tile item
   } 
   
   @override void dispose() { 
     _notesController.dispose();
-    for (var controller in _repsControllers) { 
-      controller.dispose(); 
-    } 
-    for (var controller in _weightControllers) { 
-      controller.dispose(); 
-    } 
-    for (var controller in _distanceControllers) { 
-      controller.dispose(); 
-    } 
-    for (var controller in _timeControllers) { 
-      controller.dispose(); 
-    } 
     super.dispose(); 
   }
 
@@ -105,22 +46,18 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
       if(widget.exercise.hasReps){
         newSet['reps'] = 0;
-        _repsControllers.add(TextEditingController(text: '0')); 
       }
 
       if(widget.exercise.hasWeight){
         newSet['weight'] = 0;
-        _weightControllers.add(TextEditingController(text: '0'));
       }
 
       if(widget.exercise.hasDistance){
         newSet['Distance'] = 0;
-        _distanceControllers.add(TextEditingController(text: '0'));
       }
 
       if(widget.exercise.hasTime){
         newSet['Time'] = 0;
-        _timeControllers.add(TextEditingController(text: '0'));
       }
 
       widget.exercise.sets.add(newSet);
@@ -168,7 +105,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   @override
   Widget build(BuildContext context) {
-    final exerciseTileState = Provider.of<ExerciseTileStateNotifier>(context, listen: true); 
     return Padding( 
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0), 
       child: CustomRoundedExpansionTile( 
@@ -249,18 +185,18 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         children: [ 
                           Expanded(
                             child: ExerciseTileListItem(
-                              repsController: _repsControllers[index], 
-                              weightController: _weightControllers[index], 
+                              repsController: TextEditingController(text: set['reps'].toString()), 
+                              weightController: TextEditingController(text: set['weight'].toString()), 
                               onWeightUnitChanged: changeWeightUnit, 
                               onDistanceUnitChanged: changeDistanceUnit,
                               onTimeUnitChanged: changeTimeUnit,
-                              hasDistance: exerciseTileState.hasDistance,
-                              hasReps: exerciseTileState.hasReps,
-                              hasTime: exerciseTileState.hasTime,
-                              hasWeight: exerciseTileState.hasWeight,
+                              hasDistance: widget.exercise.hasDistance,
+                              hasReps: widget.exercise.hasReps,
+                              hasTime: widget.exercise.hasTime,
+                              hasWeight: widget.exercise.hasWeight,
                               isEditable: widget.isEditable, 
                               distanceController: TextEditingController(text: set['Distance'].toString()),
-                              timeController: TextEditingController(text: set['Distance'].toString()),
+                              timeController: TextEditingController(text: set['Time'].toString()),
                               weightUnit: _weightUnit,
                               timeUnit: _timeUnit,
                               distanceUnit: _distanceUnit, 
