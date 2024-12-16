@@ -1,6 +1,4 @@
 import 'package:exercise_tracking_app/models/ExerciseModel.dart';
-import 'package:exercise_tracking_app/models/WorkoutModel.dart';
-import 'package:exercise_tracking_app/viewmodels/ExerciseViewModel.dart';
 import 'package:exercise_tracking_app/views/widgets/AddNotesPopUp.dart';
 import 'package:exercise_tracking_app/views/widgets/CustomRoundedExpansionTile.dart';
 import 'package:flutter/material.dart';
@@ -46,10 +44,10 @@ class ExerciseTileStateNotifier extends ChangeNotifier{
   }
 }
 class ExerciseTile extends StatefulWidget{
-  final WorkoutExercise exercise;
+  final Exercise exercise;
   final bool isEditable;
   final VoidCallback onDeleteExercise;
-  final Function(int setIndex, int reps, int weight, int distance, int time, String unit) onSetDetailsChanged;
+  final Function(int setIndex, int reps, int weight, int distance, int time, String timeUnit, String weightUnit, String distanceUnit) onSetDetailsChanged;
   final Function(String notes) updateNotes;
 
   const ExerciseTile({super.key, required this.exercise, required this.onDeleteExercise, required this.isEditable, required this.onSetDetailsChanged, required this.updateNotes});
@@ -60,73 +58,75 @@ class ExerciseTile extends StatefulWidget{
 }
 
 class _ExerciseTileState extends State<ExerciseTile> {
-  late String _selectedUnit; // still have yet to implement units! and other exercises besides lifting
-  late List<TextEditingController> _repsControllers; 
-  late List<TextEditingController> _weightControllers;
-  late List<TextEditingController> _distanceControllers; 
-  late List<TextEditingController> _timeControllers;
+  late String _timeUnit; // still have yet to implement units! and other exercises besides lifting
+  late String _weightUnit;
+  late String _distanceUnit;
   late TextEditingController _notesController;
 
   @override void initState() { // initialize controllers for the text fields
     super.initState(); 
-    _selectedUnit = widget.exercise.sets.isNotEmpty ? widget.exercise.sets[0].unit : 'lbs';
-    widget.exercise.sets.forEach((set) {
-    print('Set:');
-    print('  Reps: ${set.reps}');
-    print('  Weight: ${set.weight}');
-    print('  Time:   ${set.time}');
-    print('  Distance ${set.distance}');
-    print('  Unit: ${set.unit}');
-    print('-------------------'); 
-  });
-    print('initial selected unit: $_selectedUnit');
-    _repsControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index].reps.toString())); 
-    _weightControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index].weight.toString())); 
-    _distanceControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index].distance.toString())); 
-    _timeControllers = List.generate( widget.exercise.sets.length, (index) => TextEditingController(text: widget.exercise.sets[index].time.toString())); 
+    _timeUnit = widget.exercise.timeUnit;
+    _distanceUnit = widget.exercise.distanceUnit;
+    _weightUnit = widget.exercise.weightUnit;
     _notesController = TextEditingController(text: widget.exercise.notes);
-
-    context.read<ExerciseTileStateNotifier>().fetchAndSetState(context, widget.exercise.name);// have to figure out how to pass in booleans into exercise tile item
   } 
   
   @override void dispose() { 
     _notesController.dispose();
-    for (var controller in _repsControllers) { 
-      controller.dispose(); 
-    } 
-    for (var controller in _weightControllers) { 
-      controller.dispose(); 
-    } 
-    for (var controller in _distanceControllers) { 
-      controller.dispose(); 
-    } 
-    for (var controller in _timeControllers) { 
-      controller.dispose(); 
-    } 
     super.dispose(); 
   }
 
   void addSet() {
     setState(() { // adding sets to the list and to the controller list
-      widget.exercise.sets.add(Set(reps: 0, weight: 0, unit:_selectedUnit, time: 0, distance:0)); 
-      _repsControllers.add(TextEditingController(text: '0')); 
-      _weightControllers.add(TextEditingController(text: '0'));
-      _distanceControllers.add(TextEditingController(text: '0'));
-      _timeControllers.add(TextEditingController(text: '0'));
+      Map<String, dynamic> newSet = {};
+
+      if(widget.exercise.hasReps){
+        newSet['reps'] = 0;
+      }
+
+      if(widget.exercise.hasWeight){
+        newSet['weight'] = 0;
+      }
+
+      if(widget.exercise.hasDistance){
+        newSet['Distance'] = 0;
+      }
+
+      if(widget.exercise.hasTime){
+        newSet['Time'] = 0;
+      }
+
+      widget.exercise.sets.add(newSet);
     });
   }
 
-  void changeUnit(String? newUnit) { // changes the units through the drop down
+  void changeWeightUnit(String? newUnit) { // changes the units through the drop down
     if(newUnit != null) {
       setState(() {
-        _selectedUnit = newUnit;
-        for(var set in widget.exercise.sets){
-          set.unit = newUnit;
-        }
+        _weightUnit = newUnit;
+        widget.exercise.weightUnit = newUnit;
       });
     }
   }
   
+    void changeTimeUnit(String? newUnit) { // changes the units through the drop down
+    if(newUnit != null) {
+      setState(() {
+        _timeUnit = newUnit;
+        widget.exercise.timeUnit = newUnit;
+      });
+    }
+  }
+
+    void changeDistanceUnit(String? newUnit) { // changes the units through the drop down
+    if(newUnit != null) {
+      setState(() {
+        _distanceUnit = newUnit;
+        widget.exercise.distanceUnit = newUnit;
+      });
+    }
+  }
+
   void deleteExercise() {
     widget.onDeleteExercise(); 
   }
@@ -140,7 +140,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   @override
   Widget build(BuildContext context) {
-    final exerciseTileState = Provider.of<ExerciseTileStateNotifier>(context, listen: true); 
     return Padding( 
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0), 
       child: CustomRoundedExpansionTile( 
@@ -221,40 +220,43 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         children: [ 
                           Expanded(
                             child: ExerciseTileListItem(
-                              setNumber: index + 1, 
-                              repsController: _repsControllers[index], 
-                              weightController: _weightControllers[index], 
-                              onUnitChanged: changeUnit, 
-                              hasDistance: exerciseTileState.hasDistance,
-                              hasReps: exerciseTileState.hasReps,
-                              hasTime: exerciseTileState.hasTime,
-                              hasWeight: exerciseTileState.hasWeight,
+                              repsController: TextEditingController(text: set['reps'].toString()), 
+                              weightController: TextEditingController(text: set['weight'].toString()), 
+                              onWeightUnitChanged: changeWeightUnit, 
+                              onDistanceUnitChanged: changeDistanceUnit,
+                              onTimeUnitChanged: changeTimeUnit,
+                              hasDistance: widget.exercise.hasDistance,
+                              hasReps: widget.exercise.hasReps,
+                              hasTime: widget.exercise.hasTime,
+                              hasWeight: widget.exercise.hasWeight,
                               isEditable: widget.isEditable, 
-                              distanceController: TextEditingController(text: set.distance.toString()),
-                              timeController: TextEditingController(text: set.time.toString()),
-                              unit: _selectedUnit, 
+                              distanceController: TextEditingController(text: set['Distance'].toString()),
+                              timeController: TextEditingController(text: set['Time'].toString()),
+                              weightUnit: _weightUnit,
+                              timeUnit: _timeUnit,
+                              distanceUnit: _distanceUnit, 
                               onRepsChanged: (reps) { 
                                 setState(() { 
-                                  widget.exercise.sets[index].reps = int.parse(reps); 
-                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index].reps ?? -1, widget.exercise.sets[index].weight ?? -1, widget.exercise.sets[index].distance ?? -1, widget.exercise.sets[index].time ?? -1, widget.exercise.sets[index].unit); 
+                                  widget.exercise.sets[index]['reps'] = int.parse(reps); 
+                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index]['reps'] ?? -1, widget.exercise.sets[index]['weight'] ?? -1, widget.exercise.sets[index]['Distance'] ?? -1, widget.exercise.sets[index]['Time'] ?? -1, widget.exercise.timeUnit, widget.exercise.weightUnit, widget.exercise.distanceUnit); 
                                 }); 
                               }, 
                               onDistanceChanged: (distance){
                                 setState(() {
-                                  widget.exercise.sets[index].distance = int.parse(distance);
-                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index].reps ?? -1, widget.exercise.sets[index].weight ?? -1, widget.exercise.sets[index].distance ?? -1, widget.exercise.sets[index].time ?? -1, widget.exercise.sets[index].unit);                                   
+                                  widget.exercise.sets[index]['Distance'] = int.parse(distance);
+                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index]['reps'] ?? -1, widget.exercise.sets[index]['weight'] ?? -1, widget.exercise.sets[index]['Distance'] ?? -1, widget.exercise.sets[index]['Time'] ?? -1, widget.exercise.timeUnit, widget.exercise.weightUnit, widget.exercise.distanceUnit);                                   
                                 });
                               },
                               onTimeChanged: (time){
                                 setState(() {
-                                  widget.exercise.sets[index].time = int.parse(time);
-                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index].reps ?? -1, widget.exercise.sets[index].weight ?? -1, widget.exercise.sets[index].distance ?? -1, widget.exercise.sets[index].time ?? -1, widget.exercise.sets[index].unit);   
+                                  widget.exercise.sets[index]['Time'] = int.parse(time);
+                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index]['reps'] ?? -1, widget.exercise.sets[index]['weight'] ?? -1, widget.exercise.sets[index]['Distance'] ?? -1, widget.exercise.sets[index]['Time'] ?? -1, widget.exercise.timeUnit, widget.exercise.weightUnit, widget.exercise.distanceUnit);   
                                 });
                               },
                               onWeightChanged: (weight) { 
                                 setState(() { 
-                                  widget.exercise.sets[index].weight = int.parse(weight); 
-                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index].reps ?? -1, widget.exercise.sets[index].weight ?? -1, widget.exercise.sets[index].distance ?? -1, widget.exercise.sets[index].time ?? -1, widget.exercise.sets[index].unit); 
+                                  widget.exercise.sets[index]['weight'] = int.parse(weight); 
+                                  widget.onSetDetailsChanged(index, widget.exercise.sets[index]['reps'] ?? -1, widget.exercise.sets[index]['weight'] ?? -1, widget.exercise.sets[index]['Distance'] ?? -1, widget.exercise.sets[index]['Time'] ?? -1, widget.exercise.timeUnit, widget.exercise.weightUnit, widget.exercise.distanceUnit); 
                                 }); 
                               },
                             )), 

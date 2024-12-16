@@ -1,8 +1,9 @@
+import 'package:exercise_tracking_app/models/ExerciseModel.dart';
 import 'package:uuid/uuid.dart';
 
 class Workout{
   String? id;
-  final List<WorkoutExercise> completed;
+  final List<Exercise> completed;
   final String time;
   final String workoutName;
   final DateTime date;
@@ -32,33 +33,3 @@ class Tag {
   Tag({required this.name});
 }
 
-class WorkoutExercise{
-  String name;
-  List<Set> sets;
-  String notes;
-  String? id;
-
-  WorkoutExercise({
-    id,
-    required this.name,
-    required this.sets,
-    required this.notes
-  }) : id = id ?? const Uuid().v4();
-
-}
-
-class Set{
-  int? reps;
-  int? weight;
-  String unit;
-  int? distance;
-  int? time;
-
-  Set({
-    required this.reps,
-    required this.weight,
-    required this.unit, 
-    required this.time,
-    required this.distance,
-  });
-}
