@@ -182,8 +182,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         children: [ 
                           Expanded(
                             child: ExerciseTileListItem(
-                              repsController: TextEditingController(text: set['reps'].toString()), 
-                              weightController: TextEditingController(text: set['weight'].toString()), 
+                              repsController: TextEditingController(
+                                text: (set['reps'] ?? set['Reps'] ?? '').toString(),
+                              ), 
+                              weightController: TextEditingController(
+                                text: (set['weight'] ?? set['Weight'] ?? '').toString(),
+                              ), 
                               onWeightUnitChanged: changeWeightUnit, 
                               onDistanceUnitChanged: changeDistanceUnit,
                               onTimeUnitChanged: changeTimeUnit,
@@ -192,8 +196,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
                               hasTime: widget.exercise.hasTime,
                               hasWeight: widget.exercise.hasWeight,
                               isEditable: widget.isEditable, 
-                              distanceController: TextEditingController(text: set['Distance'].toString()),
-                              timeController: TextEditingController(text: set['Time'].toString()),
+                              distanceController: TextEditingController(
+                                text: (set['distance'] ?? set['Distance'] ?? '').toString(),
+                              ),
+                              timeController: TextEditingController(
+                                text: (set['time'] ?? set['Time'] ?? '').toString(),
+                              ),
                               weightUnit: _weightUnit,
                               timeUnit: _timeUnit,
                               distanceUnit: _distanceUnit, 

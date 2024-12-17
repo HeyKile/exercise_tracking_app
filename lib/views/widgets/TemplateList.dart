@@ -148,7 +148,7 @@ class _TemplateListState extends State<TemplateList> {
                           final template = templateViewModel.filteredTemplates[idx];
                           return TemplateListItem(
                             template: template,
-                            onTap: chooseTemplate(template),
+                            onTap: () => _openTemplateBuilder(templateViewModel, template),
                             isWorkout: widget.isWorkout,
                           );
                         }

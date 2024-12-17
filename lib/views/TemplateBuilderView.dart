@@ -71,10 +71,10 @@ class _TemplateBuilderViewState extends State<TemplateBuilderView> {
     final selectedExercises = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider(
-          create: (context) => ExerciseViewModel(),
+        builder: (context) => ChangeNotifierProvider.value(
+          value: Provider.of<ExerciseViewModel>(context, listen: false),
           child: const AddExerciseModal(),
-        )
+        ),
       ),
     );
     if (selectedExercises != null && selectedExercises.length > 0) {

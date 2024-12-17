@@ -20,9 +20,6 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AllMoves'),
-      ),
       body: <Widget> [
           HomeView(showWorkout: _startWorkout),
           WorkoutOptions(),
