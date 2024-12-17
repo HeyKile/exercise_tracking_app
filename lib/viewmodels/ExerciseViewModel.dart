@@ -62,7 +62,7 @@ class ExerciseViewModel extends ChangeNotifier {
       exercises = await _exerciseService.createMockExercises();
     }
     if (id < exercises.length) {
-      return exercises[id];
+      return exercises.firstWhere((elem) => elem.id == id);
     }
     else {
       return null;
