@@ -20,7 +20,7 @@ To run the current SnapShot of AllMoves you will need:
 
 > Alternatively, if you have Flutter set up in VSCode or Android Studio, you *should* just be able to launch it as you normally would
 
-## State of the app (as of 11/21/24)
+## State of the app (as of 12/16/24)
 
 ### Basic app structure and navigation
 
@@ -32,15 +32,13 @@ To run the current SnapShot of AllMoves you will need:
 
 - users are able to view and search for templates in both the templates view and when starting a workout
 - template creation is entirely customizable, allowing users to add any exercise with any amount of sets
-- templates can even be saved between sessions, reading / writing from a JSON file
-- The is no implementation to allow users to give each template an image or icon
-- Templates made by the user currently cannot be edited again, but this functionality should be done with the Beta
+- templates can even be saved between sessions, reading / writing from in-line objects
+- User can assign new templates an icon
 
 ### Exercises
 
 - exercises can be searched for and added to templates in both template builder mode and workout mode
 - excises can be created in both modes as well, specifying name and which attributes they'd like to track
-- support for images associated with each exercise is intended to come with the Beta, but depending on need we may pivot to a more convient design
 
 ### Home Page
 
@@ -54,15 +52,11 @@ To run the current SnapShot of AllMoves you will need:
 - logging workouts is nearly feature complete, allowing users to select a template, add exercises, add notes to their exercises, fill out their sets, and complete their workout
 - what has yet to be done:
   - design-wise, we plan on making each exercise in the template closer to how they're displayed in template builder, which will be implemented in Beta
-  - after user feedback, we have a plan for how to better design adding notes to an exercise
-    - selecting the "Add Notes" button on an exercise will slide out a notes page for users to add details about their exercise
-  - we have a plan for how to design adding tags to an exercise
-    -  selecting the "Add Tags" button on a workout will slide allow you to select different tags (and potentially create custom tags)
-  - we also need to tweak designs to better support logging different types of exercises, as we have mostly been testing with weight lifting
+  - selecting the "Add Notes" button on an exercise will slide out a notes page for users to add details about their exercise
+  - we have tweaked designs to better support logging different types of exercises, as we have mostly been testing with weight lifting
   - once viewing stats has been futher implemented, conntect workouts to those stats can be finalized
 
 ### Viewing Stats
 
-- stats has not yet been implemented in any capacity, as being able to log and complete workouts has been our highest priority
-- by the Beta, we plan to have the stats page fully finished, allowing individual workouts to be viewed, goals to be set, etc.
-  - at the very least, the UI of this page will be done
+- the stats page will show a split of workouts for each week, and a list of each exercise you've completed with your exercise specfic goal and current pr
+- Each exercise also has specific stats with a line chart to show progress over time, and a History list to show each time you've completed the exercise
