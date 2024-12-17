@@ -47,7 +47,6 @@ class ExerciseTileListItem extends StatelessWidget { // this is the line of sets
 
   @override
   Widget build(BuildContext context) {
-    print('Building ExerciseTileListItem with unit: $unit');
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(

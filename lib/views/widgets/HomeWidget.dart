@@ -147,12 +147,12 @@ class ScheduleListItem extends StatelessWidget {
           ),
           Expanded(child:Center(child:Text(workoutName))),
           Container(padding: const EdgeInsets.all(8.0), child:TextButton(onPressed: (){
-            Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: workout),
-                      ), (Route<dynamic> route) => false
-                    );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkoutSummary(workoutViewModel: workoutViewModel, currentWorkout: workout),
+              )
+            );
           }, style: TextButton.styleFrom(
             backgroundColor:const Color.fromARGB(255, 228, 230, 231),
           ), child: const Text("View", style: TextStyle(color: Colors.black)))),

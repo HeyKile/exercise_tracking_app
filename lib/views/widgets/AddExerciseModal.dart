@@ -20,7 +20,9 @@ class _AddExerciseModalState extends State<AddExerciseModal> {
   void initState() {
     super.initState();
     searchController.addListener(_onSearchChanged);
-    Provider.of<ExerciseViewModel>(context, listen: false).fetchExercises();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ExerciseViewModel>(context, listen: false).fetchExercises();
+    });
   }
 
   @override
