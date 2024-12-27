@@ -29,3 +29,42 @@ class Goal {
 
   Goal({required this.exerciseName, required this.exerciseId, required this.goalThreshold, required this.currPR,});
 }
+
+class UserPrime {
+  int id;
+  String username;
+  String pwdHash;
+  String firstName;
+  String lastName;
+  DateTime birthday;
+  DateTime creationDate;
+  bool isAdmin;
+
+  UserPrime({
+    required this.id,
+    required this.username,
+    required this.pwdHash,
+    required this.firstName,
+    required this.lastName,
+    required this.birthday,
+    required this.creationDate,
+    required this.isAdmin,
+  });
+
+  factory UserPrime.fromJson(Map<String, dynamic> json) {
+    return UserPrime(
+      id: json['id'],
+      username: json['username'],
+      pwdHash: json['pwdHash'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      birthday: DateTime.parse(json['birthday']),
+      creationDate: DateTime.parse(json['creationDate']),
+      isAdmin: json['isAdmin'],
+    );
+  }
+}
+
+class AchievementPrime {
+  
+}
